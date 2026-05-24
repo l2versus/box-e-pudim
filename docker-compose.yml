@@ -25,6 +25,7 @@ services:
       DATABASE_URL: postgresql://${POSTGRES_USER:-bep}:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-box_e_pudim}?schema=public
       JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET}
       JWT_COOKIE_NAME: ${JWT_COOKIE_NAME:-bep_session}
+      JWT_COOKIE_SECURE: ${JWT_COOKIE_SECURE:-false}
       JWT_TTL_HOURS: ${JWT_TTL_HOURS:-24}
       ARGON_SECRET: ${ARGON_SECRET:?set ARGON_SECRET}
       ADMIN_INITIAL_EMAIL: ${ADMIN_INITIAL_EMAIL:-admin@brazilianpudding.com}

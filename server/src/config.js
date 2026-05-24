@@ -32,6 +32,13 @@ const ConfigSchema = z.object({
 
   JWT_SECRET: z.string().min(32, 'JWT_SECRET precisa de ao menos 32 chars (use 64 bytes hex)'),
   JWT_COOKIE_NAME: z.string().default('bep_session'),
+  JWT_COOKIE_SECURE: z
+    .string()
+    .optional()
+    .transform((value) => {
+      if (value === undefined || value === '') return undefined;
+      return ['1', 'true', 'yes', 'on'].includes(value.toLowerCase());
+    }),
   JWT_TTL_HOURS: z.coerce.number().int().positive().default(24),
 
   ARGON_SECRET: z.string().min(16, 'ARGON_SECRET precisa de ao menos 16 chars'),

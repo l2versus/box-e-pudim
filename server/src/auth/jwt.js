@@ -29,7 +29,7 @@ export async function verifySession(token) {
 
 export const COOKIE_OPTS = {
   httpOnly: true,
-  secure: config.NODE_ENV === 'production',
+  secure: config.JWT_COOKIE_SECURE ?? config.NODE_ENV === 'production',
   sameSite: 'strict',
   path: '/',
   maxAge: config.JWT_TTL_HOURS * 60 * 60,
