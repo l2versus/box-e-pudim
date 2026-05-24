@@ -7,7 +7,7 @@ services:
       api:
         condition: service_started
     ports:
-      - "${WEB_HOST_PORT:-18080}:80"
+      - "18180:80"
     restart: unless-stopped
 
   api:
@@ -29,7 +29,7 @@ services:
       ARGON_SECRET: ${ARGON_SECRET:?set ARGON_SECRET}
       ADMIN_INITIAL_EMAIL: ${ADMIN_INITIAL_EMAIL:-admin@brazilianpudding.com}
       ADMIN_INITIAL_PASS: ${ADMIN_INITIAL_PASS:?set ADMIN_INITIAL_PASS}
-      CORS_ORIGINS: ${CORS_ORIGINS:-http://187.77.226.144:18080}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://187.77.226.144:18180}
       TURNSTILE_SECRET: ${TURNSTILE_SECRET:-}
       EVOLUTION_API_URL: ${EVOLUTION_API_URL:-}
       EVOLUTION_API_KEY: ${EVOLUTION_API_KEY:-}
