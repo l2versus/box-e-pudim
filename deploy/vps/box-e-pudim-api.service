@@ -1,0 +1,17 @@
+[Unit]
+Description=Box e Pudim API
+After=network.target postgresql.service
+
+[Service]
+Type=simple
+WorkingDirectory=/var/www/box-e-pudim/server
+EnvironmentFile=/etc/box-e-pudim/api.env
+ExecStart=/usr/bin/node src/server.js
+Restart=always
+RestartSec=5
+User=www-data
+Group=www-data
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

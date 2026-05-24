@@ -1,0 +1,25 @@
+# Postgres local pra dev — mesma versão que vai pra produção (Hostinger KVM)
+# Sobe com: docker compose up -d
+# Para com: docker compose down (volume preservado)
+# Reset total: docker compose down -v
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: bep-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: bep
+      POSTGRES_PASSWORD: bep_dev_only
+      POSTGRES_DB: box_e_pudim
+    ports:
+      - '5433:5432' # 5433 pra não conflitar com Postgres nativo do Windows na 5432
+    volumes:
+      - bep_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U bep -d box_e_pudim']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  bep_pgdata:

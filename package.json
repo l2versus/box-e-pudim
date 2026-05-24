@@ -1,0 +1,21 @@
+{
+  "name": "box-e-pudim",
+  "version": "1.1.0",
+  "description": "Brazilian Pudding & Box InHouse — bilingual (PT/EN) static preorder site with WhatsApp checkout.",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "node -e \"console.log('Static site: no build step')\"",
+    "dev": "node dev-server.mjs",
+    "deploy:vercel": "vercel --prod",
+    "start": "node dev-server.mjs"
+  },
+  "author": "Brazilian Kitchen",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "sharp": "^0.34.5"
+  }
+}

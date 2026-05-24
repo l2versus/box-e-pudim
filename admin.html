@@ -1,0 +1,567 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Brazilian Pudding Admin | Private Orders</title>
+    <meta name="robots" content="noindex,nofollow" />
+    <link rel="preload" href="assets/img/lifestyle/pudding-photo.avif" as="image" type="image/avif" />
+    <link rel="stylesheet" href="admin.css?v=80" />
+    <link rel="stylesheet" href="assets/header/header.css?v=80" />
+    <link rel="stylesheet" href="assets/admin/admin-router.css?v=80" />
+  </head>
+  <body class="admin-body">
+    <section class="login-stage" data-login-stage aria-label="Private admin login">
+      <div class="login-art">
+        <a class="login-store-link" href="index.html">Ver loja publica</a>
+        <div class="login-photo">
+          <picture>
+            <source srcset="assets/img/lifestyle/pudding-photo.avif" type="image/avif" />
+            <source srcset="assets/img/lifestyle/pudding-photo.webp" type="image/webp" />
+            <img src="assets/img/lifestyle/pudding-photo.png" alt="Brazilian pudding" loading="lazy" decoding="async" />
+          </picture>
+        </div>
+        <div class="login-metric login-metric-a">
+          <span>Hoje</span>
+          <strong>$486</strong>
+        </div>
+        <div class="login-metric login-metric-b">
+          <span>Vagas</span>
+          <strong>5</strong>
+        </div>
+      </div>
+
+      <form class="login-card" data-login-form>
+        <span class="admin-kicker">Acesso privado</span>
+        <h1>Painel da dona</h1>
+        <p>Pedidos, capacidade, produtos ativos e leads do WhatsApp em uma area separada da loja.</p>
+        <label>
+          <span>Email ou telefone</span>
+          <input name="owner" type="text" autocomplete="username" placeholder="owner@brazilianpudding.com" />
+        </label>
+        <label>
+          <span>Senha</span>
+          <input name="password" type="password" autocomplete="current-password" placeholder="********" />
+        </label>
+        <button class="admin-button admin-button-primary" type="submit">Entrar no painel</button>
+        <small style="color:#166534;font-weight:600;">Acesso protegido pela API. Use o email e senha configurados no backend.</small>
+      </form>
+    </section>
+
+    <div class="admin-app" data-admin-app aria-hidden="true">
+      <aside class="admin-sidebar">
+        <a class="admin-brand" href="index.html" aria-label="Brazilian Pudding public site">
+          <span>BP</span>
+          <strong>Brazilian Pudding</strong>
+          <small>Private orders</small>
+        </a>
+        <nav class="admin-nav" aria-label="Admin navigation" data-admin-nav>
+          <a href="#start" class="is-active" data-view-link="start">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12 12 4l9 8M5 10v10h14V10"/></svg>
+            Início
+          </a>
+          <a href="#orders" data-view-link="orders">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 11h16"/></svg>
+            Pedidos
+            <em data-nav-badge="orders"></em>
+          </a>
+          <a href="#capacity" data-view-link="capacity">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            Agenda
+          </a>
+          <a href="#products" data-view-link="products">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 8 9-5 9 5-9 5-9-5z"/><path d="M3 8v8l9 5 9-5V8"/></svg>
+            Produtos
+          </a>
+          <a href="#leads" data-view-link="leads">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 4V6a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></svg>
+            Leads
+            <em data-nav-badge="leads"></em>
+          </a>
+          <a href="#rules" data-view-link="rules">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M5 7h14M5 12h14M5 17h9"/></svg>
+            Regras
+          </a>
+          <a href="#whatsapp" data-view-link="whatsapp">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.5A10 10 0 1 0 12 2z"/></svg>
+            WhatsApp
+          </a>
+        </nav>
+        <div class="sidebar-status">
+          <span data-accepting-copy>Aceitando pedidos</span>
+          <strong>Sabado, 5:30 PM</strong>
+        </div>
+        <a class="admin-store" href="index.html">Abrir site publico</a>
+      </aside>
+
+      <main class="admin-main">
+        <header class="admin-topbar">
+          <div>
+            <span class="admin-kicker" data-view-kicker>Operacao de hoje</span>
+            <h1 data-view-title>Início</h1>
+          </div>
+          <div class="topbar-actions">
+            <button class="admin-button admin-button-soft" type="button" data-accepting-toggle>Aceitando pedidos</button>
+            <button class="admin-button admin-button-ghost" type="button" data-lock-admin>Sair</button>
+          </div>
+        </header>
+
+        <div class="admin-views" data-admin-views>
+
+        <!-- ============== INÍCIO ============== -->
+        <section class="admin-view is-active" data-view="start">
+          <section class="admin-hero">
+            <div>
+              <span class="admin-kicker">Batch de sabado</span>
+              <h2>Controle o que entra antes de virar conversa perdida no WhatsApp.</h2>
+              <p>O painel mostra pedidos abertos, pagamento, capacidade e leads que ainda precisam de resposta.</p>
+            </div>
+            <div class="batch-card">
+              <span>Proxima janela</span>
+              <strong>Saturday</strong>
+              <p>Pickup 5:00 PM - 7:30 PM</p>
+            </div>
+          </section>
+
+          <section class="kpi-row" aria-label="Key sales indicators">
+          <article>
+            <span>Venda em aberto</span>
+            <strong data-kpi-revenue>$0</strong>
+            <small data-kpi-revenue-sub>nenhum pedido ativo</small>
+          </article>
+          <article>
+            <span>Pedidos ativos</span>
+            <strong data-kpi-orders data-open-orders>0</strong>
+            <small data-kpi-orders-sub>—</small>
+          </article>
+          <article>
+            <span>Vagas livres</span>
+            <strong data-kpi-capacity data-capacity-left>0</strong>
+            <small>limite ajustavel</small>
+          </article>
+          <article>
+            <span>Ticket medio</span>
+            <strong data-kpi-ticket>$0</strong>
+            <small data-kpi-ticket-sub>baseado em pedidos ativos</small>
+          </article>
+        </section>
+
+        <!-- Atalhos rápidos -->
+        <section class="quick-actions" aria-label="Atalhos">
+          <a href="#orders" data-view-link="orders" class="quick-card quick-card-primary">
+            <span class="quick-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 11h16"/></svg>
+            </span>
+            <strong>Pedidos abertos</strong>
+            <span><b data-quick-orders>0</b> ativos</span>
+          </a>
+          <a href="#capacity" data-view-link="capacity" class="quick-card">
+            <span class="quick-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            </span>
+            <strong>Capacidade</strong>
+            <span>ajustar batches</span>
+          </a>
+          <a href="#products" data-view-link="products" class="quick-card">
+            <span class="quick-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m3 8 9-5 9 5-9 5-9-5z"/><path d="M3 8v8l9 5 9-5V8"/></svg>
+            </span>
+            <strong>Produtos</strong>
+            <span><b data-quick-products>0</b> ativos</span>
+          </a>
+          <a href="#leads" data-view-link="leads" class="quick-card">
+            <span class="quick-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a4 4 0 0 1-4 4H8l-5 4V6a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></svg>
+            </span>
+            <strong>Leads</strong>
+            <span><b data-quick-leads>0</b> aguardando</span>
+          </a>
+        </section>
+
+        <section class="admin-panel sales-panel">
+          <div class="panel-heading">
+            <div>
+              <span class="admin-kicker">Vendas</span>
+              <h2>Semana</h2>
+            </div>
+            <div class="sales-range" data-sales-range>
+              <button type="button" class="is-active" data-range="week">Semana</button>
+              <button type="button" data-range="month">Mês</button>
+            </div>
+          </div>
+          <div class="sales-bars" data-sales-bars aria-label="Weekly sales chart">
+            <span style="--value: 42%"><b>Mon</b><i>$182</i></span>
+            <span style="--value: 58%"><b>Tue</b><i>$252</i></span>
+            <span style="--value: 34%"><b>Wed</b><i>$148</i></span>
+            <span style="--value: 74%"><b>Thu</b><i>$322</i></span>
+            <span style="--value: 92%"><b>Fri</b><i>$401</i></span>
+            <span style="--value: 78%"><b>Sat</b><i>$340</i></span>
+          </div>
+        </section>
+        </section>
+        <!-- /view start -->
+
+        <!-- ============== PEDIDOS ============== -->
+        <section class="admin-view admin-panel orders-panel" data-view="orders" id="orders">
+            <div class="panel-heading">
+              <div>
+                <span class="admin-kicker">Pedidos</span>
+                <h2>Quadro vivo</h2>
+              </div>
+              <div class="panel-heading-actions">
+                <div class="status-filters" aria-label="Filter orders">
+                  <button class="is-active" type="button" data-filter="all">Todos</button>
+                  <button type="button" data-filter="requested">Solicitados</button>
+                  <button type="button" data-filter="paid">Pagos</button>
+                  <button type="button" data-filter="production">Produção</button>
+                  <button type="button" data-filter="ready">Prontos</button>
+                </div>
+                <button class="admin-button admin-button-primary" type="button" data-order-new>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+                  Novo pedido
+                </button>
+              </div>
+            </div>
+
+            <div class="order-list" data-order-list>
+              <article class="order-card" data-status="requested">
+                <div>
+                  <span class="status-pill requested">Solicitado</span>
+                  <h3>2 classic pudins</h3>
+                  <p>Camila S. - Pickup 5:30 PM - $56</p>
+                </div>
+                <button type="button" data-next-status>Avancar</button>
+              </article>
+              <article class="order-card" data-status="paid">
+                <div>
+                  <span class="status-pill paid">Pago</span>
+                  <h3>Gift box + brigadeiros</h3>
+                  <p>Lucas M. - Delivery ZIP 33139 - $74</p>
+                </div>
+                <button type="button" data-next-status>Avancar</button>
+              </article>
+              <article class="order-card" data-status="production">
+                <div>
+                  <span class="status-pill production">Producao</span>
+                  <h3>Regional lunch boxes</h3>
+                  <p>12 unidades - retirar sabado - $216</p>
+                </div>
+                <button type="button" data-next-status>Avancar</button>
+              </article>
+              <article class="order-card" data-status="ready">
+                <div>
+                  <span class="status-pill ready">Pronto</span>
+                  <h3>Party sweets tray</h3>
+                  <p>Fernanda A. - 35 convidados - $140</p>
+                </div>
+                <button type="button" data-next-status>Finalizar</button>
+              </article>
+            </div>
+          </section>
+
+          <!-- ============== AGENDA ============== -->
+          <section class="admin-view admin-panel capacity-panel" data-view="capacity" id="capacity">
+            <div class="panel-heading">
+              <div>
+                <span class="admin-kicker">Agenda</span>
+                <h2>Capacidade por fornada</h2>
+              </div>
+              <button class="admin-button admin-button-soft" type="button" data-capacity-save>Salvar limite</button>
+            </div>
+            <div class="capacity-controls">
+              <label>
+                <span>Pudins sabado</span>
+                <output data-capacity-output="puddings">9</output>
+                <input type="range" min="0" max="20" value="9" data-capacity-slider="puddings" />
+              </label>
+              <label>
+                <span>Boxes regionais</span>
+                <output data-capacity-output="boxes">12</output>
+                <input type="range" min="0" max="30" value="12" data-capacity-slider="boxes" />
+              </label>
+            </div>
+            <div class="calendar-strip">
+              <button type="button">
+                <span>Thu</span>
+                <strong>4</strong>
+              </button>
+              <button type="button" class="is-hot">
+                <span>Fri</span>
+                <strong>2</strong>
+              </button>
+              <button type="button" class="is-active">
+                <span>Sat</span>
+                <strong>5</strong>
+              </button>
+              <button type="button" class="is-closed">
+                <span>Sun</span>
+                <strong>0</strong>
+              </button>
+            </div>
+          </section>
+
+          <!-- ============== PRODUTOS ============== -->
+          <section class="admin-view admin-panel products-panel" data-view="products" id="products">
+            <div class="panel-heading">
+              <div>
+                <span class="admin-kicker">Cardapio</span>
+                <h2>Produtos e estoque</h2>
+              </div>
+              <div class="panel-heading-actions">
+                <label class="admin-search">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+                  <input type="search" placeholder="Buscar por nome, categoria, loja..." data-product-search />
+                </label>
+                <select class="admin-select" data-product-filter>
+                  <option value="all">Todos</option>
+                  <option value="Brazilian Pudding">Brazilian Pudding</option>
+                  <option value="Box InHouse">Box InHouse</option>
+                  <option value="Ambos">Ambos</option>
+                  <option value="paused">Pausados</option>
+                </select>
+                <button class="admin-button admin-button-ghost" type="button" data-product-reset>Restaurar demo</button>
+              </div>
+            </div>
+            <form class="product-editor" data-product-form>
+              <input type="hidden" name="id" />
+              <label>
+                <span>Nome do produto</span>
+                <input name="name" type="text" placeholder="Ex: Pudim classico" required />
+              </label>
+              <label>
+                <span>Categoria</span>
+                <select name="category">
+                  <option value="Pudim">Pudim</option>
+                  <option value="Box InHouse">Box InHouse</option>
+                  <option value="Doces">Doces</option>
+                  <option value="Salgados">Salgados</option>
+                </select>
+              </label>
+              <label>
+                <span>Aparece em</span>
+                <select name="storefront">
+                  <option value="Brazilian Pudding">Brazilian Pudding</option>
+                  <option value="Box InHouse">Box InHouse</option>
+                  <option value="Ambos">Ambos</option>
+                </select>
+              </label>
+              <label>
+                <span>Valor</span>
+                <input name="price" type="number" min="0" step="0.01" placeholder="28.00" required />
+              </label>
+              <label>
+                <span>Quantidade / vagas</span>
+                <input name="quantity" type="number" min="0" step="1" placeholder="12" required />
+              </label>
+              <label>
+                <span>Tipo de venda</span>
+                <select name="saleType">
+                  <option value="Sob encomenda">Sob encomenda</option>
+                  <option value="Pronta entrega">Pronta entrega</option>
+                  <option value="Ambos">Ambos</option>
+                </select>
+              </label>
+              <label>
+                <span>Prazo</span>
+                <input name="leadTime" type="text" placeholder="48h, sabado, 3 a 5 dias" />
+              </label>
+              <label class="product-description-field">
+                <span>Descricao de venda</span>
+                <textarea name="description" rows="3" placeholder="Texto curto que aparece no cardapio e no carrinho"></textarea>
+              </label>
+              <label class="product-photo-field">
+                <span>Foto / caminho</span>
+                <input name="image" type="text" placeholder="assets/img/products/product-classic-pudim.png" />
+              </label>
+              <label class="product-active-field">
+                <input name="active" type="checkbox" checked />
+                <span>Ativo no cardapio</span>
+              </label>
+              <div class="product-editor-actions">
+                <button class="admin-button admin-button-primary" type="submit" data-product-submit>Adicionar produto</button>
+                <button class="admin-button admin-button-ghost" type="button" data-product-cancel hidden>Cancelar edicao</button>
+              </div>
+            </form>
+            <div class="product-summary" aria-label="Resumo do cardapio">
+              <article>
+                <span>Produtos ativos</span>
+                <strong data-products-active>0</strong>
+              </article>
+              <article>
+                <span>Pronta entrega</span>
+                <strong data-products-ready>0</strong>
+              </article>
+              <article>
+                <span>Sob encomenda</span>
+                <strong data-products-preorder>0</strong>
+              </article>
+            </div>
+            <div class="product-control-list" data-product-list></div>
+          </section>
+
+          <!-- ============== REGRAS ============== -->
+          <section class="admin-view admin-panel rules-panel" data-view="rules" id="rules">
+            <div class="panel-heading">
+              <div>
+                <span class="admin-kicker">Regras</span>
+                <h2>Negocio</h2>
+              </div>
+            </div>
+            <div class="rules-list">
+              <article>
+                <strong>Antecedencia minima</strong>
+                <span>48h para pudim e boxes. Eventos: 3 a 5 dias.</span>
+              </article>
+              <article>
+                <strong>Entrega</strong>
+                <span>Confirmar ZIP, rota e taxa antes do pagamento.</span>
+              </article>
+              <article>
+                <strong>Pagamento</strong>
+                <span>Zelle, Venmo ou link antes de entrar em producao.</span>
+              </article>
+            </div>
+          </section>
+
+          <!-- ============== LEADS ============== -->
+          <section class="admin-view admin-panel leads-panel" data-view="leads" id="leads">
+            <div class="panel-heading">
+              <div>
+                <span class="admin-kicker">Leads</span>
+                <h2>Antes do WhatsApp</h2>
+              </div>
+              <div class="panel-heading-actions">
+                <button class="admin-button admin-button-ghost" type="button" data-leads-export>Exportar CSV</button>
+              </div>
+            </div>
+            <div class="lead-list" data-lead-list></div>
+          </section>
+
+          <!-- ============== WHATSAPP ============== -->
+          <section class="admin-view admin-panel whatsapp-panel" data-view="whatsapp" id="whatsapp">
+            <div class="panel-heading">
+              <div>
+                <span class="admin-kicker">WhatsApp</span>
+                <h2>Conversas e respostas</h2>
+              </div>
+              <div class="panel-heading-actions">
+                <a class="admin-button admin-button-primary" href="https://web.whatsapp.com" target="_blank" rel="noreferrer" data-wa-open-web>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.5A10 10 0 1 0 12 2z"/></svg>
+                  Abrir WhatsApp Web
+                </a>
+              </div>
+            </div>
+
+            <div class="wa-grid">
+              <!-- Número da loja -->
+              <article class="wa-card wa-card-status">
+                <span class="admin-kicker">Número da loja</span>
+                <div class="wa-number-row">
+                  <strong data-wa-number-display>+1 (555) 123-4567</strong>
+                  <span class="wa-status-pill" data-wa-status>Ativo no site</span>
+                </div>
+                <p class="wa-help">Esse número aparece nos botões "WhatsApp" do site, no carrinho e nos links da caixa de entrada.</p>
+                <div class="wa-number-edit" data-wa-edit-zone hidden>
+                  <input type="tel" placeholder="+14075551234" data-wa-number-input />
+                  <button class="admin-button admin-button-primary" type="button" data-wa-number-save>Salvar</button>
+                  <button class="admin-button admin-button-ghost" type="button" data-wa-number-cancel>Cancelar</button>
+                </div>
+                <div class="wa-status-actions" data-wa-display-zone>
+                  <button class="admin-button admin-button-soft" type="button" data-wa-edit-number>Trocar número</button>
+                  <button class="admin-button admin-button-ghost" type="button" data-wa-test>Mandar teste pra mim</button>
+                </div>
+              </article>
+
+              <!-- Templates -->
+              <article class="wa-card wa-card-templates">
+                <div class="wa-card-head">
+                  <span class="admin-kicker">Respostas rápidas</span>
+                  <h3>Templates</h3>
+                </div>
+                <p class="wa-help">Toque o template pra copiar. Use <code>{nome}</code>, <code>{item}</code>, <code>{data}</code> e <code>{valor}</code> como variáveis.</p>
+                <ul class="wa-template-list" data-wa-templates></ul>
+                <button class="admin-button admin-button-soft wa-template-add" type="button" data-wa-template-add>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+                  Novo template
+                </button>
+              </article>
+
+              <!-- Conversas do site -->
+              <article class="wa-card wa-card-conversations">
+                <div class="wa-card-head">
+                  <span class="admin-kicker">Caixa de entrada do site</span>
+                  <h3>Mensagens enviadas</h3>
+                </div>
+                <p class="wa-help">Quando o cliente envia o carrinho, a mensagem fica salva aqui. Clique em "Continuar no WA" pra abrir a conversa no WhatsApp.</p>
+                <ul class="wa-conv-list" data-wa-conversations></ul>
+              </article>
+            </div>
+          </section>
+        </div>
+        <!-- /admin-views -->
+      </main>
+    </div>
+
+    <!-- Modal: novo pedido manual -->
+    <div class="admin-modal" data-order-modal hidden>
+      <div class="admin-modal-overlay" data-order-modal-close></div>
+      <form class="admin-modal-card" data-order-form>
+        <header>
+          <span class="admin-kicker">Novo pedido</span>
+          <h2>Lançar pedido manual</h2>
+          <button type="button" class="admin-modal-close" data-order-modal-close aria-label="Fechar">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+          </button>
+        </header>
+        <div class="form-grid">
+          <label>
+            <span>Cliente</span>
+            <input name="customer" type="text" placeholder="Nome ou WhatsApp" required />
+          </label>
+          <label>
+            <span>Produto</span>
+            <input name="title" type="text" placeholder="Ex: 2 classic pudins" required />
+          </label>
+          <label>
+            <span>Valor</span>
+            <input name="total" type="number" min="0" step="0.01" placeholder="56" required />
+          </label>
+          <label>
+            <span>Data</span>
+            <input name="date" type="date" required />
+          </label>
+          <label>
+            <span>Forma</span>
+            <select name="fulfillment">
+              <option value="Pickup">Pickup</option>
+              <option value="Delivery">Delivery</option>
+            </select>
+          </label>
+          <label>
+            <span>Status inicial</span>
+            <select name="status">
+              <option value="requested">Solicitado</option>
+              <option value="paid">Pago</option>
+              <option value="production">Em produção</option>
+            </select>
+          </label>
+        </div>
+        <label>
+          <span>Observação</span>
+          <textarea name="notes" rows="2" placeholder="ZIP, sabor, alergias..."></textarea>
+        </label>
+        <footer>
+          <button type="button" class="admin-button admin-button-ghost" data-order-modal-close>Cancelar</button>
+          <button type="submit" class="admin-button admin-button-primary">Salvar pedido</button>
+        </footer>
+      </form>
+    </div>
+
+    <div class="admin-toast" data-toast role="status" aria-live="polite"></div>
+    <script src="assets/img/picture.js?v=80"></script>
+    <script src="assets/config/config.js?v=80"></script>
+    <script src="assets/api/client.js?v=80"></script>
+    <script src="admin.js?v=80"></script>
+    <script src="assets/admin/admin-router.js?v=80" defer></script>
+  </body>
+</html>

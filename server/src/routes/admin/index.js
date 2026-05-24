@@ -1,0 +1,15 @@
+import authRoutes from './auth.js';
+import productsRoutes from './products.js';
+import ordersRoutes from './orders.js';
+import leadsRoutes from './leads.js';
+import capacityRoutes from './capacity.js';
+import kpisRoutes from './kpis.js';
+
+export default async function adminRoutes(app) {
+  await app.register(authRoutes);
+  await app.register(productsRoutes);
+  await app.register(ordersRoutes);
+  await app.register(leadsRoutes);
+  await app.register(capacityRoutes);
+  await app.register(kpisRoutes);
+}

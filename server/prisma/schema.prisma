@@ -1,0 +1,397 @@
+// Box e Pudim — Schema Prisma
+// Convenções:
+// - Datas em TIMESTAMPTZ (Prisma DateTime já é UTC)
+// - Soft delete via `deletedAt` (nunca hard-delete em modelos com história)
+// - IDs CUID (rápidos, sortáveis aproximadamente, URL-safe)
+// - Indexes pensados pra queries reais do admin
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================
+// Enums
+// ============================================================
+
+enum UserRole {
+  owner       // dona — tudo
+  staff       // ajudante — sem acesso a config sensível
+}
+
+enum OrderStatus {
+  draft
+  requested            // cliente enviou, aguarda dona confirmar disponibilidade
+  confirmed            // dona aceitou, vai gerar instruções de pagamento
+  awaiting_payment     // instruções enviadas, esperando comprovante
+  paid                 // pagamento validado pela dona (manual ou webhook)
+  in_production        // dona iniciou produção
+  ready                // pronto pra retirada/entrega
+  out_for_delivery     // saiu pra entrega (só fulfillment=delivery)
+  delivered            // entregue/retirado
+  cancelled            // cancelado em qualquer estado
+  refunded             // cancelado após paid, com refund
+}
+
+enum OrderFulfillment {
+  pickup
+  delivery
+}
+
+enum ProductCategory {
+  pudim
+  sweet
+  box
+  tray
+  gift
+}
+
+enum PaymentMethod {
+  zelle
+  venmo
+  cashapp
+  paypal
+  square
+  stripe
+  cash
+}
+
+enum PaymentStatus {
+  pending      // instruções enviadas, aguarda comprovante
+  received     // dona validou comprovante (manual) ou webhook (auto)
+  refunded
+}
+
+enum LeadStatus {
+  new
+  contacted
+  converted    // virou Order
+  lost
+}
+
+enum ConversationChannel {
+  whatsapp
+  email
+  site
+}
+
+enum MessageDirection {
+  in           // cliente -> negócio
+  out          // negócio -> cliente
+}
+
+enum AuditAction {
+  create
+  update
+  delete
+  status_change
+  login
+  logout
+  failed_login
+}
+
+// ============================================================
+// Models
+// ============================================================
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  name         String?
+  role         UserRole  @default(owner)
+  active       Boolean   @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  ordersTransitioned OrderStatusTransition[]
+  auditLogs          AuditLog[]
+}
+
+model Customer {
+  id          String   @id @default(cuid())
+  name        String
+  phone       String   // formato internacional, sem mask
+  email       String?
+  zip         String?
+  city        String?
+  notes       String?
+  preferredLang String @default("en") // "en" | "pt"
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
+
+  orders        Order[]
+  leads         Lead[]
+  conversations Conversation[]
+
+  @@index([phone])
+  @@index([email])
+}
+
+model Product {
+  id            String          @id @default(cuid())
+  slug          String          @unique // ex: "classic-pudim", "shrimp-tray"
+  category      ProductCategory
+  name          String
+  nameI18n      Json?           // { "pt": "Pudim Clássico", "en": "Classic Pudim" }
+  description   String?
+  descriptionI18n Json?
+  priceCents    Int             // em USD cents
+  imageUrl      String?
+  active        Boolean         @default(true)
+  paused        Boolean         @default(false) // pausado temporariamente, mas catálogo
+  leadTimeHours Int             @default(48)
+  maxQtyPerDay  Int?            // limite por dia (null = sem limite individual)
+  sortOrder     Int             @default(0)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  deletedAt     DateTime?
+
+  orderItems OrderItem[]
+
+  @@index([category, active])
+  @@index([slug])
+}
+
+model AvailabilitySlot {
+  id           String          @id @default(cuid())
+  date         DateTime        // só a parte de data importa (sempre 00:00 UTC do dia)
+  category     ProductCategory
+  capacityMax  Int             // capacidade total do dia naquela categoria
+  reserved     Int             @default(0) // incrementa quando Order é criado
+  notes        String?
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+
+  @@unique([date, category]) // garante 1 slot por (data, categoria)
+  @@index([date])
+}
+
+model DeliveryZone {
+  id        String   @id @default(cuid())
+  zip       String   @unique
+  city      String?
+  feeCents  Int      @default(0)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Order {
+  id              String           @id @default(cuid())
+  number          Int              @unique @default(autoincrement()) // pedido #123 humano
+  customerId      String
+  customer        Customer         @relation(fields: [customerId], references: [id])
+  status          OrderStatus      @default(draft)
+  fulfillment     OrderFulfillment
+  requestedFor    DateTime         // data/hora desejada (TIMESTAMPTZ)
+  requestedTz     String           @default("America/New_York") // TZ que cliente escolheu
+  pickupWindow    String?          // "Saturday 5-7 PM" (snapshot do BK_CONFIG)
+  deliveryAddress String?
+  deliveryZip     String?
+  deliveryFeeCents Int             @default(0)
+  notes           String?
+  subtotalCents   Int              @default(0) // soma OrderItem.priceCents * qty
+  totalCents      Int              @default(0) // subtotal + delivery
+  currency        String           @default("USD")
+  source          String           @default("site") // "site" | "admin_manual" | "concierge"
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  cancelledAt     DateTime?
+  cancelReason    String?
+
+  items        OrderItem[]
+  transitions  OrderStatusTransition[]
+  payments     Payment[]
+  conversations Conversation[]
+
+  @@index([status, createdAt])
+  @@index([customerId])
+  @@index([requestedFor])
+}
+
+model OrderItem {
+  id         String  @id @default(cuid())
+  orderId    String
+  order      Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId  String
+  product    Product @relation(fields: [productId], references: [id])
+  qty        Int
+  priceCents Int     // snapshot — não usa product.priceCents direto pra não mudar histórico
+  notes      String?
+
+  @@index([orderId])
+}
+
+model OrderStatusTransition {
+  id        String      @id @default(cuid())
+  orderId   String
+  order     Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  fromStatus OrderStatus?
+  toStatus  OrderStatus
+  actorType String      @default("system") // "system" | "admin" | "webhook" | "customer"
+  actorId   String?     // User.id se actorType=admin
+  actor     User?       @relation(fields: [actorId], references: [id])
+  reason    String?
+  createdAt DateTime    @default(now())
+
+  @@index([orderId, createdAt])
+}
+
+model Payment {
+  id            String        @id @default(cuid())
+  orderId       String
+  order         Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  method        PaymentMethod
+  status        PaymentStatus @default(pending)
+  amountCents   Int
+  currency      String        @default("USD")
+  reference     String?       // ID Stripe/Square OU "Zelle: [transaction id]"
+  proofUrl      String?       // upload do comprovante (Zelle/Venmo screenshots)
+  notes         String?
+  createdAt     DateTime      @default(now())
+  receivedAt    DateTime?
+  refundedAt    DateTime?
+
+  @@index([orderId])
+  @@index([status])
+}
+
+model Lead {
+  id          String     @id @default(cuid())
+  customerId  String?
+  customer    Customer?  @relation(fields: [customerId], references: [id])
+  name        String
+  phone       String?
+  email       String?
+  productSlug String?    // produto que despertou interesse
+  message     String?
+  source      String     @default("site") // "site" | "concierge" | "admin"
+  status      LeadStatus @default(new)
+  utmSource   String?
+  utmMedium   String?
+  utmCampaign String?
+  consent     Boolean    @default(false) // checkbox CTDPA explícito
+  consentedAt DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  deletedAt   DateTime?  // política de retenção: 90d se status != converted
+
+  @@index([status, createdAt])
+  @@index([phone])
+}
+
+model BusinessRule {
+  id          String   @id @default(cuid())
+  key         String   @unique // "lead_time_pudim", "delivery_radius", "cancellation_policy"
+  category    String   // "policy" | "faq" | "menu" | "hours"
+  contentEn   String
+  contentPt   String?
+  // pgvector embeddings: campo Bytes opcional pra Fase 9 (concierge IA com RAG)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([category, active])
+}
+
+model AuditLog {
+  id         String      @id @default(cuid())
+  actorId    String?
+  actor      User?       @relation(fields: [actorId], references: [id])
+  action     AuditAction
+  entityType String      // "Order" | "Product" | "User" | etc.
+  entityId   String?
+  diff       Json?       // { before, after }
+  ip         String?
+  userAgent  String?
+  createdAt  DateTime    @default(now())
+
+  @@index([entityType, entityId])
+  @@index([createdAt])
+  @@index([actorId])
+}
+
+// ============================================================
+// Outbox + dedupe (idempotência)
+// ============================================================
+
+model OutboxEvent {
+  id          String    @id @default(cuid())
+  topic       String    // "order.confirmed" | "order.paid" | "order.ready" etc.
+  payload     Json
+  attempts    Int       @default(0)
+  status      String    @default("pending") // pending | sent | dlq
+  lastError   String?
+  scheduledAt DateTime  @default(now())
+  sentAt      DateTime?
+  createdAt   DateTime  @default(now())
+
+  @@index([status, scheduledAt])
+}
+
+model WebhookEvent {
+  id         String   @id @default(cuid())
+  source     String   // "stripe" | "evolution" | "square"
+  externalId String   // event.id do provider
+  payload    Json
+  processedAt DateTime @default(now())
+
+  @@unique([source, externalId])
+}
+
+model IdempotencyKey {
+  key         String   @id // UUID v4 do cliente
+  resource    String   // "POST /api/orders"
+  responseStatus Int
+  responseBody Json
+  createdAt   DateTime @default(now())
+  expiresAt   DateTime // createdAt + 24h
+
+  @@index([expiresAt]) // pra cleanup
+}
+
+// ============================================================
+// WhatsApp (Conversations + Messages)
+// ============================================================
+
+model Conversation {
+  id          String              @id @default(cuid())
+  channel     ConversationChannel @default(whatsapp)
+  customerId  String?
+  customer    Customer?           @relation(fields: [customerId], references: [id])
+  orderId     String?
+  order       Order?              @relation(fields: [orderId], references: [id])
+  externalRef String?             // chatId do Evolution
+  unreadCount Int                 @default(0)
+  lastMessageAt DateTime?
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  messages Message[]
+
+  @@index([customerId])
+  @@index([lastMessageAt])
+}
+
+model Message {
+  id             String           @id @default(cuid())
+  conversationId String
+  conversation   Conversation     @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  direction      MessageDirection
+  externalId     String?          @unique // messageId do Evolution
+  text           String?
+  mediaUrl       String?
+  template       String?          // "order_confirmed" se foi template
+  templateLang   String?          // "pt" | "en"
+  status         String?          // "sent" | "delivered" | "read" | "failed"
+  createdAt      DateTime         @default(now())
+
+  @@index([conversationId, createdAt])
+}

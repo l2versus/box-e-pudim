@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+
+# Runtime logs
+*.log
+npm-debug.log*
+.env
+.env.*
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.claude/
+.vscode/
+.idea/
+*.swp
+.vercel/
+
+# Build outputs
+dist/
+build/
+assets/img-original/
+
+# Server runtime / secrets
+server/.env
+server/.env.*
+server/node_modules/
+
+# Local archive (not for production deploy)
+_archive/
+
+# Backups
+*.bak
+*.backup

@@ -1,0 +1,34 @@
+/* ============================================================
+   Fluid Particles — estilo do container do efeito decorativo
+   ============================================================ */
+
+.fluid-particles-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  /* opacity sutil pra não competir com pudim 3D / fotos do hero */
+  opacity: 0.85;
+  mix-blend-mode: screen;
+}
+
+/* Quando prefers-reduced-motion: efeito desabilitado, mostra fundo estático */
+.fluid-particles-bg.fluid-particles--static {
+  background:
+    radial-gradient(circle at 30% 30%, rgba(251, 191, 36, 0.08), transparent 40%),
+    radial-gradient(circle at 70% 70%, rgba(251, 191, 36, 0.05), transparent 50%);
+}
+
+.fluid-particles-bg[data-palette="green"].fluid-particles--static {
+  background:
+    radial-gradient(circle at 30% 30%, rgba(254, 243, 199, 0.10), transparent 40%),
+    radial-gradient(circle at 70% 70%, rgba(254, 243, 199, 0.06), transparent 50%);
+}
+
+/* Em mobile, baixar opacidade pra performance perceptual e não pesar visualmente */
+@media (max-width: 480px) {
+  .fluid-particles-bg {
+    opacity: 0.55;
+  }
+}

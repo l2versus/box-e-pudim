@@ -1,0 +1,13 @@
+.git
+.github
+.vercel
+node_modules
+server/node_modules
+_archive
+.claude
+assets/img-original
+*.log
+.env
+.env.*
+server/.env
+server/.env.*
