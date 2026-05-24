@@ -6,6 +6,11 @@
     <title>Brazilian Pudding Admin | Private Orders</title>
     <meta name="robots" content="noindex,nofollow" />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <script>
+      if (location.hostname.endsWith('vercel.app')) {
+        location.replace('http://187.77.226.144:18180/admin');
+      }
+    </script>
     <link rel="preload" href="assets/img/lifestyle/pudding-photo.avif" as="image" type="image/avif" />
     <link rel="stylesheet" href="admin.css?v=80" />
     <link rel="stylesheet" href="assets/header/header.css?v=80" />
@@ -38,14 +43,14 @@
         <p>Pedidos, capacidade, produtos ativos e leads do WhatsApp em uma area separada da loja.</p>
         <label>
           <span>Email ou telefone</span>
-          <input name="owner" type="text" autocomplete="username" placeholder="owner@brazilianpudding.com" />
+          <input name="owner" type="text" autocomplete="username" placeholder="admin@brazilianpudding.com" value="admin@brazilianpudding.com" />
         </label>
         <label>
           <span>Senha</span>
           <input name="password" type="password" autocomplete="current-password" placeholder="********" />
         </label>
         <button class="admin-button admin-button-primary" type="submit">Entrar no painel</button>
-        <small style="color:#166534;font-weight:600;">Acesso protegido pela API. Use o email e senha configurados no backend.</small>
+        <small style="color:#166534;font-weight:600;">Acesso protegido pela API. Use admin@brazilianpudding.com.</small>
       </form>
     </section>
 

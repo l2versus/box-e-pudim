@@ -10,6 +10,10 @@ import { config } from '../src/config.js';
 
 const prisma = new PrismaClient();
 
+function uniqueEmails(emails) {
+  return [...new Set(emails.map((email) => email.trim().toLowerCase()).filter(Boolean))];
+}
+
 async function main() {
   console.log('[seed-prod] Iniciando…');
 
@@ -22,18 +26,32 @@ async function main() {
     secret: Buffer.from(config.ARGON_SECRET),
   });
 
-  const admin = await prisma.user.upsert({
-    where: { email: config.ADMIN_INITIAL_EMAIL },
-    update: {},
-    create: {
-      email: config.ADMIN_INITIAL_EMAIL,
-      passwordHash,
-      name: 'Owner',
-      role: 'owner',
-    },
-  });
+  const adminEmails = uniqueEmails([
+    config.ADMIN_INITIAL_EMAIL,
+    'admin@brazilianpudding.com',
+    'owner@brazilianpudding.com',
+  ]);
 
-  console.log(`[seed-prod] Admin criado/garantido: ${admin.email}`);
+  const admins = [];
+  for (const email of adminEmails) {
+    const admin = await prisma.user.upsert({
+      where: { email },
+      update: {
+        passwordHash,
+        active: true,
+        role: 'owner',
+      },
+      create: {
+        email,
+        passwordHash,
+        name: 'Owner',
+        role: 'owner',
+      },
+    });
+    admins.push(admin);
+  }
+
+  console.log(`[seed-prod] Admin criado/garantido: ${admins.map((admin) => admin.email).join(', ')}`);
   console.log('[seed-prod] AÇÃO REQUERIDA: faça login e troque a senha imediatamente.');
 }
 

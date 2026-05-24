@@ -15,6 +15,10 @@ const ChangePasswordSchema = z.object({
   newPassword: z.string().min(8).max(200),
 });
 
+const LOGIN_ALIASES = {
+  'owner@brazilianpudding.com': 'admin@brazilianpudding.com',
+};
+
 export default async function adminAuthRoutes(app) {
   // POST /api/admin/login
   app.post(
@@ -29,7 +33,10 @@ export default async function adminAuthRoutes(app) {
       }
       const { email, password } = parsed.data;
 
-      const user = await db.user.findUnique({ where: { email } });
+      let user = await db.user.findUnique({ where: { email } });
+      if (!user && LOGIN_ALIASES[email]) {
+        user = await db.user.findUnique({ where: { email: LOGIN_ALIASES[email] } });
+      }
       // Tempo constante: sempre roda hash (mesmo se user não existe), evita user enumeration
       const ok = user && user.active
         ? await verifyPassword(user.passwordHash, password)
