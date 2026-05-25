@@ -304,41 +304,20 @@ function saveProducts() {
 }
 
 function defaultLeads() {
-  return [
-    {
-      id: "demo-lead-pudim",
-      source: "Brazilian Pudding",
-      status: "Novo lead",
-      createdAt: new Date().toISOString(),
-      date: "2026-05-02",
-      time: "Saturday, 5-7 PM",
-      fulfillment: "Pickup",
-      total: "$56",
-      items: ["2x Classic Brazilian Pudim"],
-      message: "Hi! I would like to request a preorder.\n\nItems:\n- 2x Classic Brazilian Pudim ($56)",
-      note: "Demo: em producao esse lead vem do carrinho antes do WhatsApp."
-    },
-    {
-      id: "demo-lead-box",
-      source: "Box InHouse",
-      status: "Aguardando pagamento",
-      createdAt: new Date().toISOString(),
-      date: "2026-05-03",
-      time: "Owner can suggest the best window",
-      fulfillment: "Delivery request",
-      total: "custom quote",
-      items: ["1x Birthday Tray"],
-      message: "Hi! I would like to request a Box InHouse preorder.\n\nItems:\n- 1x Birthday Tray",
-      note: "Conversa completa exige WhatsApp Business Cloud API + webhook."
-    }
-  ];
+  return [];
 }
 
 function loadLeads() {
   if (isProductionAdmin()) return [];
   try {
     const saved = window.localStorage.getItem("bp-leads");
-    return saved ? JSON.parse(saved) : defaultLeads();
+    const parsed = saved ? JSON.parse(saved) : defaultLeads();
+    if (!Array.isArray(parsed)) return [];
+    const realLeads = parsed.filter((lead) => !String(lead?.id || "").startsWith("demo-lead-"));
+    if (realLeads.length !== parsed.length) {
+      window.localStorage.setItem("bp-leads", JSON.stringify(realLeads));
+    }
+    return realLeads;
   } catch {
     return defaultLeads();
   }

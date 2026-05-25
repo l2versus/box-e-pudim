@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
@@ -12,10 +12,10 @@
       }
     </script>
     <link rel="preload" href="assets/img/lifestyle/pudding-photo.avif" as="image" type="image/avif" />
-    <link rel="stylesheet" href="admin.css?v=81" />
-    <link rel="stylesheet" href="assets/header/header.css?v=81" />
-    <link rel="stylesheet" href="assets/admin/admin-router.css?v=81" />
-    <link rel="stylesheet" href="assets/delivery/delivery.css?v=81" />
+    <link rel="stylesheet" href="admin.css?v=82" />
+    <link rel="stylesheet" href="assets/header/header.css?v=82" />
+    <link rel="stylesheet" href="assets/admin/admin-router.css?v=82" />
+    <link rel="stylesheet" href="assets/delivery/delivery.css?v=82" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   </head>
   <body class="admin-body">
@@ -30,12 +30,12 @@
           </picture>
         </div>
         <div class="login-metric login-metric-a">
-          <span>Hoje</span>
-          <strong>$486</strong>
+          <span>Base</span>
+          <strong class="metric-word">Danbury</strong>
         </div>
         <div class="login-metric login-metric-b">
-          <span>Vagas</span>
-          <strong>5</strong>
+          <span>ZIP</span>
+          <strong>06810</strong>
         </div>
       </div>
 
@@ -198,12 +198,12 @@
             </div>
           </div>
           <div class="sales-bars" data-sales-bars aria-label="Weekly sales chart">
-            <span style="--value: 42%"><b>Mon</b><i>$182</i></span>
-            <span style="--value: 58%"><b>Tue</b><i>$252</i></span>
-            <span style="--value: 34%"><b>Wed</b><i>$148</i></span>
-            <span style="--value: 74%"><b>Thu</b><i>$322</i></span>
-            <span style="--value: 92%"><b>Fri</b><i>$401</i></span>
-            <span style="--value: 78%"><b>Sat</b><i>$340</i></span>
+            <span style="--value: 0%"><b>Mon</b><i>$0</i></span>
+            <span style="--value: 0%"><b>Tue</b><i>$0</i></span>
+            <span style="--value: 0%"><b>Wed</b><i>$0</i></span>
+            <span style="--value: 0%"><b>Thu</b><i>$0</i></span>
+            <span style="--value: 0%"><b>Fri</b><i>$0</i></span>
+            <span style="--value: 0%"><b>Sat</b><i>$0</i></span>
           </div>
         </section>
         </section>
@@ -232,38 +232,7 @@
             </div>
 
             <div class="order-list" data-order-list>
-              <article class="order-card" data-status="requested">
-                <div>
-                  <span class="status-pill requested">Solicitado</span>
-                  <h3>2 classic pudins</h3>
-                  <p>Camila S. - Pickup 5:30 PM - $56</p>
-                </div>
-                <button type="button" data-next-status>Avancar</button>
-              </article>
-              <article class="order-card" data-status="paid">
-                <div>
-                  <span class="status-pill paid">Pago</span>
-                  <h3>Gift box + brigadeiros</h3>
-                  <p>Lucas M. - Delivery ZIP 33139 - $74</p>
-                </div>
-                <button type="button" data-next-status>Avancar</button>
-              </article>
-              <article class="order-card" data-status="production">
-                <div>
-                  <span class="status-pill production">Producao</span>
-                  <h3>Regional lunch boxes</h3>
-                  <p>12 unidades - retirar sabado - $216</p>
-                </div>
-                <button type="button" data-next-status>Avancar</button>
-              </article>
-              <article class="order-card" data-status="ready">
-                <div>
-                  <span class="status-pill ready">Pronto</span>
-                  <h3>Party sweets tray</h3>
-                  <p>Fernanda A. - 35 convidados - $140</p>
-                </div>
-                <button type="button" data-next-status>Finalizar</button>
-              </article>
+              <div class="lead-empty">Nenhum pedido carregado ainda. Assim que a API responder, os pedidos reais aparecem aqui.</div>
             </div>
           </section>
 
@@ -613,12 +582,12 @@
     </div>
 
     <div class="admin-toast" data-toast role="status" aria-live="polite"></div>
-    <script src="assets/img/picture.js?v=81"></script>
-    <script src="assets/config/config.js?v=81"></script>
-    <script src="assets/api/client.js?v=81"></script>
+    <script src="assets/img/picture.js?v=82"></script>
+    <script src="assets/config/config.js?v=82"></script>
+    <script src="assets/api/client.js?v=82"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="assets/delivery/delivery.js?v=81"></script>
-    <script src="admin.js?v=81"></script>
-    <script src="assets/admin/admin-router.js?v=81" defer></script>
+    <script src="assets/delivery/delivery.js?v=82"></script>
+    <script src="admin.js?v=82"></script>
+    <script src="assets/admin/admin-router.js?v=82" defer></script>
   </body>
 </html>

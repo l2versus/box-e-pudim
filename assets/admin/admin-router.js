@@ -68,6 +68,7 @@
   /* ---------------- Persistência: orders ---------------- */
   const ORDERS_KEY = 'bp-admin-orders-state';
   const orderList = document.querySelector('[data-order-list]');
+  let latestApiOrders = [];
 
   function snapshotOrders() {
     if (!orderList) return [];
@@ -91,6 +92,7 @@
     try { saved = JSON.parse(localStorage.getItem(ORDERS_KEY) || '[]'); } catch {}
     if (!saved.length) return;
 
+    orderList.querySelector('.lead-empty')?.remove();
     saved.forEach((s) => {
       if (s.manual && s.manualHTML) {
         // pedido criado manualmente: re-injeta no DOM
@@ -106,6 +108,7 @@
       }
     });
     updateBadges();
+    renderSalesBars();
   }
 
   const STATUS_FLOW = [
@@ -172,6 +175,8 @@
     card.dataset.status = front;
     card.dataset.orderId = order.id;
     card.dataset.backendStatus = order.status;
+    card.dataset.totalCents = String(order.totalCents || 0);
+    card.dataset.requestedFor = order.requestedFor || order.createdAt || '';
 
     const header = document.createElement('header');
     const pill = document.createElement('span');
@@ -201,24 +206,29 @@
     try {
       const res = await window.bkApi.adminListOrders({ pageSize: 50 });
       const orders = res?.orders || [];
+      const visibleOrders = orders.filter((o) => !['delivered', 'cancelled', 'refunded'].includes(o.status));
+      latestApiOrders = orders;
 
       // Limpa cards demo e renderiza reais (apenas ativos)
       while (orderList.firstChild) orderList.removeChild(orderList.firstChild);
-      if (!orders.length) {
+      if (!visibleOrders.length) {
         const empty = document.createElement('div');
         empty.className = 'lead-empty';
         empty.textContent = 'Nenhum pedido ativo ainda. Quando o cliente enviar o checkout, aparece aqui.';
         orderList.appendChild(empty);
         updateBadges();
+        renderSalesBars(orders);
         return true;
       }
-      for (const o of orders) {
-        if (o.status === 'delivered' || o.status === 'cancelled' || o.status === 'refunded') continue;
+      for (const o of visibleOrders) {
         orderList.appendChild(renderApiOrderCard(o));
       }
       updateBadges();
+      renderSalesBars(orders);
       return true;
     } catch {
+      latestApiOrders = [];
+      renderSalesBars([]);
       return false;
     }
   }
@@ -252,7 +262,7 @@
       }
     } else {
       // Card legacy/demo
-      setTimeout(() => { saveOrders(); updateBadges(); }, 0);
+      setTimeout(() => { saveOrders(); updateBadges(); renderSalesBars(); }, 0);
     }
   });
 
@@ -458,30 +468,63 @@
   /* ---------------- Sales range toggle ---------------- */
   const salesBars = document.querySelector('[data-sales-bars]');
   const salesTitle = document.querySelector('.sales-panel .panel-heading h2');
+  let currentSalesRange = 'week';
+
+  function collectDomSalesOrders() {
+    if (!orderList) return [];
+    return [...orderList.querySelectorAll('.order-card')].map((card) => ({
+      status: card.dataset.backendStatus || card.dataset.status,
+      requestedFor: card.dataset.requestedFor || new Date().toISOString(),
+      totalCents: Number(card.dataset.totalCents || Math.round(readOrderTotal(card) * 100)),
+    }));
+  }
+
+  function renderSalesBars(orders = latestApiOrders, range = currentSalesRange) {
+    if (!salesBars) return;
+    const source = (orders && orders.length ? orders : collectDomSalesOrders())
+      .filter((order) => !['cancelled', 'refunded'].includes(order.status));
+    const labels = range === 'month' ? ['W1', 'W2', 'W3', 'W4'] : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const totals = labels.map(() => 0);
+    const now = new Date();
+
+    source.forEach((order) => {
+      const d = new Date(order.requestedFor || order.createdAt || now);
+      if (Number.isNaN(d.getTime())) return;
+      const cents = Number(order.totalCents || 0);
+      if (range === 'month') {
+        if (d.getMonth() !== now.getMonth() || d.getFullYear() !== now.getFullYear()) return;
+        const weekIndex = Math.min(3, Math.floor((d.getDate() - 1) / 7));
+        totals[weekIndex] += cents;
+      } else {
+        const start = new Date(now);
+        start.setHours(0, 0, 0, 0);
+        start.setDate(start.getDate() - ((start.getDay() + 6) % 7));
+        const end = new Date(start);
+        end.setDate(start.getDate() + 6);
+        end.setHours(23, 59, 59, 999);
+        if (d < start || d > end) return;
+        const dayIndex = (d.getDay() + 6) % 7;
+        if (dayIndex < labels.length) totals[dayIndex] += cents;
+      }
+    });
+
+    const max = Math.max(...totals, 1);
+    salesBars.classList.toggle('is-empty', totals.every((v) => v === 0));
+    salesBars.innerHTML = labels.map((label, i) => {
+      const value = Math.round((totals[i] / max) * 100);
+      return `<span style="--value: ${value}%"><b>${label}</b><i>${fmtUSD(totals[i] / 100)}</i></span>`;
+    }).join('');
+  }
+
   document.querySelectorAll('[data-sales-range] button').forEach((b) => {
     b.addEventListener('click', () => {
       document.querySelectorAll('[data-sales-range] button').forEach((x) => x.classList.toggle('is-active', x === b));
-      if (!salesBars) return;
-      if (b.dataset.range === 'month') {
-        if (salesTitle) salesTitle.textContent = 'Mês';
-        salesBars.innerHTML = ['W1','W2','W3','W4'].map((w, i) => {
-          const v = [62, 78, 54, 88][i];
-          const t = ['$1.2k','$1.6k','$1.0k','$2.1k'][i];
-          return `<span style="--value: ${v}%"><b>${w}</b><i>${t}</i></span>`;
-        }).join('');
-      } else {
-        if (salesTitle) salesTitle.textContent = 'Semana';
-        salesBars.innerHTML = `
-          <span style="--value: 42%"><b>Mon</b><i>$182</i></span>
-          <span style="--value: 58%"><b>Tue</b><i>$252</i></span>
-          <span style="--value: 34%"><b>Wed</b><i>$148</i></span>
-          <span style="--value: 74%"><b>Thu</b><i>$322</i></span>
-          <span style="--value: 92%"><b>Fri</b><i>$401</i></span>
-          <span style="--value: 78%"><b>Sat</b><i>$340</i></span>
-        `;
-      }
+      currentSalesRange = b.dataset.range === 'month' ? 'month' : 'week';
+      if (salesTitle) salesTitle.textContent = currentSalesRange === 'month' ? 'Mês' : 'Semana';
+      renderSalesBars();
     });
   });
+  renderSalesBars();
 
   /* ---------------- Modal: novo pedido manual ---------------- */
   const modal = document.querySelector('[data-order-modal]');

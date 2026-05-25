@@ -188,6 +188,10 @@ a {
   line-height: 1;
 }
 
+.login-metric strong.metric-word {
+  font-size: 1.42rem;
+}
+
 .login-metric-a {
   right: 12%;
   top: 16%;
