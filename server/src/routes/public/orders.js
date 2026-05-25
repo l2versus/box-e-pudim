@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { db } from '../../db.js';
 import { idempotency } from '../../middleware/idempotency.js';
 import { publish } from '../../lib/outbox.js';
+import { getDeliverySettings, quoteDeliveryByZip } from '../../lib/delivery-settings.js';
 
 const ItemSchema = z.object({
   productSlug: z.string().trim().min(1).max(80),
@@ -58,8 +59,13 @@ export default async function ordersRoutes(app) {
       }
       const bySlug = new Map(products.map((p) => [p.slug, p]));
 
-      // Categorias únicas pra reservar capacity
-      const categoriesNeeded = [...new Set(products.map((p) => p.category))];
+      // Reserva capacity pela quantidade real de itens em cada categoria.
+      const categoryQty = new Map();
+      for (const item of data.items) {
+        const product = bySlug.get(item.productSlug);
+        if (!product) continue;
+        categoryQty.set(product.category, (categoryQty.get(product.category) || 0) + item.qty);
+      }
 
       // Data alvo (00:00 UTC do dia).
       // Mantemos dayUtc como Date pro Prisma client, e dayStr (YYYY-MM-DD)
@@ -72,14 +78,12 @@ export default async function ordersRoutes(app) {
       const dayStr = `${yyyy}-${mm}-${dd}`;
       const dayUtc = new Date(`${dayStr}T00:00:00.000Z`);
 
-      // Delivery fee
+      // Delivery fee by ZIP/radius settings.
       let deliveryFeeCents = 0;
       if (data.fulfillment === 'delivery' && data.deliveryZip) {
-        const zone = await db.deliveryZone.findUnique({ where: { zip: data.deliveryZip } });
-        if (!zone || !zone.active) {
-          return reply.code(400).send({ error: 'zip_not_served', message: 'Delivery not available for this ZIP' });
-        }
-        deliveryFeeCents = zone.feeCents;
+        const quote = quoteDeliveryByZip(data.deliveryZip, await getDeliverySettings());
+        if (!quote.served) return reply.code(400).send({ error: 'zip_not_served', message: quote.message });
+        deliveryFeeCents = quote.feeCents;
       }
 
       // Subtotal
@@ -111,7 +115,7 @@ export default async function ordersRoutes(app) {
 
           // Lock + check capacity de cada categoria envolvida.
           // Cast explícito ::"ProductCategory" porque Postgres não auto-converte string→enum.
-          for (const category of categoriesNeeded) {
+          for (const [category, qtyNeeded] of categoryQty.entries()) {
             const rows = await tx.$queryRaw`
               SELECT id, "capacityMax", reserved
               FROM "AvailabilitySlot"
@@ -123,12 +127,12 @@ export default async function ordersRoutes(app) {
             if (!slot) {
               throw new HttpError(400, 'no_capacity_slot', `No capacity slot for ${category} on ${data.requestedFor}`);
             }
-            if (slot.reserved >= slot.capacityMax) {
+            if (slot.reserved + qtyNeeded > slot.capacityMax) {
               throw new HttpError(409, 'capacity_full', `${category} fully booked on ${data.requestedFor}`);
             }
             await tx.availabilitySlot.update({
               where: { id: slot.id },
-              data: { reserved: { increment: 1 } },
+              data: { reserved: { increment: qtyNeeded } },
             });
           }
 

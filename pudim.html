@@ -12,10 +12,12 @@
     />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="preload" href="assets/img/lifestyle/hero-premium.avif" as="image" type="image/avif" />
-    <link rel="stylesheet" href="styles.css?v=80" />
-    <link rel="stylesheet" href="assets/header/header.css?v=80" />
-    <link rel="stylesheet" href="assets/cart/cart-drawer.css?v=80" />
-    <link rel="stylesheet" href="assets/vendor/fluid-particles.css?v=80" />
+    <link rel="stylesheet" href="styles.css?v=81" />
+    <link rel="stylesheet" href="assets/header/header.css?v=81" />
+    <link rel="stylesheet" href="assets/cart/cart-drawer.css?v=81" />
+    <link rel="stylesheet" href="assets/delivery/delivery.css?v=81" />
+    <link rel="stylesheet" href="assets/vendor/fluid-particles.css?v=81" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   </head>
   <body>
     <!-- legacy bridges (não remover): garantem que app.js mantém handler de idioma e WhatsApp link -->
@@ -27,8 +29,8 @@
       <!-- Announcement marquee -->
       <div class="bk-announce" role="region" aria-label="Live batch updates">
         <div class="bk-announce-track" data-bk-marquee>
-          <span class="bk-announce-chip" data-pulse><span data-bk-i18n="bkAnnounceBatchClose">Saturday batch closes in</span> <strong data-bk-deadline="2026-05-09T18:00">--</strong></span>
-          <span class="bk-announce-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17V6h11v11"/><path d="M14 10h4l3 4v3h-7"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg><span data-bk-i18n="bkAnnouncePickupOrlando">Pickup or local delivery in Orlando</span></span>
+          <span class="bk-announce-chip" data-pulse><span data-bk-i18n="bkAnnounceBatchClose">Saturday batch closes in</span> <strong data-bk-deadline="2026-06-06T18:00">--</strong></span>
+          <span class="bk-announce-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17V6h11v11"/><path d="M14 10h4l3 4v3h-7"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg><span data-bk-i18n="bkAnnouncePickupOrlando">Pickup or local delivery in Danbury</span></span>
           <span class="bk-announce-chip" data-bk-i18n="bkAnnounceSlotsLeft">Only 5 slots left for this weekend</span>
           <span class="bk-announce-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg><span data-bk-i18n="bkAnnounceCode">Use code FRESH10 on your first batch</span></span>
         </div>
@@ -384,6 +386,21 @@
             <button class="button button-quiet" type="button" data-add-selected-product data-i18n="cartAdd">Add to cart</button>
           </div>
 
+          <div class="form-grid checkout-contact">
+            <label>
+              <span data-i18n="fieldName">Name</span>
+              <input name="name" type="text" autocomplete="name" data-i18n-placeholder="namePlaceholder" placeholder="Your name" required />
+            </label>
+            <label>
+              <span data-i18n="fieldPhone">WhatsApp</span>
+              <input name="phone" type="tel" autocomplete="tel" inputmode="tel" data-i18n-placeholder="phonePlaceholder" placeholder="+1 (203) 000-0000" required />
+            </label>
+            <label>
+              <span data-i18n="fieldEmail">Email</span>
+              <input name="email" type="email" autocomplete="email" data-i18n-placeholder="emailPlaceholder" placeholder="you@email.com" />
+            </label>
+          </div>
+
           <div class="form-grid">
             <label>
               <span data-i18n="fieldDate">Preferred date</span>
@@ -406,6 +423,35 @@
               <span data-i18n="delivery">Delivery request</span>
             </label>
           </fieldset>
+
+          <section class="bk-delivery-panel" data-delivery-panel>
+            <header>
+              <div>
+                <h3 data-i18n="deliveryTitle">Delivery from Danbury</h3>
+                <p data-i18n="deliveryText">Enter a ZIP to check the automatic radius and delivery fee.</p>
+              </div>
+            </header>
+            <div class="bk-delivery-grid">
+              <div>
+                <div class="bk-delivery-row">
+                  <label>
+                    <span data-i18n="fieldZip">Delivery ZIP</span>
+                    <input name="deliveryZip" type="text" inputmode="numeric" autocomplete="postal-code" maxlength="5" data-delivery-zip data-i18n-placeholder="zipPlaceholder" placeholder="06810" />
+                  </label>
+                  <button class="button button-quiet" type="button" data-delivery-check data-i18n="checkDelivery">Check</button>
+                </div>
+                <label>
+                  <span data-i18n="fieldAddress">Delivery address</span>
+                  <input name="deliveryAddress" type="text" autocomplete="street-address" data-i18n-placeholder="addressPlaceholder" placeholder="Street, city, CT" />
+                </label>
+                <div class="bk-delivery-quote" data-delivery-quote>
+                  <strong data-i18n="deliveryWaiting">Pickup is free.</strong>
+                  <span data-i18n="deliveryWaitingSub">For delivery, enter the ZIP before sending.</span>
+                </div>
+              </div>
+              <div class="bk-service-map" data-service-map aria-label="Danbury delivery radius"></div>
+            </div>
+          </section>
 
           <label>
             <span data-i18n="fieldNotes">Notes</span>
@@ -479,7 +525,7 @@
               <span data-i18n="loginPassword">Password</span>
               <input name="password" type="password" autocomplete="current-password" placeholder="••••••••" />
             </label>
-            <button class="button button-primary button-full" type="submit" data-i18n="loginButton">Open dashboard demo</button>
+            <button class="button button-primary button-full" type="submit" data-i18n="loginButton">Open dashboard</button>
             <p data-i18n="loginNote">Prototype only. In production this connects to secure auth and SQL.</p>
           </form>
 
@@ -620,13 +666,15 @@
       </button>
     </div>
 
-    <script src="assets/img/picture.js?v=80"></script>
-    <script src="assets/config/config.js?v=80"></script>
-    <script src="assets/api/client.js?v=80"></script>
-    <script type="module" src="app.js?v=80"></script>
-    <script src="assets/header/header.js?v=80" defer></script>
-    <script src="assets/concierge/concierge-ai.js?v=80" defer></script>
-    <script src="assets/cart/cart-drawer.js?v=80" defer></script>
-    <script type="module" src="assets/vendor/fluid-particles.js?v=80"></script>
+    <script src="assets/img/picture.js?v=81"></script>
+    <script src="assets/config/config.js?v=81"></script>
+    <script src="assets/api/client.js?v=81"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="assets/delivery/delivery.js?v=81"></script>
+    <script type="module" src="app.js?v=81"></script>
+    <script src="assets/header/header.js?v=81" defer></script>
+    <script src="assets/concierge/concierge-ai.js?v=81" defer></script>
+    <script src="assets/cart/cart-drawer.js?v=81" defer></script>
+    <script type="module" src="assets/vendor/fluid-particles.js?v=81"></script>
   </body>
 </html>

@@ -1,0 +1,126 @@
+.bk-delivery-panel {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid rgba(36, 24, 18, 0.12);
+  border-radius: 8px;
+  background: rgba(255, 251, 244, 0.72);
+}
+
+.bk-delivery-panel header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.bk-delivery-panel h3,
+.bk-delivery-panel p {
+  margin: 0;
+}
+
+.bk-delivery-panel p {
+  color: rgba(36, 24, 18, 0.68);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.bk-delivery-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+}
+
+.bk-delivery-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: end;
+}
+
+.bk-delivery-quote {
+  display: grid;
+  gap: 4px;
+  min-height: 48px;
+  padding: 10px 12px;
+  border: 1px solid rgba(13, 59, 49, 0.16);
+  border-radius: 8px;
+  background: #fff;
+  color: #241812;
+}
+
+.bk-delivery-quote strong {
+  font-size: 0.95rem;
+}
+
+.bk-delivery-quote span {
+  color: rgba(36, 24, 18, 0.64);
+  font-size: 0.84rem;
+}
+
+.bk-delivery-quote.is-outside {
+  border-color: rgba(215, 62, 94, 0.32);
+  background: rgba(215, 62, 94, 0.08);
+}
+
+.bk-service-map {
+  width: 100%;
+  min-height: 260px;
+  aspect-ratio: 1 / 0.72;
+  overflow: hidden;
+  border: 1px solid rgba(36, 24, 18, 0.12);
+  border-radius: 8px;
+  background: #e9efe9;
+}
+
+.bk-map-fallback {
+  display: grid;
+  place-content: center;
+  gap: 6px;
+  min-height: 260px;
+  padding: 18px;
+  text-align: center;
+  color: #0d3b31;
+  background:
+    linear-gradient(90deg, rgba(13, 59, 49, 0.08) 1px, transparent 1px),
+    linear-gradient(rgba(13, 59, 49, 0.08) 1px, transparent 1px),
+    radial-gradient(circle, rgba(13, 107, 88, 0.24), transparent 48%);
+  background-size: 28px 28px, 28px 28px, 100% 100%;
+}
+
+.bk-map-fallback strong {
+  font-size: 1.1rem;
+}
+
+.bk-map-fallback span,
+.bk-map-fallback em {
+  font-style: normal;
+  color: rgba(13, 59, 49, 0.72);
+}
+
+.bk-service-map .leaflet-control-attribution {
+  font-size: 10px;
+}
+
+@media (min-width: 720px) {
+  .bk-delivery-grid {
+    grid-template-columns: minmax(260px, 0.86fr) minmax(280px, 1.14fr);
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 560px) {
+  .bk-delivery-panel {
+    padding: 12px;
+  }
+
+  .bk-delivery-panel header,
+  .bk-delivery-row {
+    grid-template-columns: 1fr;
+    display: grid;
+  }
+
+  .bk-service-map {
+    min-height: 220px;
+  }
+}

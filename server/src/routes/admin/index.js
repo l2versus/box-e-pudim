@@ -4,6 +4,7 @@ import ordersRoutes from './orders.js';
 import leadsRoutes from './leads.js';
 import capacityRoutes from './capacity.js';
 import kpisRoutes from './kpis.js';
+import deliverySettingsRoutes from './delivery-settings.js';
 
 export default async function adminRoutes(app) {
   await app.register(authRoutes);
@@ -12,4 +13,5 @@ export default async function adminRoutes(app) {
   await app.register(leadsRoutes);
   await app.register(capacityRoutes);
   await app.register(kpisRoutes);
+  await app.register(deliverySettingsRoutes);
 }

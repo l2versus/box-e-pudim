@@ -1,54 +1,70 @@
 /* ============================================================
-   Brazilian Kitchen — config central
-   Edita aqui ANTES de subir pra produção. Tudo o que muda
-   por ambiente passa por esse arquivo.
+   Brazilian Kitchen - config central
+   Dados reais da operacao em Danbury/CT.
    ============================================================ */
 (() => {
   'use strict';
 
   const config = {
-    // Número WhatsApp da loja — formato internacional, só dígitos.
-    // Exemplo Orlando: "14075551234"
-    waPhone: localStorage.getItem('bp-admin-wa-number')?.replace(/\D/g, '') || '15551234567',
+    waPhone: localStorage.getItem('bp-admin-wa-number')?.replace(/\D/g, '') || '12034822797',
 
-    // Lead time mínimo (horas) — bloqueia datas anteriores no cart
     leadTimeHours: 48,
+    deliveryFeeCents: 257,
+    freeShippingMin: 0,
 
-    // Frete grátis a partir de (USD)
-    freeShippingMin: 299,
-
-    // Janela padrão de pickup
-    pickupWindow: 'Saturday, 5–7 PM',
-
-    // Email/contato fallback
+    pickupWindow: 'Saturday, 5-7 PM',
     supportEmail: 'hello@brazilianpudding.com',
+    storeRegion: 'Danbury, CT 06810',
 
-    // Origem geográfica
-    storeRegion: 'Danbury, CT · USA',
+    storeLocation: {
+      name: 'Brazilian Pudding',
+      city: 'Danbury',
+      state: 'CT',
+      zip: '06810',
+      lat: 41.391768,
+      lng: -73.454168,
+    },
 
-    // Modo de admin: "demo" | "production"
-    // production exige backend/API com login real.
+    delivery: {
+      enabled: true,
+      unit: 'mi',
+      baseZip: '06810',
+      maxRadiusMiles: 15,
+      fallbackMessage: 'Outside the automatic delivery radius. The owner can confirm by WhatsApp.',
+      tiers: [
+        { id: 'danbury-core', label: 'Danbury core', maxMiles: 5, feeCents: 257 },
+        { id: 'nearby', label: 'Nearby towns', maxMiles: 10, feeCents: 650 },
+        { id: 'outer-radius', label: 'Outer radius', maxMiles: 15, feeCents: 950 },
+      ],
+      zipCoordinates: {
+        '06810': { city: 'Danbury', lat: 41.391768, lng: -73.454168 },
+        '06811': { city: 'Danbury North', lat: 41.4301, lng: -73.4612 },
+        '06801': { city: 'Bethel', lat: 41.3712, lng: -73.4140 },
+        '06804': { city: 'Brookfield', lat: 41.4826, lng: -73.4096 },
+        '06812': { city: 'New Fairfield', lat: 41.4668, lng: -73.4857 },
+        '06877': { city: 'Ridgefield', lat: 41.2815, lng: -73.4982 },
+        '06896': { city: 'Redding', lat: 41.3026, lng: -73.3926 },
+        '06897': { city: 'Wilton', lat: 41.1954, lng: -73.4379 },
+        '06776': { city: 'New Milford', lat: 41.5768, lng: -73.4085 },
+        '06470': { city: 'Newtown', lat: 41.4141, lng: -73.3036 },
+      },
+    },
+
     adminMode: 'production',
-
-    // Versão (increment manual ao deployar)
-    version: '1.0.1',
+    version: '1.2.0',
   };
 
-  // Expor globalmente — leitura by app.js, box.js, admin.js, header.js, cart-drawer.js
   window.BK_CONFIG = config;
 
-  // Warning visível se ainda estiver com o número fake — evita ir pra produção esquecido
   if (config.waPhone === '15551234567') {
     console.warn(
-      '[BK_CONFIG] waPhone ainda é o placeholder "15551234567". ' +
-      'Defina o número real em assets/config/config.js antes de subir pra produção.'
+      '[BK_CONFIG] waPhone ainda e o placeholder "15551234567". ' +
+      'Defina o numero real em assets/config/config.js antes de subir pra producao.'
     );
   }
 
-  // Helper: link wa.me sempre formatado
   window.bkWaLink = (msg) => `https://wa.me/${config.waPhone}?text=${encodeURIComponent(msg || '')}`;
 
-  // Helper: validar data >= hoje + leadTimeHours
   window.bkIsValidPreorderDate = (dateStr) => {
     if (!dateStr) return false;
     const d = new Date(dateStr);

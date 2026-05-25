@@ -27,7 +27,7 @@
 
   /* ----- Configurações da loja (puxa de localStorage quando possível) ----- */
   const getWaNumber = () => {
-    const raw = localStorage.getItem('bp-admin-wa-number') || '+1 (407) 555-1234';
+    const raw = localStorage.getItem('bp-admin-wa-number') || window.BK_CONFIG?.waPhone || '+1 (203) 482-2797';
     return raw.replace(/\D/g, '');
   };
   const waLink = (msg) => `https://wa.me/${getWaNumber()}?text=${encodeURIComponent(msg)}`;
@@ -85,8 +85,8 @@
       id: 'delivery',
       kw: ['entrega', 'deliver', 'frete', 'shipping', 'zip', 'cep', 'endereço', 'endereco', 'address', 'pickup', 'retirada', 'envio'],
       reply: (lang) => lang === 'pt'
-        ? `Trabalhamos em Orlando (FL) e arredores: retirada agendada ou entrega local. A taxa varia pelo ZIP e horário — me passa o CEP da entrega que retorno com o valor exato. Pickup é gratuito.`
-        : `We operate in Orlando, FL and nearby: scheduled pickup or local delivery. Fee depends on ZIP and time slot — share your ZIP and I'll quote it. Pickup is always free.`,
+        ? `Atendemos Danbury, CT 06810 e arredores com retirada agendada ou entrega local. O site calcula pelo ZIP antes do WhatsApp; pickup e gratuito.`
+        : `We serve Danbury, CT 06810 and nearby areas with scheduled pickup or local delivery. The site checks the ZIP before WhatsApp; pickup is free.`,
       chips: (lang) => lang === 'pt'
         ? ['Quero entrega', 'Vou retirar', 'Qual o prazo?']
         : ['I want delivery', 'I will pick up', "What's the lead time?"],

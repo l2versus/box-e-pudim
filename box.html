@@ -13,10 +13,12 @@
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="preload" href="assets/img/products/product-dessert-cups.avif" as="image" type="image/avif" />
     <link rel="preload" href="assets/img/products/product-shrimp-tray.avif" as="image" type="image/avif" />
-    <link rel="stylesheet" href="box.css?v=80" />
-    <link rel="stylesheet" href="assets/header/header.css?v=80" />
-    <link rel="stylesheet" href="assets/cart/cart-drawer.css?v=80" />
-    <link rel="stylesheet" href="assets/vendor/fluid-particles.css?v=80" />
+    <link rel="stylesheet" href="box.css?v=81" />
+    <link rel="stylesheet" href="assets/header/header.css?v=81" />
+    <link rel="stylesheet" href="assets/cart/cart-drawer.css?v=81" />
+    <link rel="stylesheet" href="assets/delivery/delivery.css?v=81" />
+    <link rel="stylesheet" href="assets/vendor/fluid-particles.css?v=81" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   </head>
   <body class="box-body">
     <!-- legacy bridge (não remover): mantém box.js funcional pra troca de idioma -->
@@ -27,7 +29,7 @@
     <header class="bk-header" data-bk-header data-bk-theme="cobalt" data-bk-cart-count="0" aria-label="Site header">
       <div class="bk-announce" role="region" aria-label="Live batch updates">
         <div class="bk-announce-track" data-bk-marquee>
-          <span class="bk-announce-chip" data-pulse><span data-bk-i18n="bkAnnounceBatchClose">Saturday batch closes in</span> <strong data-bk-deadline="2026-05-09T18:00">--</strong></span>
+          <span class="bk-announce-chip" data-pulse><span data-bk-i18n="bkAnnounceBatchClose">Saturday batch closes in</span> <strong data-bk-deadline="2026-06-06T18:00">--</strong></span>
           <span class="bk-announce-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17V6h11v11"/><path d="M14 10h4l3 4v3h-7"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg><span data-bk-i18n="bkAnnounceFamilyBoxes">Family-size boxes prepared on demand</span></span>
           <span class="bk-announce-chip" data-bk-i18n="bkAnnounceBoxSlots">Only 3 box slots for this weekend</span>
           <span class="bk-announce-chip" data-bk-i18n="bkAnnounceSecondBox">Save $8 on your second box this month</span>
@@ -253,6 +255,21 @@
             Add selected box
           </button>
 
+          <div class="box-order-fields checkout-contact">
+            <label>
+              <span>Name</span>
+              <input name="name" type="text" autocomplete="name" placeholder="Your name" required />
+            </label>
+            <label>
+              <span>WhatsApp</span>
+              <input name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+1 (203) 000-0000" required />
+            </label>
+            <label>
+              <span>Email</span>
+              <input name="email" type="email" autocomplete="email" placeholder="you@email.com" />
+            </label>
+          </div>
+
           <div class="box-order-fields">
             <label>
               <span>For when?</span>
@@ -275,6 +292,35 @@
               <span>Delivery request</span>
             </label>
           </fieldset>
+
+          <section class="bk-delivery-panel" data-delivery-panel>
+            <header>
+              <div>
+                <h3>Delivery from Danbury</h3>
+                <p>Enter a ZIP to check the automatic radius and delivery fee.</p>
+              </div>
+            </header>
+            <div class="bk-delivery-grid">
+              <div>
+                <div class="bk-delivery-row">
+                  <label>
+                    <span>Delivery ZIP</span>
+                    <input name="deliveryZip" type="text" inputmode="numeric" autocomplete="postal-code" maxlength="5" data-delivery-zip placeholder="06810" />
+                  </label>
+                  <button class="box-button box-button-light" type="button" data-delivery-check>Check</button>
+                </div>
+                <label>
+                  <span>Delivery address</span>
+                  <input name="deliveryAddress" type="text" autocomplete="street-address" placeholder="Street, city, CT" />
+                </label>
+                <div class="bk-delivery-quote" data-delivery-quote>
+                  <strong>Pickup is free.</strong>
+                  <span>For delivery, enter the ZIP before sending.</span>
+                </div>
+              </div>
+              <div class="bk-service-map" data-service-map aria-label="Danbury delivery radius"></div>
+            </div>
+          </section>
 
           <label class="box-notes">
             <span>Notes</span>
@@ -330,13 +376,15 @@
       <em data-box-cart-floating-total>$42</em>
     </button>
 
-    <script src="assets/img/picture.js?v=80"></script>
-    <script src="assets/config/config.js?v=80"></script>
-    <script src="assets/api/client.js?v=80"></script>
-    <script src="box.js?v=80"></script>
-    <script src="assets/header/header.js?v=80" defer></script>
-    <script src="assets/cart/cart-drawer.js?v=80" defer></script>
-    <script src="assets/i18n/box-i18n.js?v=80" defer></script>
-    <script type="module" src="assets/vendor/fluid-particles.js?v=80"></script>
+    <script src="assets/img/picture.js?v=81"></script>
+    <script src="assets/config/config.js?v=81"></script>
+    <script src="assets/api/client.js?v=81"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="assets/delivery/delivery.js?v=81"></script>
+    <script src="box.js?v=81"></script>
+    <script src="assets/header/header.js?v=81" defer></script>
+    <script src="assets/cart/cart-drawer.js?v=81" defer></script>
+    <script src="assets/i18n/box-i18n.js?v=81" defer></script>
+    <script type="module" src="assets/vendor/fluid-particles.js?v=81"></script>
   </body>
 </html>

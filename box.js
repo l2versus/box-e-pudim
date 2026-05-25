@@ -1,4 +1,4 @@
-const BOX_WA_PHONE = (window.BK_CONFIG && window.BK_CONFIG.waPhone) || "15551234567";
+const BOX_WA_PHONE = (window.BK_CONFIG && window.BK_CONFIG.waPhone) || "12034822797";
 
 const boxProducts = {
   cups: {
@@ -172,12 +172,19 @@ const boxOrderForm = document.querySelector("[data-box-order-form]");
 const boxCartLines = document.querySelector("[data-box-cart-lines]");
 const boxCartCount = document.querySelector("[data-box-cart-count]");
 const boxCartTotal = document.querySelector("[data-box-cart-total]");
+const boxCartFloatingCount = document.querySelector("[data-box-cart-floating-count]");
+const boxCartFloatingTotal = document.querySelector("[data-box-cart-floating-total]");
 const boxOrderLink = document.querySelector("[data-box-order]");
 const boxMessagePreview = document.querySelector("[data-box-message-preview]");
 const boxDateInput = document.querySelector("[data-box-date]");
+const boxDeliveryZipInput = document.querySelector("[data-delivery-zip]");
+const boxDeliveryCheckButton = document.querySelector("[data-delivery-check]");
+const boxDeliveryQuoteBox = document.querySelector("[data-delivery-quote]");
+const boxServiceMap = document.querySelector("[data-service-map]");
 
 let activeProduct = "cups";
 let boxCart = [{ productKey: "cups", quantity: 1 }];
+let activeBoxDeliveryQuote = null;
 
 function whatsappUrl(message) {
   return `https://wa.me/${BOX_WA_PHONE}?text=${encodeURIComponent(message)}`;
@@ -208,13 +215,58 @@ function cartTotalNumber() {
   return cartItems().reduce((sum, item) => sum + priceNumber(item.product.price) * item.quantity, 0);
 }
 
+function boxFulfillmentValue() {
+  return new FormData(boxOrderForm).get("fulfillment") || "Pickup";
+}
+
+function isBoxDeliverySelected() {
+  return /delivery|entrega/i.test(String(boxFulfillmentValue()));
+}
+
+function boxDeliveryFee() {
+  return isBoxDeliverySelected() && activeBoxDeliveryQuote?.served ? (activeBoxDeliveryQuote.feeCents || 0) / 100 : 0;
+}
+
+function boxOrderTotalNumber() {
+  return cartTotalNumber() + boxDeliveryFee();
+}
+
 function cartTotalText() {
   const items = cartItems();
   const total = cartTotalNumber();
   const hasCustom = items.some((item) => priceNumber(item.product.price) === 0);
   if (hasCustom && total > 0) return `${money(total)} + custom`;
   if (hasCustom) return "custom quote";
-  return money(total);
+  return money(boxOrderTotalNumber());
+}
+
+function renderBoxDeliveryQuote(quote = activeBoxDeliveryQuote) {
+  if (!boxDeliveryQuoteBox) return;
+  const deliverySelected = isBoxDeliverySelected();
+  boxDeliveryQuoteBox.classList.toggle("is-outside", !!quote && !quote.served);
+  if (!deliverySelected) {
+    boxDeliveryQuoteBox.innerHTML = "<strong>Pickup is free.</strong><span>For delivery, enter the ZIP before sending.</span>";
+    return;
+  }
+  if (!quote) {
+    boxDeliveryQuoteBox.innerHTML = "<strong>Enter delivery ZIP.</strong><span>We quote from Danbury, CT 06810.</span>";
+    return;
+  }
+  if (quote.served) {
+    boxDeliveryQuoteBox.innerHTML = `<strong>${quote.feeLabel} delivery</strong><span>${quote.zip} - ${quote.distanceMiles} mi from Danbury - ${quote.tier.label}</span>`;
+    return;
+  }
+  boxDeliveryQuoteBox.innerHTML = `<strong>Delivery needs confirmation.</strong><span>${quote.zip || ""} ${quote.distanceMiles ? `- ${quote.distanceMiles} mi` : ""} - ${quote.message}</span>`;
+}
+
+function checkBoxDeliveryZip() {
+  if (!boxDeliveryZipInput || !window.bkDelivery) return null;
+  const zip = window.bkDelivery.sanitizeZip(boxDeliveryZipInput.value);
+  boxDeliveryZipInput.value = zip;
+  activeBoxDeliveryQuote = window.bkDelivery.quoteByZip(zip);
+  renderBoxDeliveryQuote(activeBoxDeliveryQuote);
+  refreshBoxCart();
+  return activeBoxDeliveryQuote;
 }
 
 function setMinimumDate() {
@@ -238,6 +290,18 @@ function updateHeaderWhatsApp() {
 function buildBoxMessage() {
   const data = new FormData(boxOrderForm);
   const notes = String(data.get("notes") || "").trim() || "No notes yet";
+  const name = String(data.get("name") || "").trim();
+  const phone = String(data.get("phone") || "").trim();
+  const zip = String(data.get("deliveryZip") || "").trim();
+  const address = String(data.get("deliveryAddress") || "").trim();
+  const deliveryLine = isBoxDeliverySelected()
+    ? `${address || "Address pending"}${zip ? ` - ZIP ${zip}` : ""}`
+    : "Pickup in Danbury, CT";
+  const feeLine = isBoxDeliverySelected()
+    ? activeBoxDeliveryQuote?.served
+      ? activeBoxDeliveryQuote.feeLabel
+      : "Confirm on WhatsApp"
+    : "$0";
   const items = cartItems();
   const itemLines = items.length
     ? items
@@ -251,11 +315,15 @@ function buildBoxMessage() {
 
   return `Hi! I would like to request a Box InHouse preorder.
 
+Customer: ${name || "Not filled yet"}
+WhatsApp: ${phone || "Not filled yet"}
 Items:
 ${itemLines}
 Preferred date: ${data.get("date")}
 Preferred time: ${data.get("time") || "Owner can suggest the best window"}
 Fulfillment: ${data.get("fulfillment")}
+Delivery: ${deliveryLine}
+Delivery fee: ${feeLine}
 Estimated total: ${cartTotalText()}
 Notes: ${notes}`;
 }
@@ -298,6 +366,8 @@ function renderBoxCart() {
 
   if (boxCartCount) boxCartCount.textContent = `${cartQuantity()} items`;
   if (boxCartTotal) boxCartTotal.textContent = cartTotalText();
+  if (boxCartFloatingCount) boxCartFloatingCount.textContent = `${cartQuantity()} item${cartQuantity() === 1 ? "" : "s"}`;
+  if (boxCartFloatingTotal) boxCartFloatingTotal.textContent = cartTotalText();
 }
 
 function updateBoxOrder() {
@@ -350,6 +420,147 @@ function saveBoxLeadSnapshot() {
       }
     } catch { /* não bloqueia WA */ }
   }
+}
+
+function saveBoxLocalLead(status = "Novo lead") {
+  try {
+    const data = new FormData(boxOrderForm);
+    const leads = JSON.parse(window.localStorage.getItem("bp-leads") || "[]");
+    const lead = {
+      id: `lead-${Date.now()}`,
+      source: "Box InHouse",
+      status,
+      createdAt: new Date().toISOString(),
+      date: data.get("date"),
+      time: data.get("time") || "Owner can suggest the best window",
+      fulfillment: data.get("fulfillment"),
+      total: cartTotalText(),
+      items: cartItems().map((item) => `${item.quantity}x ${item.product.label}`),
+      message: buildBoxMessage(),
+      note: "Fallback local: confira a API para confirmar se o pedido entrou.",
+    };
+    window.localStorage.setItem("bp-leads", JSON.stringify([lead, ...leads].slice(0, 80)));
+    return lead;
+  } catch {
+    return null;
+  }
+}
+
+function boxRequestedForIso(dateValue) {
+  return `${dateValue}T17:00:00-04:00`;
+}
+
+function boxSlug(productKey) {
+  const map = {
+    cups: "cups-tower",
+    shrimp: "shrimp-tray",
+    weekend: "weekend-family-box",
+    beefRice: "beef-rice-box",
+    fitGroundBeef: "fit-ground-beef-box",
+    grilledChicken: "grilled-chicken-box",
+    meatballPasta: "meatball-pasta-box",
+    salmonMash: "salmon-mash-box",
+    groundBeefRice: "ground-beef-rice-box",
+    pizzaWaffle: "pizza-waffle",
+    savoryPie: "savory-pie",
+    shrimpPlatter: "shrimp-platter",
+    cookieDuo: "cookie-duo",
+    charcuterie: "charcuterie-board",
+    luxuryHamper: "luxury-hamper",
+    birthdayTray: "birthday-tray",
+  };
+  return map[productKey] || productKey;
+}
+
+function buildBoxLeadPayload() {
+  const data = new FormData(boxOrderForm);
+  const items = cartItems();
+  const lang = window.localStorage.getItem("bp-lang") === "pt" ? "pt" : "en";
+  return {
+    name: String(data.get("name") || "").trim(),
+    phone: String(data.get("phone") || "").trim(),
+    email: String(data.get("email") || "").trim() || undefined,
+    productSlug: boxSlug(items[0]?.productKey),
+    message: buildBoxMessage(),
+    preferredLang: lang,
+    consent: true,
+  };
+}
+
+function buildBoxOrderPayload() {
+  const data = new FormData(boxOrderForm);
+  const delivery = isBoxDeliverySelected();
+  const lang = window.localStorage.getItem("bp-lang") === "pt" ? "pt" : "en";
+  return {
+    customer: {
+      name: String(data.get("name") || "").trim(),
+      phone: String(data.get("phone") || "").trim(),
+      email: String(data.get("email") || "").trim() || undefined,
+      preferredLang: lang,
+    },
+    fulfillment: delivery ? "delivery" : "pickup",
+    requestedFor: boxRequestedForIso(String(data.get("date") || "").trim()),
+    requestedTz: "America/New_York",
+    deliveryAddress: delivery ? String(data.get("deliveryAddress") || "").trim() : undefined,
+    deliveryZip: delivery ? String(data.get("deliveryZip") || "").trim() : undefined,
+    notes: String(data.get("notes") || "").trim() || undefined,
+    items: cartItems().map((item) => ({
+      productSlug: boxSlug(item.productKey),
+      qty: item.quantity,
+    })),
+    consent: true,
+  };
+}
+
+function validateBoxCheckout() {
+  const data = new FormData(boxOrderForm);
+  if (!cartItems().length) return "Add at least 1 item.";
+  if (!String(data.get("name") || "").trim()) return "Enter your name.";
+  if (!String(data.get("phone") || "").trim()) return "Enter your WhatsApp.";
+  if (!String(data.get("date") || "").trim()) return "Choose a date.";
+  if (!window.bkIsValidPreorderDate(String(data.get("date") || ""))) return "Date must be at least 48h ahead.";
+  if (isBoxDeliverySelected()) {
+    const zip = String(data.get("deliveryZip") || "").trim();
+    const address = String(data.get("deliveryAddress") || "").trim();
+    if (!zip) return "Enter the delivery ZIP.";
+    if (!address) return "Enter the delivery address.";
+    const quote = activeBoxDeliveryQuote?.zip === zip ? activeBoxDeliveryQuote : window.bkDelivery?.quoteByZip(zip);
+    activeBoxDeliveryQuote = quote;
+    renderBoxDeliveryQuote(quote);
+    if (!quote?.served) return "This ZIP needs WhatsApp confirmation.";
+  }
+  return "";
+}
+
+async function submitBoxCheckout(event) {
+  event.preventDefault();
+  const error = validateBoxCheckout();
+  if (error) {
+    alert(error);
+    return;
+  }
+  const originalText = boxOrderLink.textContent;
+  boxOrderLink.setAttribute("aria-busy", "true");
+  boxOrderLink.textContent = "Sending...";
+  let message = buildBoxMessage();
+  try {
+    if (window.bkApi) {
+      const order = await window.bkApi.createOrder(buildBoxOrderPayload());
+      message = `${message}\n\nOrder: #${order.number}`;
+    } else {
+      saveBoxLocalLead("API offline");
+    }
+  } catch {
+    try {
+      if (window.bkApi) await window.bkApi.createLead(buildBoxLeadPayload());
+    } catch {
+      saveBoxLocalLead("API fallback");
+    }
+  } finally {
+    boxOrderLink.removeAttribute("aria-busy");
+    boxOrderLink.textContent = originalText;
+  }
+  window.location.href = whatsappUrl(message);
 }
 
 function renderProductControls() {
@@ -489,9 +700,17 @@ document.addEventListener("click", (event) => {
   }
 });
 
-boxOrderForm?.addEventListener("input", updateBoxOrder);
-boxOrderForm?.addEventListener("change", updateBoxOrder);
-boxOrderLink?.addEventListener("click", saveBoxLeadSnapshot);
+boxOrderForm?.addEventListener("input", () => {
+  renderBoxDeliveryQuote();
+  updateBoxOrder();
+});
+boxOrderForm?.addEventListener("change", () => {
+  renderBoxDeliveryQuote();
+  updateBoxOrder();
+});
+boxDeliveryCheckButton?.addEventListener("click", checkBoxDeliveryZip);
+boxDeliveryZipInput?.addEventListener("blur", checkBoxDeliveryZip);
+boxOrderLink?.addEventListener("click", submitBoxCheckout);
 
 window.addEventListener(
   "pointermove",
@@ -535,6 +754,19 @@ if ("IntersectionObserver" in window) {
 
 renderProductControls();
 renderProductCatalog();
+function renderBoxDeliveryMap() {
+  if (boxServiceMap && window.bkDelivery) {
+    window.bkDelivery.renderServiceMap(boxServiceMap, { zip: boxDeliveryZipInput?.value, reset: true });
+  }
+}
+
+renderBoxDeliveryMap();
+document.addEventListener("bk:delivery-settings-loaded", () => {
+  activeBoxDeliveryQuote = boxDeliveryZipInput?.value ? window.bkDelivery?.quoteByZip(boxDeliveryZipInput.value) : null;
+  renderBoxDeliveryQuote(activeBoxDeliveryQuote);
+  renderBoxDeliveryMap();
+  refreshBoxCart();
+});
 setMinimumDate();
 setProduct(activeProduct);
 refreshBoxCart();

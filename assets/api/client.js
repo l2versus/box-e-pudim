@@ -19,6 +19,15 @@
 (() => {
   'use strict';
 
+  const STATIC_LOCAL =
+    ['127.0.0.1', 'localhost'].includes(window.location.hostname) &&
+    ['4173', ''].includes(window.location.port || '') &&
+    !window.BK_CONFIG?.forceApiLocal;
+  if (STATIC_LOCAL) {
+    window.bkApi = null;
+    return;
+  }
+
   const BASE = (window.BK_CONFIG && window.BK_CONFIG.apiBase) || '/api';
 
   function uuid() {
@@ -112,6 +121,9 @@
     getAvailability: (date, category) =>
       request('GET', `/availability?date=${encodeURIComponent(date)}${category ? `&category=${encodeURIComponent(category)}` : ''}`),
 
+    deliveryQuote: (zip) =>
+      request('GET', `/delivery/quote?zip=${encodeURIComponent(zip)}`),
+
     // ---- Admin ----
     adminLogin: (email, password) =>
       request('POST', '/admin/login', { email, password }),
@@ -147,6 +159,8 @@
       request('PUT', '/admin/capacity', { date, category, capacityMax }),
 
     adminKpis: () => request('GET', '/admin/kpis'),
+    adminDeliverySettings: () => request('GET', '/admin/delivery-settings'),
+    adminUpdateDeliverySettings: (settings) => request('PUT', '/admin/delivery-settings', settings),
   };
 
   window.bkApi = api;

@@ -11,14 +11,14 @@
   const I18N = {
     en: {
       bkAnnounceBatchClose: 'Saturday batch closes in',
-      bkAnnouncePickupOrlando: 'Pickup or local delivery in Orlando',
+      bkAnnouncePickupOrlando: 'Pickup or local delivery in Danbury',
       bkAnnounceFamilyBoxes: 'Family-size boxes prepared on demand',
       bkAnnounceSlotsLeft: 'Only 5 slots left for this weekend',
       bkAnnounceBoxSlots: 'Only 3 box slots for this weekend',
       bkAnnounceCode: 'Use code FRESH10 on your first batch',
       bkAnnounceSecondBox: 'Save $8 on your second box this month',
       bkAnnounceTwoDoors: 'Two doors, one kitchen',
-      bkAnnounceUSOnly: 'Pickup or local delivery, US only',
+      bkAnnounceUSOnly: 'Danbury pickup or local delivery',
       bkAnnouncePreorderUS: 'Brazilian sweets and boxes by preorder',
       bkSwitchPudim: 'Pudim',
       bkSwitchBox: 'Box',
@@ -82,7 +82,7 @@
     },
     pt: {
       bkAnnounceBatchClose: 'Lote de sábado fecha em',
-      bkAnnouncePickupOrlando: 'Retirada local ou entrega em Orlando',
+      bkAnnouncePickupOrlando: 'Retirada local ou entrega em Danbury',
       bkAnnounceFamilyBoxes: 'Boxes tamanho família preparados sob encomenda',
       bkAnnounceSlotsLeft: 'Apenas 5 vagas para este fim de semana',
       bkAnnounceBoxSlots: 'Apenas 3 vagas de box este fim de semana',

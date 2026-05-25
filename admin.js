@@ -1,4 +1,4 @@
-const ADMIN_WA_PHONE = (window.BK_CONFIG && window.BK_CONFIG.waPhone) || "15551234567";
+const ADMIN_WA_PHONE = (window.BK_CONFIG && window.BK_CONFIG.waPhone) || "12034822797";
 
 const body = document.body;
 const loginForm = document.querySelector("[data-login-form]");
@@ -18,6 +18,8 @@ const productsReady = document.querySelector("[data-products-ready]");
 const productsPreorder = document.querySelector("[data-products-preorder]");
 const leadList = document.querySelector("[data-lead-list]");
 
+const isProductionAdmin = () => Boolean(window.bkApi && window.BK_CONFIG?.adminMode !== "demo");
+
 const statusFlow = [
   { key: "requested", label: "Solicitado", action: "Avancar" },
   { key: "paid", label: "Pago", action: "Avancar" },
@@ -35,7 +37,24 @@ const productImages = {
   Pudim: "assets/img/products/product-classic-pudim.png",
   "Box InHouse": "assets/img/products/product-dessert-cups.png",
   Doces: "assets/img/lifestyle/sweets-photo.png",
-  Salgados: "assets/img/products/product-shrimp-tray.png"
+  Salgados: "assets/img/products/product-shrimp-tray.png",
+  Eventos: "assets/img/events/event-berry-cake.png"
+};
+
+const CATEGORY_TO_API = {
+  Pudim: "pudim",
+  Doces: "sweet",
+  "Box InHouse": "box",
+  Salgados: "tray",
+  Eventos: "gift"
+};
+
+const API_TO_CATEGORY = {
+  pudim: "Pudim",
+  sweet: "Doces",
+  box: "Box InHouse",
+  tray: "Salgados",
+  gift: "Eventos"
 };
 
 function defaultProducts() {
@@ -265,6 +284,7 @@ function defaultProducts() {
 }
 
 function loadProducts() {
+  if (isProductionAdmin()) return [];
   try {
     const saved = window.localStorage.getItem("bp-admin-products");
     if (!saved) return defaultProducts();
@@ -279,6 +299,7 @@ function loadProducts() {
 }
 
 function saveProducts() {
+  if (isProductionAdmin()) return;
   window.localStorage.setItem("bp-admin-products", JSON.stringify(adminProducts));
 }
 
@@ -314,6 +335,7 @@ function defaultLeads() {
 }
 
 function loadLeads() {
+  if (isProductionAdmin()) return [];
   try {
     const saved = window.localStorage.getItem("bp-leads");
     return saved ? JSON.parse(saved) : defaultLeads();
@@ -331,6 +353,116 @@ function productImage(product) {
   return product.image || productImages[product.category] || "assets/img/lifestyle/pudding-photo.png";
 }
 
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
+}
+
+function digitsOnly(value) {
+  return String(value || "").replace(/\D/g, "");
+}
+
+function slugify(value) {
+  return String(value || "product")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 70) || `product-${Date.now()}`;
+}
+
+function storeFromCategory(category) {
+  return ["box", "tray"].includes(category) ? "Box InHouse" : "Brazilian Pudding";
+}
+
+function adminProductFromApi(product) {
+  const category = API_TO_CATEGORY[product.category] || "Eventos";
+  return {
+    id: product.id,
+    apiId: product.id,
+    slug: product.slug,
+    name: product.name,
+    category,
+    storefront: storeFromCategory(product.category),
+    description: product.description || "",
+    price: Number(product.priceCents || 0) / 100,
+    quantity: Number(product.maxQtyPerDay || (product.category === "pudim" ? 10 : 14)),
+    saleType: "Sob encomenda",
+    leadTime: `${Number(product.leadTimeHours || 48)}h`,
+    image: product.imageUrl || productImages[category],
+    active: Boolean(product.active && !product.paused),
+    backendCategory: product.category,
+    sortOrder: product.sortOrder || 0
+  };
+}
+
+function productToApiPayload(product) {
+  const category = CATEGORY_TO_API[product.category] || product.backendCategory || "gift";
+  return {
+    slug: product.slug || slugify(product.name),
+    category,
+    name: product.name,
+    description: product.description || undefined,
+    priceCents: Math.max(0, Math.round(Number(product.price || 0) * 100)),
+    imageUrl: product.image || undefined,
+    active: Boolean(product.active),
+    paused: !product.active,
+    leadTimeHours: parseInt(String(product.leadTime || "48").match(/\d+/)?.[0] || "48", 10),
+    maxQtyPerDay: Math.max(0, Math.round(Number(product.quantity || 0))) || undefined,
+    sortOrder: product.sortOrder || 0
+  };
+}
+
+async function refreshProductsFromApi(options = {}) {
+  if (!isProductionAdmin()) return false;
+  try {
+    const res = await window.bkApi.adminListProducts();
+    adminProducts = (res?.products || []).map(adminProductFromApi);
+    renderProducts();
+    if (!options.silent) showToast("Produtos sincronizados com a API.");
+    return true;
+  } catch {
+    if (!options.silent) showToast("Nao consegui carregar produtos da API.");
+    return false;
+  }
+}
+
+function leadFromApi(lead) {
+  return {
+    id: lead.id,
+    source: `API - ${lead.source || "site"}`,
+    status: lead.status === "new" ? "Novo lead" : lead.status,
+    createdAt: lead.createdAt,
+    date: "",
+    time: "",
+    fulfillment: "",
+    total: "",
+    items: lead.productSlug ? [lead.productSlug] : ["Lead sem produto"],
+    message: lead.message || "",
+    note: "",
+    phone: lead.phone,
+    email: lead.email,
+  };
+}
+
+async function refreshLeadsFromApi() {
+  if (!isProductionAdmin()) return false;
+  try {
+    const res = await window.bkApi.adminListLeads({ pageSize: 50 });
+    adminLeads = (res?.leads || []).map(leadFromApi);
+    renderLeads();
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 function showToast(message) {
   toast.textContent = message;
   toast.classList.add("is-visible");
@@ -341,7 +473,9 @@ function showToast(message) {
 function unlockDashboard() {
   body.classList.add("is-unlocked");
   adminApp.setAttribute("aria-hidden", "false");
-  showToast("Painel demo desbloqueado.");
+  showToast("Painel desbloqueado.");
+  refreshProductsFromApi({ silent: true });
+  refreshLeadsFromApi();
 }
 
 function lockDashboard() {
@@ -379,6 +513,14 @@ function updateCapacitySummary() {
 function renderProducts() {
   if (!productList) return;
 
+  if (!adminProducts.length) {
+    productList.innerHTML = `<div class="lead-empty">Nenhum produto carregado ainda. Entre no painel e sincronize a API.</div>`;
+    productsActive.textContent = "0";
+    productsReady.textContent = "0";
+    productsPreorder.textContent = "0";
+    return;
+  }
+
   productList.innerHTML = adminProducts
     .map((product) => {
       const availability = Number(product.quantity) <= 0 ? "Esgotado" : `${product.quantity} vagas`;
@@ -388,21 +530,21 @@ function renderProducts() {
       const soldOut = Number(product.quantity) <= 0 ? " is-sold-out" : "";
       const imgSrc = productImage(product);
       const rowImg = window.bkPicture
-        ? window.bkPicture.html(imgSrc, `alt="${product.name}" loading="lazy"`)
-        : `<img src="${imgSrc}" alt="${product.name}" loading="lazy" />`;
+        ? window.bkPicture.html(imgSrc, `alt="${escapeHtml(product.name)}" loading="lazy"`)
+        : `<img src="${escapeHtml(imgSrc)}" alt="${escapeHtml(product.name)}" loading="lazy" />`;
       return `
-        <article class="product-control product-row${paused}${soldOut}" data-product-id="${product.id}">
+        <article class="product-control product-row${paused}${soldOut}" data-product-id="${escapeHtml(product.id)}">
           ${rowImg}
           <div class="product-info">
             <span class="product-row-top">
-              <strong>${product.name}</strong>
-              <b>${money(product.price)}</b>
+              <strong>${escapeHtml(product.name)}</strong>
+              <b>${escapeHtml(money(product.price))}</b>
             </span>
-            <small>${storefront} - ${product.category} - ${availability} - ${product.leadTime || "sem prazo definido"}</small>
-            <small>${description}</small>
+            <small>${escapeHtml(storefront)} - ${escapeHtml(product.category)} - ${escapeHtml(availability)} - ${escapeHtml(product.leadTime || "sem prazo definido")}</small>
+            <small>${escapeHtml(description)}</small>
             <span class="product-badges">
-              <em>${product.saleType}</em>
-              <em>${storefront}</em>
+              <em>${escapeHtml(product.saleType)}</em>
+              <em>${escapeHtml(storefront)}</em>
               <em>${product.active ? "Ativo" : "Pausado"}</em>
             </span>
           </div>
@@ -438,15 +580,17 @@ function renderLeads() {
     .map((lead) => {
       const created = lead.createdAt ? new Date(lead.createdAt).toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" }) : "Sem data";
       const items = Array.isArray(lead.items) ? lead.items.join(", ") : "Sem itens";
+      const waTarget = digitsOnly(lead.phone) || ADMIN_WA_PHONE;
+      const message = lead.message || lead.note || "Sem mensagem salva";
       return `
         <article>
           <div>
-            <span>${lead.status || "Novo lead"} - ${lead.source || "Site"} - ${created}</span>
-            <strong>${items}</strong>
-            <p>${lead.fulfillment || "Forma nao informada"} - ${lead.date || "sem data"} - ${lead.time || "sem horario"} - ${lead.total || "sem total"}</p>
-            <pre>${lead.message || lead.note || "Sem mensagem salva"}</pre>
+            <span>${escapeHtml(lead.status || "Novo lead")} - ${escapeHtml(lead.source || "Site")} - ${escapeHtml(created)}</span>
+            <strong>${escapeHtml(items)}</strong>
+            <p>${escapeHtml(lead.fulfillment || "Forma nao informada")} - ${escapeHtml(lead.date || "sem data")} - ${escapeHtml(lead.time || "sem horario")} - ${escapeHtml(lead.total || "sem total")}</p>
+            <pre>${escapeHtml(message)}</pre>
           </div>
-          <a href="https://wa.me/${ADMIN_WA_PHONE}" target="_blank" rel="noreferrer">Responder</a>
+          <a href="https://wa.me/${escapeHtml(waTarget)}" target="_blank" rel="noreferrer">Responder</a>
         </article>
       `;
     })
@@ -483,9 +627,14 @@ function productFromForm() {
   const category = form.get("category");
   const saleType = form.get("saleType");
   const fallbackLeadTime = saleType === "Pronta entrega" ? "hoje" : "48h";
+  const id = form.get("id") || `product-${Date.now()}`;
+  const existing = adminProducts.find((item) => item.id === id);
 
   return {
-    id: form.get("id") || `product-${Date.now()}`,
+    id,
+    apiId: existing?.apiId,
+    slug: existing?.slug,
+    sortOrder: existing?.sortOrder || 0,
     name: String(form.get("name") || "").trim(),
     category,
     storefront: String(form.get("storefront") || "Brazilian Pudding").trim(),
@@ -616,12 +765,33 @@ document.querySelectorAll("[data-capacity-slider]").forEach((slider) => {
   });
 });
 
-productForm.addEventListener("submit", (event) => {
+productForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   const product = productFromForm();
 
   if (!product.name) {
     showToast("Informe o nome do produto.");
+    return;
+  }
+
+  if (isProductionAdmin()) {
+    const payload = productToApiPayload(product);
+    productSubmit.disabled = true;
+    try {
+      if (product.apiId) {
+        await window.bkApi.adminUpdateProduct(product.apiId, payload);
+        showToast(`${product.name} atualizado na API.`);
+      } else {
+        await window.bkApi.adminCreateProduct(payload);
+        showToast(`${product.name} criado na API.`);
+      }
+      await refreshProductsFromApi({ silent: true });
+      clearProductForm();
+    } catch (err) {
+      showToast(err?.code === "slug_taken" ? "Ja existe produto com esse slug." : "Erro ao salvar produto na API.");
+    } finally {
+      productSubmit.disabled = false;
+    }
     return;
   }
 
@@ -633,7 +803,6 @@ productForm.addEventListener("submit", (event) => {
     adminProducts = [product, ...adminProducts];
     showToast(`${product.name} adicionado ao cardapio.`);
   }
-
   saveProducts();
   renderProducts();
   clearProductForm();
@@ -642,6 +811,11 @@ productForm.addEventListener("submit", (event) => {
 productCancel.addEventListener("click", clearProductForm);
 
 productReset.addEventListener("click", () => {
+  if (isProductionAdmin()) {
+    refreshProductsFromApi();
+    clearProductForm();
+    return;
+  }
   adminProducts = defaultProducts();
   saveProducts();
   renderProducts();
@@ -649,7 +823,7 @@ productReset.addEventListener("click", () => {
   showToast("Produtos demo restaurados.");
 });
 
-productList.addEventListener("change", (event) => {
+productList.addEventListener("change", async (event) => {
   const activeToggle = event.target.closest("[data-product-active]");
   if (!activeToggle) return;
 
@@ -658,6 +832,21 @@ productList.addEventListener("change", (event) => {
   if (!product) return;
 
   product.active = activeToggle.checked;
+  if (isProductionAdmin() && product.apiId) {
+    activeToggle.disabled = true;
+    try {
+      await window.bkApi.adminUpdateProduct(product.apiId, productToApiPayload(product));
+      showToast(`${product.name} ${product.active ? "ativo" : "pausado"} na API.`);
+      await refreshProductsFromApi({ silent: true });
+    } catch {
+      product.active = !product.active;
+      showToast("Erro ao atualizar produto na API.");
+      renderProducts();
+    } finally {
+      activeToggle.disabled = false;
+    }
+    return;
+  }
   saveProducts();
   renderProducts();
   showToast(`${product.name} ${product.active ? "ativo" : "pausado"} no cardapio.`);
@@ -665,5 +854,10 @@ productList.addEventListener("change", (event) => {
 
 updateOrderCounts();
 updateCapacitySummary();
+if (productReset && window.BK_CONFIG?.adminMode !== "demo") {
+  productReset.textContent = "Recarregar API";
+} else if (productReset) {
+  productReset.textContent = "Restaurar demo";
+}
 renderProducts();
 renderLeads();

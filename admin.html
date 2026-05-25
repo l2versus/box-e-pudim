@@ -12,9 +12,11 @@
       }
     </script>
     <link rel="preload" href="assets/img/lifestyle/pudding-photo.avif" as="image" type="image/avif" />
-    <link rel="stylesheet" href="admin.css?v=80" />
-    <link rel="stylesheet" href="assets/header/header.css?v=80" />
-    <link rel="stylesheet" href="assets/admin/admin-router.css?v=80" />
+    <link rel="stylesheet" href="admin.css?v=81" />
+    <link rel="stylesheet" href="assets/header/header.css?v=81" />
+    <link rel="stylesheet" href="assets/admin/admin-router.css?v=81" />
+    <link rel="stylesheet" href="assets/delivery/delivery.css?v=81" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   </head>
   <body class="admin-body">
     <section class="login-stage" data-login-stage aria-label="Private admin login">
@@ -325,7 +327,7 @@
                   <option value="Ambos">Ambos</option>
                   <option value="paused">Pausados</option>
                 </select>
-                <button class="admin-button admin-button-ghost" type="button" data-product-reset>Restaurar demo</button>
+                <button class="admin-button admin-button-ghost" type="button" data-product-reset>Recarregar API</button>
               </div>
             </div>
             <form class="product-editor" data-product-form>
@@ -341,6 +343,7 @@
                   <option value="Box InHouse">Box InHouse</option>
                   <option value="Doces">Doces</option>
                   <option value="Salgados">Salgados</option>
+                  <option value="Eventos">Eventos</option>
                 </select>
               </label>
               <label>
@@ -427,6 +430,52 @@
                 <span>Zelle, Venmo ou link antes de entrar em producao.</span>
               </article>
             </div>
+            <form class="delivery-settings" data-delivery-settings-form>
+              <div class="delivery-settings-head">
+                <div>
+                  <span class="admin-kicker">Danbury / CT 06810</span>
+                  <h3>Raio de entrega e frete</h3>
+                  <p>O site calcula por ZIP usando a tabela abaixo. Fora do raio, o pedido pede confirmacao no WhatsApp.</p>
+                </div>
+                <button class="admin-button admin-button-primary" type="submit" data-delivery-save>Salvar frete</button>
+              </div>
+              <div class="delivery-settings-grid">
+                <label>
+                  <span>ZIP base</span>
+                  <input name="baseZip" type="text" inputmode="numeric" maxlength="5" value="06810" data-delivery-base-zip />
+                </label>
+                <label>
+                  <span>Raio maximo (milhas)</span>
+                  <input name="maxRadiusMiles" type="number" min="1" max="60" step="1" value="15" data-delivery-max-radius />
+                </label>
+                <label>
+                  <span>Frete 0-5 mi ($)</span>
+                  <input name="tier1Fee" type="number" min="0" step="0.01" value="2.57" data-delivery-tier-fee="0" />
+                </label>
+                <label>
+                  <span>Frete 5-10 mi ($)</span>
+                  <input name="tier2Fee" type="number" min="0" step="0.01" value="6.50" data-delivery-tier-fee="1" />
+                </label>
+                <label>
+                  <span>Frete 10-15 mi ($)</span>
+                  <input name="tier3Fee" type="number" min="0" step="0.01" value="9.50" data-delivery-tier-fee="2" />
+                </label>
+                <label>
+                  <span>Testar ZIP</span>
+                  <div class="delivery-zip-test">
+                    <input name="quoteZip" type="text" inputmode="numeric" maxlength="5" placeholder="06810" data-admin-delivery-zip />
+                    <button class="admin-button admin-button-ghost" type="button" data-admin-delivery-check>Calcular</button>
+                  </div>
+                </label>
+              </div>
+              <div class="delivery-settings-map">
+                <div class="bk-service-map" data-admin-service-map aria-label="Mapa do raio de entrega"></div>
+                <output class="bk-delivery-quote" data-admin-delivery-quote>
+                  <strong>Digite um ZIP para testar.</strong>
+                  <span>O mapa mostra Danbury e os aneis de atendimento.</span>
+                </output>
+              </div>
+            </form>
           </section>
 
           <!-- ============== LEADS ============== -->
@@ -468,7 +517,7 @@
                 </div>
                 <p class="wa-help">Esse número aparece nos botões "WhatsApp" do site, no carrinho e nos links da caixa de entrada.</p>
                 <div class="wa-number-edit" data-wa-edit-zone hidden>
-                  <input type="tel" placeholder="+14075551234" data-wa-number-input />
+                  <input type="tel" placeholder="+12034822797" data-wa-number-input />
                   <button class="admin-button admin-button-primary" type="button" data-wa-number-save>Salvar</button>
                   <button class="admin-button admin-button-ghost" type="button" data-wa-number-cancel>Cancelar</button>
                 </div>
@@ -564,10 +613,12 @@
     </div>
 
     <div class="admin-toast" data-toast role="status" aria-live="polite"></div>
-    <script src="assets/img/picture.js?v=80"></script>
-    <script src="assets/config/config.js?v=80"></script>
-    <script src="assets/api/client.js?v=80"></script>
-    <script src="admin.js?v=80"></script>
-    <script src="assets/admin/admin-router.js?v=80" defer></script>
+    <script src="assets/img/picture.js?v=81"></script>
+    <script src="assets/config/config.js?v=81"></script>
+    <script src="assets/api/client.js?v=81"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="assets/delivery/delivery.js?v=81"></script>
+    <script src="admin.js?v=81"></script>
+    <script src="assets/admin/admin-router.js?v=81" defer></script>
   </body>
 </html>

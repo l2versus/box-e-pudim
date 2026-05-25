@@ -201,10 +201,17 @@
     try {
       const res = await window.bkApi.adminListOrders({ pageSize: 50 });
       const orders = res?.orders || [];
-      if (!orders.length) return false;
 
       // Limpa cards demo e renderiza reais (apenas ativos)
       while (orderList.firstChild) orderList.removeChild(orderList.firstChild);
+      if (!orders.length) {
+        const empty = document.createElement('div');
+        empty.className = 'lead-empty';
+        empty.textContent = 'Nenhum pedido ativo ainda. Quando o cliente enviar o checkout, aparece aqui.';
+        orderList.appendChild(empty);
+        updateBadges();
+        return true;
+      }
       for (const o of orders) {
         if (o.status === 'delivered' || o.status === 'cancelled' || o.status === 'refunded') continue;
         orderList.appendChild(renderApiOrderCard(o));
@@ -569,7 +576,7 @@
   const DEFAULT_TEMPLATES = [
     { id: 't1', title: 'Confirmação de pedido', body: 'Oi {nome}! Recebi seu pedido de {item} pra {data}. Posso confirmar e mandar o link de pagamento?' },
     { id: 't2', title: 'Pedir endereço / ZIP', body: 'Pra fechar a entrega, me manda por favor: endereço completo, ZIP, melhor janela de horário e telefone de contato.' },
-    { id: 't3', title: 'Solicitar pagamento', body: 'Pode pagar via Zelle ou Venmo no número (407) 555-1234. O valor é {valor}. Quando fizer, me manda o screenshot pra eu colocar em produção.' },
+    { id: 't3', title: 'Solicitar pagamento', body: 'Pode pagar via Zelle ou Venmo no numero +1 (203) 482-2797. O valor e {valor}. Quando fizer, me manda o screenshot pra eu colocar em producao.' },
     { id: 't4', title: 'Prazo de produção', body: 'Combinado! Vou começar a produção {data}. Te aviso quando estiver pronto pra retirar.' },
     { id: 't5', title: 'Lembrete véspera', body: 'Oi {nome}, passando pra confirmar a retirada de amanhã do {item}. Janela: 5:00 - 7:30 PM. Tudo certo do seu lado?' },
     { id: 't6', title: 'Pickup pronto', body: 'Tá pronto! Pode passar a hora que combinamos. Endereço de retirada e instruções já estão no Maps: <link>.' },
@@ -714,7 +721,7 @@
   }
 
   function getWaNumber() {
-    return localStorage.getItem(WA_NUMBER_KEY) || '+1 (555) 123-4567';
+    return localStorage.getItem(WA_NUMBER_KEY) || (window.BK_CONFIG?.waPhone ? `+${window.BK_CONFIG.waPhone}` : '+1 (203) 482-2797');
   }
   function setWaNumber(v) {
     localStorage.setItem(WA_NUMBER_KEY, v);
@@ -913,7 +920,7 @@
     if (window.bkApi && window.BK_CONFIG?.adminMode !== 'demo') {
       try {
         const res = await window.bkApi.adminListLeads({ pageSize: 50 });
-        if (res?.leads?.length) {
+        if (Array.isArray(res?.leads)) {
           // Normaliza shape pro render existente (que espera campos do localStorage)
           return res.leads.map((l) => ({
             id: l.id,
@@ -1044,6 +1051,144 @@
   document.querySelector('[data-wa-number-save]')?.addEventListener('click', () => {
     setTimeout(renderConversations, 100);
   });
+
+  /* ---------------- Delivery settings ---------------- */
+  const deliveryForm = document.querySelector('[data-delivery-settings-form]');
+  const adminMap = document.querySelector('[data-admin-service-map]');
+  const adminZipInput = document.querySelector('[data-admin-delivery-zip]');
+  const adminZipCheck = document.querySelector('[data-admin-delivery-check]');
+  const adminQuote = document.querySelector('[data-admin-delivery-quote]');
+  let deliverySettings = window.bkDelivery?.getSettings();
+
+  function centsToInput(cents) {
+    return (Number(cents || 0) / 100).toFixed(2);
+  }
+
+  function inputToCents(value) {
+    return Math.max(0, Math.round(Number(value || 0) * 100));
+  }
+
+  function normalizeAdminSettings(settings) {
+    const base = window.bkDelivery?.getSettings(settings) || settings;
+    return {
+      enabled: base.enabled !== false,
+      unit: base.unit || 'mi',
+      baseZip: base.baseZip || '06810',
+      maxRadiusMiles: Number(base.maxRadiusMiles || 15),
+      store: base.store || {
+        name: 'Brazilian Pudding',
+        city: 'Danbury',
+        state: 'CT',
+        zip: '06810',
+        lat: 41.391768,
+        lng: -73.454168,
+      },
+      fallbackMessage: base.fallbackMessage || 'Outside the automatic delivery radius. The owner can confirm by WhatsApp.',
+      tiers: (base.tiers || []).slice(0, 3),
+      zipCoordinates: base.zipCoordinates || {},
+    };
+  }
+
+  function fillDeliveryForm(settings) {
+    if (!deliveryForm) return;
+    deliverySettings = normalizeAdminSettings(settings);
+    const zip = deliveryForm.querySelector('[data-delivery-base-zip]');
+    const radius = deliveryForm.querySelector('[data-delivery-max-radius]');
+    if (zip) zip.value = deliverySettings.baseZip;
+    if (radius) radius.value = deliverySettings.maxRadiusMiles;
+    deliveryForm.querySelectorAll('[data-delivery-tier-fee]').forEach((input) => {
+      const tier = deliverySettings.tiers[Number(input.dataset.deliveryTierFee)];
+      if (tier) input.value = centsToInput(tier.feeCents);
+    });
+    renderAdminDelivery();
+  }
+
+  function collectDeliverySettings() {
+    const form = new FormData(deliveryForm);
+    const current = normalizeAdminSettings(deliverySettings);
+    const maxRadiusMiles = Number(form.get('maxRadiusMiles') || current.maxRadiusMiles || 15);
+    const tiers = current.tiers.map((tier, index) => ({
+      ...tier,
+      maxMiles: index === current.tiers.length - 1 ? maxRadiusMiles : tier.maxMiles,
+      feeCents: inputToCents(form.get(`tier${index + 1}Fee`)),
+    }));
+    const baseZip = String(form.get('baseZip') || current.baseZip || '06810').replace(/\D/g, '').slice(0, 5);
+    return normalizeAdminSettings({
+      ...current,
+      baseZip,
+      maxRadiusMiles,
+      store: { ...current.store, zip: baseZip },
+      tiers,
+    });
+  }
+
+  function renderAdminDelivery() {
+    if (adminMap && window.bkDelivery && deliverySettings) {
+      window.bkDelivery.renderServiceMap(adminMap, {
+        settings: deliverySettings,
+        zip: adminZipInput?.value,
+        reset: true,
+      });
+    }
+    const zip = adminZipInput?.value || '';
+    if (!adminQuote || !window.bkDelivery || !zip) return;
+    const quote = window.bkDelivery.quoteByZip(zip, deliverySettings);
+    adminQuote.classList.toggle('is-outside', !quote.served);
+    adminQuote.innerHTML = quote.served
+      ? `<strong>${quote.feeLabel} de entrega</strong><span>${quote.zip} - ${quote.distanceMiles} mi de Danbury - ${quote.tier.label}</span>`
+      : `<strong>Confirmar no WhatsApp</strong><span>${quote.zip || 'ZIP'} - ${quote.message}</span>`;
+  }
+
+  async function loadDeliverySettings() {
+    if (!deliveryForm || !window.bkDelivery) return;
+    if (window.bkApi && window.BK_CONFIG?.adminMode !== 'demo') {
+      try {
+        const res = await window.bkApi.adminDeliverySettings();
+        fillDeliveryForm(res?.settings || res);
+        return;
+      } catch {
+        /* sem login ainda: usa config local ate desbloquear */
+      }
+    }
+    fillDeliveryForm(window.BK_CONFIG?.delivery || {});
+  }
+
+  deliveryForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const settings = collectDeliverySettings();
+    deliverySettings = settings;
+    renderAdminDelivery();
+    if (window.bkApi && window.BK_CONFIG?.adminMode !== 'demo') {
+      const btn = deliveryForm.querySelector('[data-delivery-save]');
+      const old = btn?.textContent;
+      if (btn) { btn.disabled = true; btn.textContent = 'Salvando...'; }
+      try {
+        const res = await window.bkApi.adminUpdateDeliverySettings(settings);
+        fillDeliveryForm(res?.settings || settings);
+        toast('Frete atualizado.');
+      } catch {
+        toast('Erro ao salvar frete na API.');
+      } finally {
+        if (btn) { btn.disabled = false; btn.textContent = old || 'Salvar frete'; }
+      }
+    } else {
+      toast('Frete atualizado nesta sessao.');
+    }
+  });
+
+  adminZipCheck?.addEventListener('click', renderAdminDelivery);
+  adminZipInput?.addEventListener('blur', renderAdminDelivery);
+  deliveryForm?.querySelectorAll('input').forEach((input) => {
+    input.addEventListener('change', () => {
+      deliverySettings = collectDeliverySettings();
+      renderAdminDelivery();
+    });
+  });
+
+  new MutationObserver(() => {
+    if (document.body.classList.contains('is-unlocked')) loadDeliverySettings();
+  }).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+  setTimeout(loadDeliverySettings, 300);
 
   /* ---------------- API pública ---------------- */
   window.bkAdmin = {
