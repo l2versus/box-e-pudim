@@ -1,0 +1,48 @@
+{
+  "name": "Brazilian Kitchen | Pudim & Box InHouse",
+  "short_name": "Brazilian Kitchen",
+  "description": "Brazilian pudding, sweets and food boxes by preorder in Danbury, CT.",
+  "start_url": "index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#fffaf2",
+  "theme_color": "#0f3f33",
+  "categories": ["food", "shopping", "lifestyle"],
+  "lang": "en-US",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "64x64",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Brazilian Pudding",
+      "short_name": "Pudim",
+      "url": "pudim.html",
+      "description": "Preorder Brazilian pudding and sweets."
+    },
+    {
+      "name": "Box InHouse",
+      "short_name": "Box",
+      "url": "box.html",
+      "description": "Preorder Brazilian food boxes and trays."
+    }
+  ]
+}

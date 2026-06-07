@@ -1,0 +1,13 @@
+#!/bin/sh
+# Local pre-commit hook to validate JSON-LD blocks in HTML files.
+# To enable locally: `git config core.hooksPath .githooks`
+
+echo "Running local JSON-LD validation..."
+node scripts/validate-jsonld.mjs
+ret=$?
+if [ $ret -ne 0 ]; then
+  echo "JSON-LD validation failed. Commit aborted."
+  exit $ret
+fi
+
+exit 0

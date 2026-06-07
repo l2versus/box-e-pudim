@@ -8,8 +8,6 @@
 (() => {
   'use strict';
 
-  const FREE_SHIPPING_MIN = 299;
-
   // Detectar qual loja: pudim ou box
   const cartForm = document.querySelector('[data-cart-modal]') || document.querySelector('[data-box-cart-modal]');
   if (!cartForm) return;
@@ -17,6 +15,7 @@
   const isBox = !!document.querySelector('[data-box-cart-modal]');
   const placeholder = document.createComment('bk-cart-anchor');
   cartForm.parentNode.insertBefore(placeholder, cartForm);
+  const FREE_SHIPPING_MIN = Number(window.BK_CONFIG?.freeShippingMin || 0);
 
   // i18n local (espelha header.js)
   const getLang = () => {
@@ -63,6 +62,19 @@
   };
   // o site usa USD; mantemos USD em ambos os idiomas pra evitar confusão
   const fmtUSD = (n) => `$${(Number(n) || 0).toFixed(2)}`;
+  const parseMoney = (text) => {
+    const raw = String(text || '').replace(/[^\d.,]/g, '');
+    if (!raw) return 0;
+    const hasComma = raw.includes(',');
+    const hasDot = raw.includes('.');
+    if (hasComma && hasDot) {
+      return raw.lastIndexOf(',') > raw.lastIndexOf('.')
+        ? Number(raw.replace(/\./g, '').replace(',', '.'))
+        : Number(raw.replace(/,/g, ''));
+    }
+    if (hasComma) return Number(raw.replace(/\./g, '').replace(',', '.'));
+    return Number(raw.replace(/,/g, ''));
+  };
 
   /* ------- Estrutura do drawer ------- */
   const overlay = document.createElement('div');
@@ -150,11 +162,12 @@
     // Tenta ler do cart-total ou box-cart-total presentes no form embedded
     const totalEl = cartForm.querySelector('[data-cart-total], [data-box-cart-total]');
     const totalText = totalEl?.textContent?.trim() || '$0';
-    const m = totalText.match(/[\d.,]+/);
-    const total = m ? Number(m[0].replace(/\./g, '').replace(',', '.')) : 0;
+    const total = parseMoney(totalText);
     const lines = cartForm.querySelectorAll('[data-cart-lines] .cart-line, [data-box-cart-lines] .box-cart-line');
     const itemCount = [...lines].reduce((sum, line) => {
-      const qty = Number(line.querySelector('[data-qty], input[type="number"]')?.value || 1);
+      const qtyEl = line.querySelector('[data-qty], input[type="number"], .quantity-stepper b, .box-stepper b');
+      const rawQty = qtyEl?.value || qtyEl?.textContent || '1';
+      const qty = Number(rawQty);
       return sum + (Number.isFinite(qty) ? qty : 1);
     }, 0);
     return { total, itemCount };
@@ -171,7 +184,7 @@
       countEl.textContent = t('items_other', { n: itemCount });
     }
     // Free shipping bar
-    if (total > 0) {
+    if (shippingBox && shippingBar && shippingPct && shippingLabel && total > 0 && FREE_SHIPPING_MIN > 0) {
       shippingBox.hidden = false;
       const remaining = Math.max(0, FREE_SHIPPING_MIN - total);
       const pct = Math.min(100, Math.round((total / FREE_SHIPPING_MIN) * 100));
@@ -184,7 +197,7 @@
         shippingLabel.textContent = t('shippingDone');
         shippingLabel.className = 'is-success';
       }
-    } else {
+    } else if (shippingBox) {
       shippingBox.hidden = true;
     }
     // Empty state
@@ -214,6 +227,22 @@
     document.body.classList.add('has-bk-cart');
     refreshTexts();
     refreshSummary();
+    const resetDrawerScroll = () => {
+      if (document.activeElement && cartForm.contains(document.activeElement)) {
+        document.activeElement.blur();
+      }
+      drawer.scrollTop = 0;
+      body.scrollTop = 0;
+      cartForm.scrollTop = 0;
+      drawer.querySelector('[data-bk-cart-close]')?.focus?.({ preventScroll: true });
+    };
+    resetDrawerScroll();
+    setTimeout(resetDrawerScroll, 80);
+    setTimeout(resetDrawerScroll, 260);
+    setTimeout(resetDrawerScroll, 720);
+    setTimeout(resetDrawerScroll, 1400);
+    document.dispatchEvent(new CustomEvent('bk:cart-opened', { detail: { isBox } }));
+    setTimeout(() => document.dispatchEvent(new CustomEvent('bk:cart-opened', { detail: { isBox } })), 220);
   }
   function closeCart() {
     drawer.classList.remove('is-open');

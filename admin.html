@@ -2,9 +2,10 @@
 <html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Brazilian Pudding Admin | Private Orders</title>
     <meta name="robots" content="noindex,nofollow" />
+    <meta name="theme-color" content="#0f3f33" />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <script>
       if (location.hostname.endsWith('vercel.app')) {
@@ -12,10 +13,10 @@
       }
     </script>
     <link rel="preload" href="assets/img/lifestyle/pudding-photo.avif" as="image" type="image/avif" />
-    <link rel="stylesheet" href="admin.css?v=82" />
-    <link rel="stylesheet" href="assets/header/header.css?v=82" />
-    <link rel="stylesheet" href="assets/admin/admin-router.css?v=82" />
-    <link rel="stylesheet" href="assets/delivery/delivery.css?v=82" />
+    <link rel="stylesheet" href="admin.css?v=113" />
+    <link rel="stylesheet" href="assets/header/header.css?v=113" />
+    <link rel="stylesheet" href="assets/admin/admin-router.css?v=113" />
+    <link rel="stylesheet" href="assets/delivery/delivery.css?v=113" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   </head>
   <body class="admin-body">
@@ -246,34 +247,35 @@
               <button class="admin-button admin-button-soft" type="button" data-capacity-save>Salvar limite</button>
             </div>
             <div class="capacity-controls">
-              <label>
-                <span>Pudins sabado</span>
-                <output data-capacity-output="puddings">9</output>
-                <input type="range" min="0" max="20" value="9" data-capacity-slider="puddings" />
+              <label class="capacity-date">
+                <span>Dia da fornada</span>
+                <input type="date" data-capacity-date />
               </label>
               <label>
-                <span>Boxes regionais</span>
-                <output data-capacity-output="boxes">12</output>
-                <input type="range" min="0" max="30" value="12" data-capacity-slider="boxes" />
+                <span>Pudins / sobremesas</span>
+                <output data-capacity-output="puddings">10</output>
+                <input type="range" min="0" max="40" value="10" data-capacity-slider="puddings" />
+                <small data-capacity-reserved="pudim">0 reservados</small>
+              </label>
+              <label>
+                <span>Boxes / bandejas</span>
+                <output data-capacity-output="boxes">14</output>
+                <input type="range" min="0" max="60" value="14" data-capacity-slider="boxes" />
+                <small data-capacity-reserved="box">0 reservados</small>
               </label>
             </div>
-            <div class="calendar-strip">
-              <button type="button">
-                <span>Thu</span>
-                <strong>4</strong>
-              </button>
-              <button type="button" class="is-hot">
-                <span>Fri</span>
-                <strong>2</strong>
-              </button>
-              <button type="button" class="is-active">
-                <span>Sat</span>
-                <strong>5</strong>
-              </button>
-              <button type="button" class="is-closed">
-                <span>Sun</span>
-                <strong>0</strong>
-              </button>
+
+            <div class="production-board" data-production-board>
+              <div class="panel-heading">
+                <div>
+                  <span class="admin-kicker">Produção</span>
+                  <h2>O que preparar nesse dia</h2>
+                </div>
+                <strong data-production-total>0 un.</strong>
+              </div>
+              <div class="production-list" data-production-list>
+                <div class="lead-empty">Escolha um dia pra ver a lista de produção.</div>
+              </div>
             </div>
           </section>
 
@@ -296,7 +298,7 @@
                   <option value="Ambos">Ambos</option>
                   <option value="paused">Pausados</option>
                 </select>
-                <button class="admin-button admin-button-ghost" type="button" data-product-reset>Recarregar API</button>
+                <button class="admin-button admin-button-ghost" type="button" data-product-reset title="Recarrega a lista de produtos salvos no servidor">Recarregar produtos</button>
               </div>
             </div>
             <form class="product-editor" data-product-form>
@@ -439,7 +441,7 @@
               </div>
               <div class="delivery-settings-map">
                 <div class="bk-service-map" data-admin-service-map aria-label="Mapa do raio de entrega"></div>
-                <output class="bk-delivery-quote" data-admin-delivery-quote>
+                <output class="admin-delivery-result" data-admin-delivery-quote aria-live="polite">
                   <strong>Digite um ZIP para testar.</strong>
                   <span>O mapa mostra Danbury e os aneis de atendimento.</span>
                 </output>
@@ -582,12 +584,12 @@
     </div>
 
     <div class="admin-toast" data-toast role="status" aria-live="polite"></div>
-    <script src="assets/img/picture.js?v=82"></script>
-    <script src="assets/config/config.js?v=82"></script>
-    <script src="assets/api/client.js?v=82"></script>
+    <script src="assets/img/picture.js?v=113"></script>
+    <script src="assets/config/config.js?v=113"></script>
+    <script src="assets/api/client.js?v=113"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="assets/delivery/delivery.js?v=82"></script>
-    <script src="admin.js?v=82"></script>
-    <script src="assets/admin/admin-router.js?v=82" defer></script>
+    <script src="assets/delivery/delivery.js?v=113"></script>
+    <script src="admin.js?v=113"></script>
+    <script src="assets/admin/admin-router.js?v=113" defer></script>
   </body>
 </html>

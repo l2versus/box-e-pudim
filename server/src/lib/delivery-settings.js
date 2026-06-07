@@ -40,6 +40,11 @@ function cleanZip(zip) {
   return String(zip || '').replace(/\D/g, '').slice(0, 5);
 }
 
+function normalizeBaseZip(zip) {
+  const clean = cleanZip(zip);
+  return clean === '06110' ? '06810' : (clean || '06810');
+}
+
 function degToRad(value) {
   return (Number(value) * Math.PI) / 180;
 }
@@ -65,6 +70,15 @@ export function normalizeDeliverySettings(settings = {}) {
       ...DEFAULT_DELIVERY_SETTINGS.zipCoordinates,
       ...(settings.zipCoordinates || {}),
     },
+  };
+  merged.baseZip = normalizeBaseZip(merged.baseZip || merged.store.zip);
+  merged.store = {
+    ...merged.store,
+    city: merged.store.city === 'Hartford' ? 'Danbury' : (merged.store.city || 'Danbury'),
+    state: merged.store.state || 'CT',
+    zip: normalizeBaseZip(merged.store.zip || merged.baseZip),
+    lat: Number(merged.store.lat || DEFAULT_DELIVERY_SETTINGS.store.lat),
+    lng: Number(merged.store.lng || DEFAULT_DELIVERY_SETTINGS.store.lng),
   };
   merged.tiers = (Array.isArray(settings.tiers) && settings.tiers.length ? settings.tiers : DEFAULT_DELIVERY_SETTINGS.tiers)
     .map((tier) => ({

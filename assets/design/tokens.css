@@ -1,0 +1,161 @@
+/* ============================================================
+   Box e Pudim — Design Tokens (fonte única do sistema visual)
+   "Editorial caramelizado": papel creme, tinta espresso,
+   caramelo (açúcar queimado) + jade brasileiro.
+
+   Pudim e Box são UMA marca; cada loja é um sub-tema via
+   [data-bk-theme="pudim"|"box"] (muda só o sotaque de cor).
+
+   Namespace: --bk-*  (não colide com --ink/--box-ink legacy).
+   Fontes: Fraunces (display) + Hanken Grotesk (corpo),
+   carregadas via <link> no <head> de cada página.
+   ============================================================ */
+
+:root {
+  /* ---- Tipografia ---- */
+  --bk-font-display: "Fraunces", "Georgia", "Times New Roman", serif;
+  --bk-font-body: "Hanken Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Escala fluida (mobile -> desktop) — uma só pras 4 páginas */
+  --bk-text-2xs: clamp(0.69rem, 0.66rem + 0.15vw, 0.75rem);
+  --bk-text-xs:  clamp(0.78rem, 0.74rem + 0.2vw, 0.84rem);
+  --bk-text-sm:  clamp(0.88rem, 0.84rem + 0.25vw, 0.95rem);
+  --bk-text-md:  clamp(1rem, 0.96rem + 0.3vw, 1.08rem);
+  --bk-text-lg:  clamp(1.15rem, 1.05rem + 0.5vw, 1.35rem);
+  --bk-text-xl:  clamp(1.4rem, 1.2rem + 1vw, 1.85rem);
+  --bk-text-2xl: clamp(1.85rem, 1.5rem + 1.7vw, 2.6rem);
+  --bk-text-3xl: clamp(2.4rem, 1.8rem + 3vw, 3.8rem);
+  --bk-text-4xl: clamp(3rem, 2rem + 5vw, 5.2rem);
+  --bk-text-5xl: clamp(3.6rem, 2rem + 8vw, 7rem);
+
+  --bk-leading-tight: 1.04;
+  --bk-leading-snug: 1.22;
+  --bk-leading-body: 1.6;
+  --bk-tracking-tight: -0.02em;
+  --bk-tracking-wide: 0.14em;
+
+  /* ---- Cor: base de marca (Ouro Caramelo — amarelo-forward premium) ----
+     Campo dominante amarelo/creme (~60%), ink espresso (~30%),
+     acento jade/guava (~10%). Texto SEMPRE escuro sobre amarelo (WCAG). */
+  --bk-ink: #221812;          /* espresso, não preto puro */
+  --bk-ink-2: #4b3d33;
+  --bk-muted: #7a6a5b;
+  --bk-paper: #fbf2d6;        /* creme-manteiga (fundo amarelo dominante) */
+  --bk-surface: #fffbef;      /* porcelana quente (cards respiram) */
+  --bk-surface-2: #fbe9bf;    /* mel claro (faixas, insets) */
+  --bk-hairline: color-mix(in srgb, var(--bk-ink) 13%, transparent);
+  --bk-on-dark: #fdf3da;
+  --bk-on-dark-soft: color-mix(in srgb, #fdf3da 70%, transparent);
+
+  /* ---- Cor: paleta assinatura (calda do pudim: amarelo -> âmbar -> caramelo) ---- */
+  --bk-amber: #f2a92c;        /* amarelo-âmbar de faixa/hero (cor de marca) */
+  --bk-caramel: #c4692a;
+  --bk-caramel-deep: #97480f;
+  --bk-caramel-bright: #e6953d;
+  --bk-honey: #f6b83e;        /* mel forte (chips, destaques) */
+  --bk-cream-hi: #ffe7ae;     /* mel claro highlight */
+  --bk-jade: #155d4c;         /* complementar frio — faz o amarelo estalar (CTA) */
+  --bk-jade-deep: #0c3a2f;
+  --bk-berry: #c5304e;        /* faísca quente */
+
+  /* ---- Semântica (sub-tema reescreve --bk-accent/--bk-pop) ---- */
+  --bk-accent: var(--bk-jade);
+  --bk-accent-deep: var(--bk-jade-deep);
+  --bk-accent-ink: #fff;
+  --bk-pop: var(--bk-berry);
+
+  /* ---- Status de disponibilidade (o coração do dual-mode) ---- */
+  --bk-ready: #1d7a4f;                                   /* pronto agora */
+  --bk-ready-bg: color-mix(in srgb, var(--bk-ready) 13%, var(--bk-surface));
+  --bk-ready-ink: #0e4a2e;
+  --bk-batch: var(--bk-caramel-deep);                    /* próxima fornada */
+  --bk-batch-bg: color-mix(in srgb, var(--bk-caramel) 16%, var(--bk-surface));
+  --bk-batch-ink: #6d3408;
+  --bk-soldout: #8a7d72;
+  --bk-soldout-bg: color-mix(in srgb, var(--bk-soldout) 16%, var(--bk-surface));
+
+  /* ---- Espaçamento (base 4px) ---- */
+  --bk-space-1: 0.25rem;
+  --bk-space-2: 0.5rem;
+  --bk-space-3: 0.75rem;
+  --bk-space-4: 1rem;
+  --bk-space-5: 1.5rem;
+  --bk-space-6: 2rem;
+  --bk-space-7: 3rem;
+  --bk-space-8: 4rem;
+  --bk-space-9: 6rem;
+  --bk-space-section: clamp(3.5rem, 8vw, 9rem);
+  --bk-gutter: clamp(1rem, 5vw, 4.5rem);
+
+  /* ---- Raio ---- */
+  --bk-radius-xs: 0.4rem;
+  --bk-radius-sm: 0.7rem;
+  --bk-radius-md: 1rem;
+  --bk-radius-lg: 1.5rem;
+  --bk-radius-xl: 2rem;
+  --bk-radius-pill: 999px;
+
+  /* ---- Elevação (sombra quente, 4 níveis) ---- */
+  --bk-elev-shadow: 34 24 18;
+  --bk-elev-1: 0 1px 2px rgba(var(--bk-elev-shadow) / 0.06), 0 4px 12px rgba(var(--bk-elev-shadow) / 0.06);
+  --bk-elev-2: 0 2px 6px rgba(var(--bk-elev-shadow) / 0.07), 0 12px 30px rgba(var(--bk-elev-shadow) / 0.1);
+  --bk-elev-3: 0 6px 16px rgba(var(--bk-elev-shadow) / 0.09), 0 24px 56px rgba(var(--bk-elev-shadow) / 0.14);
+  --bk-elev-4: 0 12px 30px rgba(var(--bk-elev-shadow) / 0.12), 0 40px 90px rgba(var(--bk-elev-shadow) / 0.2);
+
+  /* ---- Movimento ---- */
+  --bk-dur-fast: 150ms;
+  --bk-dur: 280ms;
+  --bk-dur-slow: 520ms;
+  --bk-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --bk-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ---- Toque (acessibilidade) ---- */
+  --bk-tap: 44px;
+}
+
+/* ---- Sub-temas: só o sotaque de cor muda, base é a mesma ---- */
+[data-bk-theme="pudim"] {
+  --bk-accent: var(--bk-jade);
+  --bk-accent-deep: var(--bk-jade-deep);
+  --bk-pop: var(--bk-berry);
+}
+
+[data-bk-theme="box"] {
+  --bk-accent: var(--bk-caramel-deep);
+  --bk-accent-deep: #6d3408;
+  --bk-pop: var(--bk-jade);
+}
+
+/* ============================================================
+   Acessibilidade global (cobre as 4 páginas)
+   ============================================================ */
+
+/* Foco visível consistente — antes ausente (falha WCAG 2.4.7) */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2.5px solid var(--bk-accent);
+  outline-offset: 2px;
+  border-radius: var(--bk-radius-xs);
+}
+
+/* Alvos de toque mínimos em mobile */
+@media (pointer: coarse) {
+  :where(button, a[role="button"], .button, [data-select-product]) {
+    min-height: var(--bk-tap);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Utilitário: tipografia da marca aplicável onde quisermos sem
+   reescrever componente. (Rollout global é incremental.) */
+.bk-font-display { font-family: var(--bk-font-display); }
+.bk-font-body { font-family: var(--bk-font-body); }

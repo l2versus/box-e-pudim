@@ -158,6 +158,9 @@
     adminSetCapacity: (date, category, capacityMax) =>
       request('PUT', '/admin/capacity', { date, category, capacityMax }),
 
+    adminProduction: (date) =>
+      request('GET', `/admin/production?date=${encodeURIComponent(date)}`),
+
     adminKpis: () => request('GET', '/admin/kpis'),
     adminDeliverySettings: () => request('GET', '/admin/delivery-settings'),
     adminUpdateDeliverySettings: (settings) => request('PUT', '/admin/delivery-settings', settings),

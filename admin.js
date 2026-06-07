@@ -834,9 +834,11 @@ productList.addEventListener("change", async (event) => {
 updateOrderCounts();
 updateCapacitySummary();
 if (productReset && window.BK_CONFIG?.adminMode !== "demo") {
-  productReset.textContent = "Recarregar API";
+  productReset.textContent = "Recarregar produtos";
+  productReset.title = "Recarrega a lista de produtos salvos no servidor";
 } else if (productReset) {
-  productReset.textContent = "Restaurar demo";
+  productReset.textContent = "Restaurar exemplos";
+  productReset.title = "Volta os produtos de exemplo (modo demonstracao)";
 }
 renderProducts();
 renderLeads();

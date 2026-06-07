@@ -27,10 +27,20 @@ body {
   min-width: 320px;
   color: var(--ink);
   background:
-    radial-gradient(circle at 10% 10%, rgba(255, 231, 166, 0.75), transparent 30vw),
+    radial-gradient(
+      circle at 10% 10%,
+      rgba(255, 231, 166, 0.75),
+      transparent 30vw
+    ),
     linear-gradient(135deg, #fff9ea 0%, #fff0c2 44%, #e9fff8 100%);
   font-family:
-    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
   overflow-x: hidden;
 }
 
@@ -155,8 +165,17 @@ img {
   width: min(18vw, 230px);
   pointer-events: none;
   background:
-    radial-gradient(ellipse at 50% 38%, rgba(255, 250, 221, 0.62), transparent 54%),
-    linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.28) 48%, transparent 100%);
+    radial-gradient(
+      ellipse at 50% 38%,
+      rgba(255, 250, 221, 0.62),
+      transparent 54%
+    ),
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.28) 48%,
+      transparent 100%
+    );
   content: "";
   filter: blur(18px);
   mix-blend-mode: soft-light;
@@ -199,22 +218,39 @@ img {
   display: grid;
   min-height: 100%;
   grid-template-rows: 1fr auto;
-  padding: clamp(96px, 13vh, 156px) clamp(28px, 5vw, 78px) clamp(28px, 6vh, 58px);
+  padding: clamp(96px, 13vh, 156px) clamp(28px, 5vw, 78px)
+    clamp(28px, 6vh, 58px);
   outline: none;
 }
 
 .choice-pudding {
   background:
-    radial-gradient(circle at 74% 40%, rgba(255, 247, 214, 0.96), transparent 18vw),
-    radial-gradient(circle at 28% 74%, rgba(186, 92, 6, 0.22), transparent 24vw),
+    radial-gradient(
+      circle at 74% 40%,
+      rgba(255, 247, 214, 0.96),
+      transparent 18vw
+    ),
+    radial-gradient(
+      circle at 28% 74%,
+      rgba(186, 92, 6, 0.22),
+      transparent 24vw
+    ),
     linear-gradient(135deg, #ffc21a 0%, #ffae00 48%, #f08b00 100%);
 }
 
 .choice-box {
   color: #f7fff7;
   background:
-    radial-gradient(circle at 58% 50%, rgba(255, 206, 119, 0.32), transparent 17vw),
-    radial-gradient(circle at 84% 14%, rgba(179, 41, 66, 0.48), transparent 20vw),
+    radial-gradient(
+      circle at 58% 50%,
+      rgba(255, 206, 119, 0.32),
+      transparent 17vw
+    ),
+    radial-gradient(
+      circle at 84% 14%,
+      rgba(179, 41, 66, 0.48),
+      transparent 20vw
+    ),
     linear-gradient(135deg, #06443f 0%, #0a7c78 56%, #083534 100%);
 }
 
@@ -227,7 +263,9 @@ img {
   background:
     linear-gradient(120deg, rgba(255, 255, 255, 0.16), transparent 34%),
     linear-gradient(rgba(255, 255, 255, 0.11) 1px, transparent 1px);
-  background-size: auto, 100% 11px;
+  background-size:
+    auto,
+    100% 11px;
   opacity: 0.2;
   transform: translate3d(calc(var(--mx) * -0.12), calc(var(--my) * -0.08), 0);
   transition: opacity 300ms ease;
@@ -240,7 +278,11 @@ img {
   height: 38%;
   z-index: 0;
   pointer-events: none;
-  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.3), transparent 66%);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 0, 0, 0.3),
+    transparent 66%
+  );
   filter: blur(20px);
   opacity: 0.32;
 }
@@ -358,10 +400,12 @@ img {
   position: absolute;
   z-index: 1;
   pointer-events: none;
-  transform:
-    translate3d(calc(var(--mx) * 0.16), calc(var(--my) * 0.14 + var(--scroll) * -0.08), 0)
-    rotate(var(--tilt, 0deg))
-    scale(var(--scale, 1));
+  transform: translate3d(
+      calc(var(--mx) * 0.16),
+      calc(var(--my) * 0.14 + var(--scroll) * -0.08),
+      0
+    )
+    rotate(var(--tilt, 0deg)) scale(var(--scale, 1));
   transform-origin: center;
   transition:
     transform 760ms cubic-bezier(0.19, 1, 0.22, 1),
@@ -374,6 +418,7 @@ img {
   height: auto;
   filter: drop-shadow(0 34px 42px rgba(22, 16, 8, 0.32));
 }
+
 
 .pudding-product {
   right: clamp(-120px, -6vw, -36px);
@@ -402,7 +447,11 @@ img {
   inset: auto 8% -8% 8%;
   height: 24%;
   border-radius: 50%;
-  background: radial-gradient(ellipse at center, rgba(22, 16, 8, 0.34), transparent 68%);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(22, 16, 8, 0.34),
+    transparent 68%
+  );
   content: "";
   filter: blur(18px);
 }
@@ -462,8 +511,16 @@ img {
   padding: clamp(82px, 10vw, 128px) clamp(18px, 6vw, 82px);
   overflow: hidden;
   background:
-    radial-gradient(circle at 16% 20%, rgba(248, 171, 6, 0.22), transparent 26vw),
-    radial-gradient(circle at 86% 26%, rgba(10, 124, 120, 0.2), transparent 28vw),
+    radial-gradient(
+      circle at 16% 20%,
+      rgba(248, 171, 6, 0.22),
+      transparent 26vw
+    ),
+    radial-gradient(
+      circle at 86% 26%,
+      rgba(10, 124, 120, 0.2),
+      transparent 28vw
+    ),
     #fff8e8;
 }
 
@@ -541,8 +598,17 @@ img {
   inset: 0;
   z-index: -1;
   background:
-    radial-gradient(circle at 70% 18%, rgba(255, 255, 255, 0.22), transparent 22vw),
-    linear-gradient(180deg, rgba(22, 16, 8, 0.08) 0%, rgba(22, 16, 8, 0.48) 48%, rgba(22, 16, 8, 0.9) 100%);
+    radial-gradient(
+      circle at 70% 18%,
+      rgba(255, 255, 255, 0.22),
+      transparent 22vw
+    ),
+    linear-gradient(
+      180deg,
+      rgba(22, 16, 8, 0.08) 0%,
+      rgba(22, 16, 8, 0.48) 48%,
+      rgba(22, 16, 8, 0.9) 100%
+    );
   content: "";
 }
 
@@ -905,5 +971,50 @@ img {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+  }
+}
+
+/* ============================================================
+   Entry media QA fix - one visual per side, no stacked fallback.
+   ============================================================ */
+.box-product .choice-video {
+  display: none;
+}
+
+.box-product .choice-video-fallback {
+  display: block;
+}
+
+.box-product .choice-video-fallback img {
+  width: 100%;
+  height: auto;
+}
+
+@media (min-width: 981px) and (max-width: 1280px) {
+  .entry-shell.is-pudding .entry-stage,
+  .entry-shell.is-box .entry-stage {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .choice-copy h1,
+  .choice-copy h2 {
+    max-width: 9.5ch;
+    font-size: clamp(3.45rem, 6vw, 5.75rem);
+    line-height: 0.94;
+  }
+
+  .choice-box .choice-copy h2 {
+    max-width: 8ch;
+    font-size: clamp(3.15rem, 5.6vw, 5.35rem);
+  }
+
+  .pudding-product {
+    right: -96px;
+    width: min(48vw, 620px);
+  }
+
+  .box-product {
+    left: -104px;
+    width: min(48vw, 640px);
   }
 }

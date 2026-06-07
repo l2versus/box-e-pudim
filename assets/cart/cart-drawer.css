@@ -34,6 +34,20 @@
 .bk-cart-drawer.is-open { transform: translateX(0); }
 .bk-cart-drawer.is-dragging { transition: none; }
 
+body:not(.has-bk-cart) .bk-cart-drawer {
+  width: 0;
+  min-width: 0;
+  overflow: hidden;
+  visibility: hidden;
+  box-shadow: none;
+}
+
+/* O form legado mora no HTML para preservar listeners, mas nao pode ocupar layout. */
+main [data-cart-modal],
+main [data-box-cart-modal] {
+  display: none !important;
+}
+
 .bk-cart-head {
   display: flex;
   align-items: center;
@@ -231,7 +245,8 @@
   gap: 16px;
 }
 .bk-cart-body [data-cart-modal] .cart-header,
-.bk-cart-body [data-box-cart-modal] .box-cart-header {
+.bk-cart-body [data-box-cart-modal] .box-cart-header,
+.bk-cart-body [data-box-cart-modal] .box-cart-head {
   display: none !important;     /* já temos header próprio */
 }
 
@@ -250,8 +265,31 @@ body.has-bk-cart { overflow: hidden; }
 /* Mobile */
 @media (max-width: 480px) {
   .bk-cart-drawer { width: 100vw; }
-  .bk-cart-body [data-cart-modal],
-  .bk-cart-body [data-box-cart-modal] { padding: 18px !important; }
+.bk-cart-body [data-cart-modal],
+.bk-cart-body [data-box-cart-modal] { padding: 18px !important; }
+}
+
+.bk-cart-body .bk-delivery-grid {
+  grid-template-columns: 1fr !important;
+}
+
+.bk-cart-body .bk-delivery-row {
+  grid-template-columns: minmax(0, 1fr) auto !important;
+}
+
+.bk-cart-body .bk-service-map {
+  min-height: 240px !important;
+  aspect-ratio: 1.35 / 1 !important;
+}
+
+@media (max-width: 520px) {
+  .bk-cart-body .bk-delivery-row {
+    grid-template-columns: 1fr !important;
+  }
+
+  .bk-cart-body .bk-service-map {
+    min-height: 220px !important;
+  }
 }
 
 /* Reduced motion */
@@ -329,11 +367,4 @@ body.has-bk-cart { overflow: hidden; }
   transform: translateY(-1px);
   box-shadow: 0 6px 18px rgba(15, 63, 51, .15);
 }
-.box-product-switch [data-box-product]::after {
-  content: " +";
-  font-weight: 900;
-  opacity: .5;
-  margin-left: 4px;
-}
-.box-product-switch [data-box-product]:hover::after { opacity: 1; }
-.box-product-switch [data-box-product].is-active::after { opacity: 1; }
+.box-product-switch [data-box-product]::after { content: ""; }

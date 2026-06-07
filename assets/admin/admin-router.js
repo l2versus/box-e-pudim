@@ -312,6 +312,131 @@
     });
   }
 
+  /* ---------------- Agenda real: capacidade + produção do dia via API ---------------- */
+  (function setupAgenda() {
+    const dateInput = document.querySelector('[data-capacity-date]');
+    if (!dateInput) return;
+    const saveBtn = document.querySelector('[data-capacity-save]');
+    const prodList = document.querySelector('[data-production-list]');
+    const prodTotal = document.querySelector('[data-production-total]');
+    const apiOn = () => window.bkApi && window.BK_CONFIG?.adminMode !== 'demo';
+
+    // Slider "puddings" controla a categoria pudim; "boxes" controla box.
+    // sweet/tray/gift seguem a capacidade padrão (auto-criada no pedido).
+    const SLIDER_CAT = { puddings: 'pudim', boxes: 'box' };
+    const CAT_LABEL = { pudim: 'Pudins', sweet: 'Sobremesas', box: 'Boxes', tray: 'Bandejas', gift: 'Gifts' };
+
+    function nextSaturdayISO() {
+      const d = new Date();
+      const add = (6 - d.getDay() + 7) % 7 || 7; // próximo sábado (nunca hoje)
+      d.setDate(d.getDate() + add);
+      return d.toISOString().slice(0, 10);
+    }
+    if (!dateInput.value) dateInput.value = nextSaturdayISO();
+
+    function toast(msg) {
+      const t = document.querySelector('[data-toast]');
+      if (!t) return;
+      t.textContent = msg;
+      t.classList.add('is-visible');
+      setTimeout(() => t.classList.remove('is-visible'), 2200);
+    }
+
+    async function loadCapacity(date) {
+      if (!apiOn()) return;
+      try {
+        const res = await window.bkApi.adminCapacity(date, date);
+        const byCat = {};
+        (res?.slots || []).forEach((s) => { byCat[s.category] = s; });
+        document.querySelectorAll('[data-capacity-slider]').forEach((sl) => {
+          const cat = SLIDER_CAT[sl.dataset.capacitySlider];
+          const slot = byCat[cat];
+          if (!slot) return;
+          sl.value = slot.capacityMax;
+          const out = document.querySelector(`[data-capacity-output="${sl.dataset.capacitySlider}"]`);
+          if (out) out.textContent = slot.capacityMax;
+          const rsv = document.querySelector(`[data-capacity-reserved="${cat}"]`);
+          if (rsv) rsv.textContent = `${slot.reserved} reservados`;
+        });
+      } catch { /* mantém valores atuais */ }
+    }
+
+    async function loadProduction(date) {
+      if (!apiOn() || !prodList) return;
+      try {
+        const res = await window.bkApi.adminProduction(date);
+        const items = res?.products || [];
+        if (prodTotal) prodTotal.textContent = `${res?.totalUnits || 0} un.`;
+        while (prodList.firstChild) prodList.removeChild(prodList.firstChild);
+        if (!items.length) {
+          const e = document.createElement('div');
+          e.className = 'lead-empty';
+          e.textContent = 'Nenhum pedido pra produzir nesse dia ainda.';
+          prodList.appendChild(e);
+          return;
+        }
+        for (const p of items) {
+          const row = document.createElement('div');
+          row.className = 'production-row';
+          const left = document.createElement('div');
+          const name = document.createElement('span');
+          name.className = 'production-row__name';
+          name.textContent = p.name || p.slug;
+          const cat = document.createElement('small');
+          cat.className = 'production-row__cat';
+          cat.textContent = CAT_LABEL[p.category] || p.category;
+          left.append(name, cat);
+          const qty = document.createElement('strong');
+          qty.className = 'production-row__qty';
+          // confirmados firmes; pendentes (ainda não confirmados pela dona) como "+N?"
+          qty.textContent = p.pending > 0 ? `${p.confirmed}+${p.pending}?` : `${p.confirmed}`;
+          row.append(left, qty);
+          prodList.appendChild(row);
+        }
+      } catch {
+        while (prodList.firstChild) prodList.removeChild(prodList.firstChild);
+        const e = document.createElement('div');
+        e.className = 'lead-empty';
+        e.textContent = 'Não consegui carregar a produção (API offline?).';
+        prodList.appendChild(e);
+      }
+    }
+
+    function refresh() {
+      loadCapacity(dateInput.value);
+      loadProduction(dateInput.value);
+    }
+
+    dateInput.addEventListener('change', refresh);
+
+    saveBtn?.addEventListener('click', async () => {
+      if (!apiOn()) { toast('Modo demo: limite salvo só localmente.'); return; }
+      const date = dateInput.value;
+      const orig = saveBtn.textContent;
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'Salvando...';
+      try {
+        for (const sl of document.querySelectorAll('[data-capacity-slider]')) {
+          const cat = SLIDER_CAT[sl.dataset.capacitySlider];
+          if (!cat) continue;
+          await window.bkApi.adminSetCapacity(date, cat, Number(sl.value));
+        }
+        toast('Capacidade salva.');
+        await loadCapacity(date);
+      } catch {
+        toast('Erro ao salvar capacidade.');
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.textContent = orig;
+      }
+    });
+
+    // Carrega ao desbloquear o painel.
+    const boot = () => { if (document.body.classList.contains('is-unlocked')) refresh(); };
+    new MutationObserver(boot).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    setTimeout(boot, 320);
+  })();
+
   /* ---------------- Search + filter de produtos ---------------- */
   const productList = document.querySelector('[data-product-list]');
   const searchInput = document.querySelector('[data-product-search]');
@@ -1166,20 +1291,61 @@
   }
 
   function renderAdminDelivery() {
+    const rawZip = adminZipInput?.value || '';
+    const zip = window.bkDelivery?.sanitizeZip ? window.bkDelivery.sanitizeZip(rawZip) : String(rawZip).replace(/\D/g, '').slice(0, 5);
+    if (adminZipInput && adminZipInput.value !== zip) adminZipInput.value = zip;
+
     if (adminMap && window.bkDelivery && deliverySettings) {
       window.bkDelivery.renderServiceMap(adminMap, {
         settings: deliverySettings,
-        zip: adminZipInput?.value,
-        reset: true,
+        zip: zip.length === 5 ? zip : '',
+        fitBounds: true,
       });
     }
-    const zip = adminZipInput?.value || '';
-    if (!adminQuote || !window.bkDelivery || !zip) return;
+
+    if (!adminQuote || !window.bkDelivery) return;
+    adminQuote.classList.remove('is-served', 'is-outside', 'is-pending');
+
+    if (!zip) {
+      adminQuote.classList.add('is-pending');
+      adminQuote.innerHTML = `
+        <em>Aguardando ZIP</em>
+        <strong>Digite um ZIP para testar.</strong>
+        <span>O mapa mostra Danbury e os aneis de atendimento configurados.</span>
+      `;
+      return;
+    }
+
+    if (zip.length < 5) {
+      adminQuote.classList.add('is-pending');
+      adminQuote.innerHTML = `
+        <em>ZIP incompleto</em>
+        <strong>Digite 5 numeros.</strong>
+        <span>${zip} ainda nao tem digitos suficientes para calcular raio e taxa.</span>
+      `;
+      return;
+    }
+
     const quote = window.bkDelivery.quoteByZip(zip, deliverySettings);
-    adminQuote.classList.toggle('is-outside', !quote.served);
-    adminQuote.innerHTML = quote.served
-      ? `<strong>${quote.feeLabel} de entrega</strong><span>${quote.zip} - ${quote.distanceMiles} mi de Danbury - ${quote.tier.label}</span>`
-      : `<strong>Confirmar no WhatsApp</strong><span>${quote.zip || 'ZIP'} - ${quote.message}</span>`;
+    if (quote.served) {
+      adminQuote.classList.add('is-served');
+      adminQuote.innerHTML = `
+        <em>Dentro do raio</em>
+        <strong>${quote.feeLabel} de entrega</strong>
+        <span>${quote.zip} fica a ${quote.distanceMiles} mi de Danbury. Faixa aplicada: ${quote.tier.label}.</span>
+      `;
+      return;
+    }
+
+    adminQuote.classList.add('is-outside');
+    const detail = quote.reason === 'unknown_zip'
+      ? 'ZIP sem coordenada cadastrada. Confirme manualmente no WhatsApp.'
+      : 'Fora do raio automatico. A dona confirma rota e taxa pelo WhatsApp.';
+    adminQuote.innerHTML = `
+      <em>Confirmar no WhatsApp</em>
+      <strong>${quote.zip || 'ZIP'} nao tem frete automatico.</strong>
+      <span>${quote.distanceMiles ? `${quote.distanceMiles} mi de Danbury. ` : ''}${detail}</span>
+    `;
   }
 
   async function loadDeliverySettings() {
@@ -1221,6 +1387,11 @@
 
   adminZipCheck?.addEventListener('click', renderAdminDelivery);
   adminZipInput?.addEventListener('blur', renderAdminDelivery);
+  adminZipInput?.addEventListener('input', () => {
+    const zip = window.bkDelivery?.sanitizeZip ? window.bkDelivery.sanitizeZip(adminZipInput.value) : adminZipInput.value.replace(/\D/g, '').slice(0, 5);
+    adminZipInput.value = zip;
+    if (zip.length < 5) renderAdminDelivery();
+  });
   deliveryForm?.querySelectorAll('input').forEach((input) => {
     input.addEventListener('change', () => {
       deliverySettings = collectDeliverySettings();

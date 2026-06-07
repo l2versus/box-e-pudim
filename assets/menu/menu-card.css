@@ -1,0 +1,286 @@
+/* ============================================================
+   Box e Pudim — Card de produto DUAL-MODE (premium)
+   Carregado DEPOIS de styles.css/box.css: substitui o visual
+   do .product-card legacy. Mantém as classes .product-card e
+   .reveal no <article> pros hooks JS (wireCardLight/observeReveals).
+   Estrutura interna usa namespace .bk-pcard__* (zero colisão).
+
+   Mostra os dois caminhos de venda quando existem:
+     🟢 Pronto agora · N un.
+     🗓️ Próxima fornada · <data> · N vagas
+   ============================================================ */
+
+/* Fonte de verdade do grid do catálogo (carrega depois do styles.css, então
+   vence as regras antigas de .product-grid lá). Mobile-first: 1 → 2 → 3 cols. */
+.product-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(0.9rem, 2vw, 1.4rem);
+}
+@media (min-width: 600px) {
+  .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 992px) {
+  .product-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+/* ---- Raiz do card (override do legacy) ---- */
+.product-card.bk-pcard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid var(--bk-hairline);
+  border-radius: var(--bk-radius-lg);
+  background: var(--bk-surface);
+  box-shadow: var(--bk-elev-2);
+  color: var(--bk-ink);
+  transform: translateY(0);
+  transition: transform var(--bk-dur) var(--bk-ease), box-shadow var(--bk-dur) var(--bk-ease),
+    border-color var(--bk-dur) var(--bk-ease);
+}
+
+.product-card.bk-pcard:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--bk-elev-4);
+  border-color: color-mix(in srgb, var(--bk-accent) 35%, var(--bk-hairline));
+}
+
+/* Luz quente seguindo o cursor (usa --mx/--my do wireCardLight) */
+.product-card.bk-pcard::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  border-radius: inherit;
+  background: radial-gradient(
+    220px circle at var(--mx, 50%) var(--my, 0%),
+    color-mix(in srgb, var(--bk-caramel-bright) 22%, transparent),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity var(--bk-dur) var(--bk-ease);
+}
+.product-card.bk-pcard:hover::after { opacity: 1; }
+
+/* ---- Mídia ---- */
+.bk-pcard .bk-pcard__media {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: linear-gradient(150deg, var(--bk-surface-2), color-mix(in srgb, var(--bk-cream-hi) 50%, var(--bk-surface)));
+}
+
+.bk-pcard .bk-pcard__media img,
+.bk-pcard .bk-pcard__media picture {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  object-fit: cover;
+  transform: scale(1.02);
+  filter: none;
+  transition: transform var(--bk-dur-slow) var(--bk-ease);
+}
+.bk-pcard:hover .bk-pcard__media img { transform: scale(1.07); }
+
+/* cutout (PNG recortado) respira em vez de preencher */
+.bk-pcard .bk-pcard__media img.product-cutout {
+  inset: 8% 8% 6%;
+  width: 84%;
+  height: 86%;
+  object-fit: contain;
+  transform: translateY(0) scale(1);
+  filter: drop-shadow(0 18px 24px rgba(34, 24, 18, 0.26));
+}
+.bk-pcard:hover .bk-pcard__media img.product-cutout {
+  transform: translateY(-6px) scale(1.04);
+}
+
+/* chip de selo (Best seller etc.) sobre a foto */
+.bk-pcard__badge {
+  position: absolute;
+  z-index: 2;
+  top: var(--bk-space-3);
+  left: var(--bk-space-3);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  padding: 0.3rem 0.65rem;
+  border-radius: var(--bk-radius-pill);
+  background: color-mix(in srgb, var(--bk-ink) 82%, transparent);
+  color: var(--bk-on-dark);
+  font-family: var(--bk-font-body);
+  font-size: var(--bk-text-2xs);
+  font-weight: 700;
+  letter-spacing: var(--bk-tracking-wide);
+  text-transform: uppercase;
+  backdrop-filter: blur(6px);
+}
+
+/* ---- Conteúdo ---- */
+.bk-pcard__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bk-space-3);
+  padding: clamp(1rem, 2.4vw, 1.4rem);
+}
+
+.bk-pcard__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--bk-space-3);
+}
+
+.bk-pcard__title {
+  margin: 0;
+  font-family: var(--bk-font-display);
+  font-optical-sizing: auto;
+  font-weight: 560;
+  font-size: var(--bk-text-xl);
+  line-height: var(--bk-leading-snug);
+  letter-spacing: var(--bk-tracking-tight);
+  text-wrap: balance;
+}
+
+.bk-pcard__price {
+  flex-shrink: 0;
+  font-family: var(--bk-font-body);
+  font-weight: 750;
+  font-size: var(--bk-text-md);
+  color: var(--bk-caramel-deep);
+  white-space: nowrap;
+}
+.bk-pcard__price small {
+  display: block;
+  font-weight: 600;
+  font-size: var(--bk-text-2xs);
+  color: var(--bk-muted);
+  text-align: right;
+  letter-spacing: 0.02em;
+}
+
+.bk-pcard__desc {
+  margin: 0;
+  color: var(--bk-muted);
+  font-size: var(--bk-text-sm);
+  line-height: var(--bk-leading-body);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ---- Bloco DUAL-MODE (disponibilidade) ---- */
+.bk-pcard__avail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bk-space-2);
+  margin-top: auto;
+}
+
+.bk-avail-row {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.5rem 0.7rem;
+  border-radius: var(--bk-radius-sm);
+  font-family: var(--bk-font-body);
+  font-size: var(--bk-text-sm);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.bk-avail-row__icon {
+  flex-shrink: 0;
+  display: inline-grid;
+  place-items: center;
+  width: 1.45rem;
+  height: 1.45rem;
+}
+
+.bk-avail-row__text { display: flex; flex-direction: column; }
+.bk-avail-row__text b { font-weight: 750; }
+.bk-avail-row__text span {
+  font-weight: 500;
+  font-size: var(--bk-text-2xs);
+  color: color-mix(in srgb, currentColor 65%, var(--bk-surface));
+}
+
+/* pronto agora */
+.bk-avail-row.is-ready {
+  background: var(--bk-ready-bg);
+  color: var(--bk-ready-ink);
+}
+.bk-avail-row.is-ready .bk-dot {
+  width: 0.6rem; height: 0.6rem; border-radius: 50%;
+  background: var(--bk-ready);
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--bk-ready) 60%, transparent);
+  animation: bk-pulse 2.4s var(--bk-ease) infinite;
+}
+@keyframes bk-pulse {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--bk-ready) 55%, transparent); }
+  70% { box-shadow: 0 0 0 7px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+/* próxima fornada */
+.bk-avail-row.is-batch {
+  background: var(--bk-batch-bg);
+  color: var(--bk-batch-ink);
+}
+
+/* esgotado / sob consulta */
+.bk-avail-row.is-soldout {
+  background: var(--bk-soldout-bg);
+  color: color-mix(in srgb, var(--bk-soldout) 80%, var(--bk-ink));
+}
+.bk-avail-row.is-quote {
+  background: color-mix(in srgb, var(--bk-jade) 12%, var(--bk-surface));
+  color: var(--bk-jade-deep);
+}
+
+/* ---- CTA ---- */
+.bk-pcard__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: var(--bk-tap);
+  padding: 0 1.2rem;
+  border: 0;
+  border-radius: var(--bk-radius-pill);
+  background: linear-gradient(135deg, var(--bk-accent), var(--bk-accent-deep));
+  color: var(--bk-accent-ink);
+  font-family: var(--bk-font-body);
+  font-size: var(--bk-text-sm);
+  font-weight: 750;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  box-shadow: var(--bk-elev-1);
+  transition: transform var(--bk-dur-fast) var(--bk-ease), box-shadow var(--bk-dur-fast) var(--bk-ease),
+    filter var(--bk-dur-fast) var(--bk-ease);
+}
+.bk-pcard__cta:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--bk-elev-3);
+  filter: brightness(1.05);
+}
+.bk-pcard__cta:active { transform: translateY(0); }
+
+.bk-pcard[data-availability="sold_out"] .bk-pcard__cta {
+  background: var(--bk-soldout);
+  box-shadow: none;
+}
+
+/* ---- Mobile ≤480px: sólido, sem cortar nada ---- */
+@media (max-width: 480px) {
+  .product-grid { gap: 1rem; }
+  .bk-pcard .bk-pcard__media { aspect-ratio: 16 / 10; }
+  .bk-pcard__title { font-size: var(--bk-text-lg); }
+}

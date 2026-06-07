@@ -1,22 +1,97 @@
 <!doctype html>
-<html lang="en" translate="no" class="notranslate">
+<html lang="en" translate="no" class="notranslate" data-bk-theme="pudim">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="google" content="notranslate" />
     <meta http-equiv="Content-Language" content="en" />
+    <meta name="theme-color" content="#0f3f33" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Brazilian Pudding" />
     <title>Brazilian Pudding | Preorder Kitchen</title>
     <meta
       name="description"
       content="Premium Brazilian pudding and sweets for preorder, gifts and events, with WhatsApp ordering and owner scheduling."
     />
+    <link rel="canonical" href="https://brazilianpudding.com/pudim.html" />
+    <link rel="alternate" hreflang="en-us" href="https://brazilianpudding.com/pudim.html" />
+    <link rel="alternate" hreflang="pt-br" href="https://brazilianpudding.com/pudim.html" />
+    <link rel="alternate" hreflang="x-default" href="https://brazilianpudding.com/pudim.html" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Brazilian Kitchen" />
+    <meta property="og:title" content="Brazilian Pudding | Preorder Kitchen" />
+    <meta property="og:description" content="Premium Brazilian pudding, sweets and event desserts by preorder in Danbury, CT." />
+    <meta property="og:url" content="https://brazilianpudding.com/pudim.html" />
+    <meta property="og:image" content="https://brazilianpudding.com/assets/img/lifestyle/hero-premium.png" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="pt_BR" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Brazilian Pudding | Preorder Kitchen" />
+    <meta name="twitter:description" content="Classic Brazilian pudim, sweets and event desserts made by preorder." />
+    <meta name="twitter:image" content="https://brazilianpudding.com/assets/img/lifestyle/hero-premium.png" />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-    <link rel="preload" href="assets/img/lifestyle/hero-premium.avif" as="image" type="image/avif" />
-    <link rel="stylesheet" href="styles.css?v=82" />
-    <link rel="stylesheet" href="assets/header/header.css?v=82" />
-    <link rel="stylesheet" href="assets/cart/cart-drawer.css?v=82" />
-    <link rel="stylesheet" href="assets/delivery/delivery.css?v=82" />
-    <link rel="stylesheet" href="assets/vendor/fluid-particles.css?v=82" />
+    <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="preload" href="assets/img/products/product-classic-pudim.png" as="image" type="image/png" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Bakery",
+        "name": "Brazilian Pudding",
+        "url": "https://brazilianpudding.com/pudim.html",
+        "image": "https://brazilianpudding.com/assets/img/lifestyle/hero-premium.png",
+        "telephone": "+12034822797",
+        "priceRange": "$$",
+        "servesCuisine": ["Brazilian", "Dessert"],
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Danbury",
+          "addressRegion": "CT",
+          "postalCode": "06810",
+          "addressCountry": "US"
+        },
+        "areaServed": "Danbury, CT",
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Brazilian pudding preorder menu",
+          "itemListElement": [
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Product",
+                "name": "Classic Brazilian Pudim"
+              },
+              "priceCurrency": "USD",
+              "price": "28"
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Product",
+                "name": "Berry Pudim"
+              },
+              "priceCurrency": "USD",
+              "price": "34"
+            }
+          ]
+        }
+      }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..600&family=Hanken+Grotesk:wght@400..750&display=swap"
+    />
+    <link rel="stylesheet" href="assets/design/tokens.css?v=113" />
+    <link rel="stylesheet" href="styles.css?v=113" />
+    <link rel="stylesheet" href="assets/header/header.css?v=113" />
+    <link rel="stylesheet" href="assets/cart/cart-drawer.css?v=113" />
+    <link rel="stylesheet" href="assets/delivery/delivery.css?v=113" />
+    <link rel="stylesheet" href="assets/vendor/fluid-particles.css?v=113" />
+    <link rel="stylesheet" href="assets/menu/menu-card.css?v=113" />
+    <link rel="stylesheet" href="assets/cart/checkout.css?v=113" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   </head>
   <body>
@@ -42,7 +117,7 @@
           <span class="bk-brand-mark">BP</span>
           <span class="bk-brand-text">
             <strong>Brazilian Pudding</strong>
-            <small>Small batch sweets</small>
+            <small data-bk-i18n="bkBrandPuddingTag">Small batch sweets</small>
           </span>
         </a>
 
@@ -56,6 +131,7 @@
         <div class="bk-actions">
           <div class="bk-switch" data-bk-switch data-active="pudim" role="tablist" aria-label="Switch store">
             <span class="bk-switch-knob" aria-hidden="true"></span>
+            <a href="index.html" data-bk-target="home" role="tab" data-bk-i18n="bkSwitchHome">Home</a>
             <a href="pudim.html" data-bk-target="pudim" role="tab">Pudim</a>
             <a href="box.html" data-bk-target="box" role="tab">Box</a>
           </div>
@@ -95,7 +171,7 @@
       <header class="bk-drawer-head">
         <a class="bk-brand" href="#top">
           <span class="bk-brand-mark">BP</span>
-          <span class="bk-brand-text"><strong>Brazilian Pudding</strong><small>Small batch sweets</small></span>
+          <span class="bk-brand-text"><strong>Brazilian Pudding</strong><small data-bk-i18n="bkBrandPuddingTag">Small batch sweets</small></span>
         </a>
         <button class="bk-drawer-close" data-bk-drawer-close aria-label="Close">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
@@ -112,6 +188,7 @@
       <footer class="bk-drawer-foot">
         <div class="bk-switch" data-active="pudim">
           <span class="bk-switch-knob" aria-hidden="true"></span>
+          <a href="index.html" data-bk-target="home" data-bk-i18n="bkSwitchHome">Home</a>
           <a href="pudim.html" data-bk-target="pudim">Pudim</a>
           <a href="box.html" data-bk-target="box">Box</a>
         </div>
@@ -254,12 +331,12 @@
 
       <section class="marquee" aria-label="Service highlights">
         <div>
-          <span>Preorder only</span>
-          <span>WhatsApp ordering</span>
-          <span>Pickup or delivery request</span>
-          <span>Limited weekly batches</span>
-          <span>Bilingual storefront</span>
-          <span>Made fresh by preorder</span>
+          <span data-i18n="marqueePreorder">Preorder only</span>
+          <span data-i18n="marqueeWhatsapp">WhatsApp ordering</span>
+          <span data-i18n="marqueeDelivery">Pickup or delivery request</span>
+          <span data-i18n="marqueeBatches">Limited weekly batches</span>
+          <span data-i18n="marqueeBilingual">Bilingual storefront</span>
+          <span data-i18n="marqueeFresh">Made fresh by preorder</span>
         </div>
       </section>
 
@@ -273,9 +350,9 @@
         </article>
         <article class="experience-card reveal">
           <picture>
-            <source srcset="assets/img/lifestyle/pudding-photo.avif" type="image/avif" />
-            <source srcset="assets/img/lifestyle/pudding-photo.webp" type="image/webp" />
-            <img src="assets/img/lifestyle/pudding-photo.png" alt="Classic pudim for family dessert" loading="lazy" decoding="async" />
+            <source srcset="assets/img/products/product-classic-pudim.avif" type="image/avif" />
+            <source srcset="assets/img/products/product-classic-pudim.webp" type="image/webp" />
+            <img src="assets/img/products/product-classic-pudim.png" alt="Classic pudim for family dessert" loading="eager" decoding="async" />
           </picture>
           <span class="mini-icon">01</span>
           <h3 data-i18n="deckTwoTitle">Classic pudim</h3>
@@ -283,9 +360,9 @@
         </article>
         <article class="experience-card reveal">
           <picture>
-            <source srcset="assets/img/lifestyle/pudding-photo.avif" type="image/avif" />
-            <source srcset="assets/img/lifestyle/pudding-photo.webp" type="image/webp" />
-            <img src="assets/img/lifestyle/pudding-photo.png" alt="Gift-ready pudim" loading="lazy" decoding="async" />
+            <source srcset="assets/img/products/product-berry-pudim.avif" type="image/avif" />
+            <source srcset="assets/img/products/product-berry-pudim.webp" type="image/webp" />
+            <img src="assets/img/products/product-berry-pudim.png" alt="Gift-ready berry pudim" loading="eager" decoding="async" />
           </picture>
           <span class="mini-icon">02</span>
           <h3 data-i18n="deckThreeTitle">Gift-ready pudim</h3>
@@ -295,7 +372,7 @@
           <picture>
             <source srcset="assets/img/lifestyle/sweets-photo.avif" type="image/avif" />
             <source srcset="assets/img/lifestyle/sweets-photo.webp" type="image/webp" />
-            <img src="assets/img/lifestyle/sweets-photo.png" alt="Brazilian party sweets" loading="lazy" decoding="async" />
+            <img src="assets/img/lifestyle/sweets-photo.png" alt="Brazilian party sweets" loading="eager" decoding="async" />
           </picture>
           <span class="mini-icon">03</span>
           <h3 data-i18n="deckFourTitle">Party sweets</h3>
@@ -306,7 +383,7 @@
       <section class="section menu-section" id="menu">
         <div class="section-kicker reveal">
           <p class="eyebrow" data-i18n="menuEyebrow">Signature drops</p>
-          <h2 data-i18n="menuTitle">A menu that feels scarce, fresh and made for the occasion.</h2>
+          <h2 data-i18n="menuTitle">Brazilian pudding menu, made by preorder.</h2>
         </div>
 
         <div class="menu-shell">
@@ -317,6 +394,7 @@
             <div class="category-tabs" role="tablist" aria-label="Product categories">
               <button type="button" class="tab is-active" data-category="puddings" data-i18n="tabPuddings">Puddings</button>
               <button type="button" class="tab" data-category="events" data-i18n="tabEvents">Events</button>
+              <button type="button" class="tab" data-category="box" data-i18n="tabBoxes">Box InHouse</button>
             </div>
           </div>
 
@@ -378,12 +456,11 @@
 
           <div class="cart-lines" data-cart-lines></div>
 
-          <div class="cart-add-row">
+          <div class="cart-upsell" data-cart-upsell>
             <label>
-              <span data-i18n="fieldProduct">Add product</span>
-              <select name="product" data-product-select></select>
+              <span class="cart-upsell-title" data-i18n="cartUpsellTitle">Add more to your bag</span>
+              <select name="product" data-product-select hidden aria-hidden="true" tabindex="-1"></select>
             </label>
-            <button class="button button-quiet" type="button" data-add-selected-product data-i18n="cartAdd">Add to cart</button>
           </div>
 
           <div class="form-grid checkout-contact">
@@ -423,6 +500,14 @@
               <span data-i18n="delivery">Delivery request</span>
             </label>
           </fieldset>
+
+          <div class="bk-ship-meter" data-ship-meter hidden aria-live="polite">
+            <div class="bk-ship-meter__row">
+              <span class="bk-ship-meter__label" data-ship-label></span>
+              <em class="bk-ship-meter__pct" data-ship-pct></em>
+            </div>
+            <div class="bk-ship-meter__track"><span class="bk-ship-meter__fill" data-ship-fill style="width:0%"></span></div>
+          </div>
 
           <section class="bk-delivery-panel" data-delivery-panel>
             <header>
@@ -537,20 +622,20 @@
           <a href="https://www.instagram.com/brazilianpudding" target="_blank" rel="noreferrer">@brazilianpudding</a>
         </div>
         <div>
-          <span>Pickup & delivery</span>
-          <a href="#order">Reserve a date</a>
-          <a href="#order">Request delivery ZIP</a>
+          <span data-i18n="footerPickupTitle">Pickup & delivery</span>
+          <a href="#order" data-i18n="footerReserveDate">Reserve a date</a>
+          <a href="#order" data-i18n="footerRequestZip">Request delivery ZIP</a>
         </div>
       </div>
     </footer>
 
     <button class="cart-fab" type="button" data-open-cart aria-label="Open preorder cart">
-      <span class="cart-fab-mark">Cart</span>
+      <span class="cart-fab-mark" data-i18n="cartFloatingLabel">Preorder cart</span>
       <span>
         <small data-i18n="cartFloatingLabel">Preorder cart</small>
-        <strong data-cart-floating-count>1 item</strong>
+        <strong data-cart-floating-count>0 items</strong>
       </span>
-      <em data-cart-floating-total>$28</em>
+      <em data-cart-floating-total>$0</em>
     </button>
 
     <div class="floating-concierge" data-concierge>
@@ -583,15 +668,16 @@
       </button>
     </div>
 
-    <script src="assets/img/picture.js?v=82"></script>
-    <script src="assets/config/config.js?v=82"></script>
-    <script src="assets/api/client.js?v=82"></script>
+    <script src="assets/img/picture.js?v=113"></script>
+    <script src="assets/config/config.js?v=113"></script>
+    <script src="assets/api/client.js?v=113"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="assets/delivery/delivery.js?v=82"></script>
-    <script type="module" src="app.js?v=82"></script>
-    <script src="assets/header/header.js?v=82" defer></script>
-    <script src="assets/concierge/concierge-ai.js?v=82" defer></script>
-    <script src="assets/cart/cart-drawer.js?v=82" defer></script>
-    <script type="module" src="assets/vendor/fluid-particles.js?v=82"></script>
+    <script src="assets/delivery/delivery.js?v=113"></script>
+    <script type="module" src="app.js?v=113"></script>
+    <script src="assets/header/header.js?v=113" defer></script>
+    <script src="assets/concierge/concierge-ai.js?v=113" defer></script>
+    <script src="assets/cart/cart-drawer.js?v=113" defer></script>
+    <script type="module" src="assets/vendor/fluid-particles.js?v=113"></script>
+    <script src="assets/pwa/register-sw.js?v=113" defer></script>
   </body>
 </html>

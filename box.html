@@ -2,37 +2,185 @@
 <html lang="en" translate="no" class="notranslate">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
     <meta name="google" content="notranslate" />
     <meta http-equiv="Content-Language" content="en" />
+    <meta name="theme-color" content="#1a1f2e" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Box InHouse" />
     <title>Box InHouse | Brazilian Boxes by Preorder</title>
     <meta
       name="description"
       content="Brazilian comfort food boxes, dessert cups and savory trays by preorder, pickup or delivery by appointment."
     />
+    <link rel="canonical" href="https://brazilianpudding.com/box.html" />
+    <link
+      rel="alternate"
+      hreflang="en-us"
+      href="https://brazilianpudding.com/box.html"
+    />
+    <link
+      rel="alternate"
+      hreflang="pt-br"
+      href="https://brazilianpudding.com/box.html"
+    />
+    <link
+      rel="alternate"
+      hreflang="x-default"
+      href="https://brazilianpudding.com/box.html"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Brazilian Kitchen" />
+    <meta
+      property="og:title"
+      content="Box InHouse | Brazilian Boxes by Preorder"
+    />
+    <meta
+      property="og:description"
+      content="Brazilian comfort food boxes, dessert cups and savory trays by preorder in Danbury, CT."
+    />
+    <meta property="og:url" content="https://brazilianpudding.com/box.html" />
+    <meta
+      property="og:image"
+      content="https://brazilianpudding.com/assets/img/products/product-dessert-cups.png"
+    />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="pt_BR" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Box InHouse | Brazilian Boxes" />
+    <meta
+      name="twitter:description"
+      content="Food boxes, trays and comfort meals prepared by preorder in Danbury, CT."
+    />
+    <meta
+      name="twitter:image"
+      content="https://brazilianpudding.com/assets/img/products/product-dessert-cups.png"
+    />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-    <link rel="preload" href="assets/img/products/product-dessert-cups.avif" as="image" type="image/avif" />
-    <link rel="preload" href="assets/img/products/product-shrimp-tray.avif" as="image" type="image/avif" />
-    <link rel="stylesheet" href="box.css?v=82" />
-    <link rel="stylesheet" href="assets/header/header.css?v=82" />
-    <link rel="stylesheet" href="assets/cart/cart-drawer.css?v=82" />
-    <link rel="stylesheet" href="assets/delivery/delivery.css?v=82" />
-    <link rel="stylesheet" href="assets/vendor/fluid-particles.css?v=82" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link
+      rel="preload"
+      href="assets/img/products/product-dessert-cups.avif"
+      as="image"
+      type="image/avif"
+    />
+    <link
+      rel="preload"
+      href="assets/img/products/product-shrimp-tray.avif"
+      as="image"
+      type="image/avif"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FoodEstablishment",
+        "name": "Box InHouse",
+        "url": "https://brazilianpudding.com/box.html",
+        "image": "https://brazilianpudding.com/assets/img/products/product-dessert-cups.png",
+        "telephone": "+12034822797",
+        "priceRange": "$$",
+        "servesCuisine": ["Brazilian", "Comfort food"],
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Danbury",
+          "addressRegion": "CT",
+          "postalCode": "06810",
+          "addressCountry": "US"
+        },
+        "areaServed": "Danbury, CT",
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Box InHouse preorder menu",
+          "itemListElement": [
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Product",
+                "name": "Dessert Cups"
+              },
+              "priceCurrency": "USD",
+              "price": "36"
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Product",
+                "name": "Crispy Shrimp Tray"
+              },
+              "priceCurrency": "USD",
+              "price": "58"
+            }
+          ]
+        }
+      }
+    </script>
+    <link rel="stylesheet" href="box.css?v=113" />
+    <link rel="stylesheet" href="assets/header/header.css?v=113" />
+    <link rel="stylesheet" href="assets/cart/cart-drawer.css?v=113" />
+    <link rel="stylesheet" href="assets/delivery/delivery.css?v=113" />
+    <link rel="stylesheet" href="assets/vendor/fluid-particles.css?v=113" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
   </head>
   <body class="box-body">
     <!-- legacy bridge (não remover): mantém box.js funcional pra troca de idioma -->
-    <button class="box-language-toggle" type="button" hidden aria-hidden="true" tabindex="-1">PT</button>
+    <button
+      class="box-language-toggle"
+      type="button"
+      hidden
+      aria-hidden="true"
+      tabindex="-1"
+    >
+      PT
+    </button>
 
     <div class="box-progress" data-box-progress></div>
 
-    <header class="bk-header" data-bk-header data-bk-theme="cobalt" data-bk-cart-count="0" aria-label="Site header">
+    <header
+      class="bk-header"
+      data-bk-header
+      data-bk-theme="cobalt"
+      data-bk-cart-count="0"
+      aria-label="Site header"
+    >
       <div class="bk-announce" role="region" aria-label="Live batch updates">
         <div class="bk-announce-track" data-bk-marquee>
-          <span class="bk-announce-chip" data-pulse><span data-bk-i18n="bkAnnounceBatchClose">Saturday batch closes in</span> <strong data-bk-deadline="2026-06-06T18:00">--</strong></span>
-          <span class="bk-announce-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17V6h11v11"/><path d="M14 10h4l3 4v3h-7"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg><span data-bk-i18n="bkAnnounceFamilyBoxes">Family-size boxes prepared on demand</span></span>
-          <span class="bk-announce-chip" data-bk-i18n="bkAnnounceBoxSlots">Only 3 box slots for this weekend</span>
-          <span class="bk-announce-chip" data-bk-i18n="bkAnnounceSecondBox">Save $8 on your second box this month</span>
+          <span class="bk-announce-chip" data-pulse
+            ><span data-bk-i18n="bkAnnounceBatchClose"
+              >Saturday batch closes in</span
+            >
+            <strong data-bk-deadline="2026-06-06T18:00">--</strong></span
+          >
+          <span class="bk-announce-chip"
+            ><svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M3 17V6h11v11" />
+              <path d="M14 10h4l3 4v3h-7" />
+              <circle cx="7" cy="18" r="2" />
+              <circle cx="17" cy="18" r="2" /></svg
+            ><span data-bk-i18n="bkAnnounceFamilyBoxes"
+              >Family-size boxes prepared on demand</span
+            ></span
+          >
+          <span class="bk-announce-chip" data-bk-i18n="bkAnnounceBoxSlots"
+            >Only 3 box slots for this weekend</span
+          >
+          <span class="bk-announce-chip" data-bk-i18n="bkAnnounceSecondBox"
+            >Save $8 on your second box this month</span
+          >
         </div>
       </div>
 
@@ -47,85 +195,227 @@
 
         <nav class="bk-nav" data-bk-nav aria-label="Box navigation">
           <span class="bk-nav-pill" aria-hidden="true"></span>
-          <a class="bk-nav-link" href="#menu">Menu</a>
-          <a class="bk-nav-link" href="#order" data-box-open-cart>Order</a>
-          <a class="bk-nav-link" href="#how">How it works</a>
+          <a class="bk-nav-link" href="#menu" data-bk-i18n="bkNavMenu">Menu</a>
+          <a
+            class="bk-nav-link"
+            href="#order"
+            data-box-open-cart
+            data-bk-i18n="bkNavOrder"
+            >Order</a
+          >
+          <a class="bk-nav-link" href="#how" data-bk-i18n="bkNavHow"
+            >How it works</a
+          >
         </nav>
 
         <div class="bk-actions">
-          <div class="bk-switch" data-bk-switch data-active="box" role="tablist" aria-label="Switch store">
+          <div
+            class="bk-switch"
+            data-bk-switch
+            data-active="box"
+            role="tablist"
+            aria-label="Switch store"
+          >
             <span class="bk-switch-knob" aria-hidden="true"></span>
+            <a
+              href="index.html"
+              data-bk-target="home"
+              role="tab"
+              data-bk-i18n="bkSwitchHome"
+              >Home</a
+            >
             <a href="pudim.html" data-bk-target="pudim" role="tab">Pudim</a>
             <a href="box.html" data-bk-target="box" role="tab">Box</a>
           </div>
 
-          <button class="bk-lang" data-bk-lang type="button" data-active="en" aria-label="Language toggle">
+          <button
+            class="bk-lang"
+            data-bk-lang
+            type="button"
+            data-active="en"
+            aria-label="Language toggle"
+          >
             <span class="bk-lang-knob" aria-hidden="true"></span>
             <span data-lang="en">
-              <svg class="bk-flag" viewBox="0 0 18 12" aria-hidden="true"><rect width="18" height="12" fill="#bf0a30"/><rect y="1" width="18" height="1" fill="#fff"/><rect y="3" width="18" height="1" fill="#fff"/><rect y="5" width="18" height="1" fill="#fff"/><rect y="7" width="18" height="1" fill="#fff"/><rect y="9" width="18" height="1" fill="#fff"/><rect y="11" width="18" height="1" fill="#fff"/><rect width="8" height="6" fill="#002868"/></svg>
+              <svg class="bk-flag" viewBox="0 0 18 12" aria-hidden="true">
+                <rect width="18" height="12" fill="#bf0a30" />
+                <rect y="1" width="18" height="1" fill="#fff" />
+                <rect y="3" width="18" height="1" fill="#fff" />
+                <rect y="5" width="18" height="1" fill="#fff" />
+                <rect y="7" width="18" height="1" fill="#fff" />
+                <rect y="9" width="18" height="1" fill="#fff" />
+                <rect y="11" width="18" height="1" fill="#fff" />
+                <rect width="8" height="6" fill="#002868" />
+              </svg>
               <span class="bk-lang-label">EN</span>
             </span>
             <span data-lang="pt">
-              <svg class="bk-flag" viewBox="0 0 18 12" aria-hidden="true"><rect width="18" height="12" fill="#009c3b"/><polygon points="9,1.5 16,6 9,10.5 2,6" fill="#ffdf00"/><circle cx="9" cy="6" r="2.2" fill="#002776"/></svg>
+              <svg class="bk-flag" viewBox="0 0 18 12" aria-hidden="true">
+                <rect width="18" height="12" fill="#009c3b" />
+                <polygon points="9,1.5 16,6 9,10.5 2,6" fill="#ffdf00" />
+                <circle cx="9" cy="6" r="2.2" fill="#002776" />
+              </svg>
               <span class="bk-lang-label">PT</span>
             </span>
           </button>
 
-          <button class="bk-bag" type="button" data-box-open-cart aria-label="Open box cart">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+          <button
+            class="bk-bag"
+            type="button"
+            data-box-open-cart
+            aria-label="Open box cart"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8L5 8z"
+              />
+              <path d="M9 8V6a3 3 0 0 1 6 0v2" />
+            </svg>
             <span class="bk-bag-badge" data-bk-bag-badge>0</span>
           </button>
 
-          <a class="bk-cta" data-box-wa href="#" target="_blank" rel="noreferrer">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.5A10 10 0 1 0 12 2zm5.4 14c-.2.6-1.3 1.3-1.8 1.3-.5.1-1.1.2-3.4-.7-2.9-1.2-4.7-4.1-4.8-4.3-.1-.2-1.1-1.5-1.1-2.8s.7-2 .9-2.3c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .6-.1.2-.2.3-.3.5l-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.4 1.8 2.2 1.3 1.1 2.3 1.5 2.6 1.6.3.1.5.1.6-.1l.7-.9c.2-.2.4-.2.6-.1.3.1 1.7.8 2 1 .3.1.5.2.6.3.1.2.1.7-.1 1.4z"/></svg>
-            <span>WhatsApp</span>
+          <a
+            class="bk-cta"
+            data-box-wa
+            href="#"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.5A10 10 0 1 0 12 2zm5.4 14c-.2.6-1.3 1.3-1.8 1.3-.5.1-1.1.2-3.4-.7-2.9-1.2-4.7-4.1-4.8-4.3-.1-.2-1.1-1.5-1.1-2.8s.7-2 .9-2.3c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .6-.1.2-.2.3-.3.5l-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.4 1.8 2.2 1.3 1.1 2.3 1.5 2.6 1.6.3.1.5.1.6-.1l.7-.9c.2-.2.4-.2.6-.1.3.1 1.7.8 2 1 .3.1.5.2.6.3.1.2.1.7-.1 1.4z"
+              />
+            </svg>
+            <span data-bk-i18n="bkOrderWA">WhatsApp</span>
           </a>
 
-          <button class="bk-burger" type="button" data-bk-burger aria-label="Open menu" aria-expanded="false">
-            <span class="bk-burger-bars"><span></span><span></span><span></span></span>
+          <button
+            class="bk-burger"
+            type="button"
+            data-bk-burger
+            aria-label="Open menu"
+            aria-expanded="false"
+          >
+            <span class="bk-burger-bars"
+              ><span></span><span></span><span></span
+            ></span>
           </button>
         </div>
       </div>
     </header>
 
-    <div class="bk-drawer-overlay" data-bk-drawer-overlay aria-hidden="true"></div>
-    <aside class="bk-drawer" data-bk-drawer role="dialog" aria-modal="true" aria-label="Menu">
+    <div
+      class="bk-drawer-overlay"
+      data-bk-drawer-overlay
+      aria-hidden="true"
+    ></div>
+    <aside
+      class="bk-drawer"
+      data-bk-drawer
+      role="dialog"
+      aria-modal="true"
+      aria-label="Menu"
+    >
       <header class="bk-drawer-head">
         <a class="bk-brand" href="#top">
           <span class="bk-brand-mark">BI</span>
-          <span class="bk-brand-text"><strong>Box InHouse</strong><small>Brazilian boxes</small></span>
+          <span class="bk-brand-text"
+            ><strong>Box InHouse</strong
+            ><small data-bk-i18n="bkBrandBoxTag">Brazilian boxes</small></span
+          >
         </a>
         <button class="bk-drawer-close" data-bk-drawer-close aria-label="Close">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+          >
+            <path d="M6 6l12 12M18 6 6 18" />
+          </svg>
         </button>
       </header>
       <nav class="bk-drawer-body" aria-label="Navigation">
-        <a class="bk-drawer-link" href="#menu" data-icon="menu"><span data-bk-i18n="bkNavMenu">Menu</span><span aria-hidden>→</span></a>
-        <a class="bk-drawer-link" href="#order" data-icon="order" data-box-open-cart><span data-bk-i18n="bkNavOrder">Order</span><span aria-hidden>→</span></a>
-        <a class="bk-drawer-link" href="#how" data-icon="how"><span data-bk-i18n="bkNavHow">How it works</span><span aria-hidden>→</span></a>
-        <span class="bk-drawer-section-label" data-bk-i18n="bkDrawerOtherLine">Other line</span>
-        <a class="bk-drawer-link" href="pudim.html" data-icon="store"><span>Brazilian Pudding</span><span aria-hidden>→</span></a>
-        <a class="bk-drawer-link" href="index.html" data-icon="back"><span data-bk-i18n="bkDrawerChoose">Choose another section</span><span aria-hidden>→</span></a>
+        <a class="bk-drawer-link" href="#menu" data-icon="menu"
+          ><span data-bk-i18n="bkNavMenu">Menu</span
+          ><span aria-hidden>→</span></a
+        >
+        <a
+          class="bk-drawer-link"
+          href="#order"
+          data-icon="order"
+          data-box-open-cart
+          ><span data-bk-i18n="bkNavOrder">Order</span
+          ><span aria-hidden>→</span></a
+        >
+        <a class="bk-drawer-link" href="#how" data-icon="how"
+          ><span data-bk-i18n="bkNavHow">How it works</span
+          ><span aria-hidden>→</span></a
+        >
+        <span class="bk-drawer-section-label" data-bk-i18n="bkDrawerOtherLine"
+          >Other line</span
+        >
+        <a class="bk-drawer-link" href="pudim.html" data-icon="store"
+          ><span>Brazilian Pudding</span><span aria-hidden>→</span></a
+        >
+        <a class="bk-drawer-link" href="index.html" data-icon="back"
+          ><span data-bk-i18n="bkDrawerChoose">Choose another section</span
+          ><span aria-hidden>→</span></a
+        >
       </nav>
       <footer class="bk-drawer-foot">
         <div class="bk-switch" data-active="box">
           <span class="bk-switch-knob" aria-hidden="true"></span>
+          <a href="index.html" data-bk-target="home" data-bk-i18n="bkSwitchHome"
+            >Home</a
+          >
           <a href="pudim.html" data-bk-target="pudim">Pudim</a>
           <a href="box.html" data-bk-target="box">Box</a>
         </div>
-        <button class="bk-lang" data-bk-lang type="button" data-active="en" aria-label="Language toggle">
+        <button
+          class="bk-lang"
+          data-bk-lang
+          type="button"
+          data-active="en"
+          aria-label="Language toggle"
+        >
           <span class="bk-lang-knob" aria-hidden="true"></span>
           <span data-lang="en">
-            <svg class="bk-flag" viewBox="0 0 18 12" aria-hidden="true"><rect width="18" height="12" fill="#bf0a30"/><rect y="1" width="18" height="1" fill="#fff"/><rect y="3" width="18" height="1" fill="#fff"/><rect y="5" width="18" height="1" fill="#fff"/><rect y="7" width="18" height="1" fill="#fff"/><rect y="9" width="18" height="1" fill="#fff"/><rect y="11" width="18" height="1" fill="#fff"/><rect width="8" height="6" fill="#002868"/></svg>
+            <svg class="bk-flag" viewBox="0 0 18 12" aria-hidden="true">
+              <rect width="18" height="12" fill="#bf0a30" />
+              <rect y="1" width="18" height="1" fill="#fff" />
+              <rect y="3" width="18" height="1" fill="#fff" />
+              <rect y="5" width="18" height="1" fill="#fff" />
+              <rect y="7" width="18" height="1" fill="#fff" />
+              <rect y="9" width="18" height="1" fill="#fff" />
+              <rect y="11" width="18" height="1" fill="#fff" />
+              <rect width="8" height="6" fill="#002868" />
+            </svg>
             <span class="bk-lang-label">EN</span>
           </span>
           <span data-lang="pt">
-            <svg class="bk-flag" viewBox="0 0 18 12" aria-hidden="true"><rect width="18" height="12" fill="#009c3b"/><polygon points="9,1.5 16,6 9,10.5 2,6" fill="#ffdf00"/><circle cx="9" cy="6" r="2.2" fill="#002776"/></svg>
+            <svg class="bk-flag" viewBox="0 0 18 12" aria-hidden="true">
+              <rect width="18" height="12" fill="#009c3b" />
+              <polygon points="9,1.5 16,6 9,10.5 2,6" fill="#ffdf00" />
+              <circle cx="9" cy="6" r="2.2" fill="#002776" />
+            </svg>
             <span class="bk-lang-label">PT</span>
           </span>
         </button>
         <a class="bk-cta" data-box-wa href="#" target="_blank" rel="noreferrer">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.5A10 10 0 1 0 12 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.5A10 10 0 1 0 12 2z"
+            />
+          </svg>
           <span data-bk-i18n="bkOrderWAFull">Order on WhatsApp</span>
         </a>
       </footer>
@@ -134,16 +424,38 @@
     <main>
       <section class="box-hero" id="top" aria-label="Box InHouse preorder">
         <div class="box-hero-bg" data-box-parallax="0.08"></div>
-        <div class="fluid-particles-bg" data-fluid-particles data-palette="green" aria-hidden="true"></div>
+        <div
+          class="fluid-particles-bg"
+          data-fluid-particles
+          data-palette="green"
+          aria-hidden="true"
+        ></div>
         <div class="box-copy">
-          <p class="box-kicker" data-bk-i18n="boxKickerHero">Brazilian boxes by appointment</p>
-          <h1 data-bk-i18n="boxHeroTitle">Comfort food that arrives ready to share.</h1>
+          <p class="box-kicker" data-bk-i18n="boxKickerHero">
+            Brazilian boxes by appointment
+          </p>
+          <h1 data-bk-i18n="boxHeroTitle">
+            Comfort food that arrives ready to share.
+          </h1>
           <p data-bk-i18n="boxHeroDesc">
-            Dessert cups, savory trays and weekend boxes prepared in limited batches for pickup or delivery.
+            Dessert cups, savory trays and weekend boxes prepared in limited
+            batches for pickup or delivery.
           </p>
           <div class="box-actions">
-            <button class="box-button box-button-dark" type="button" data-box-hero-add data-bk-i18n="boxReserveBox">Reserve a box</button>
-            <a class="box-button box-button-light" href="index.html" data-bk-i18n="boxChooseLine">Choose another line</a>
+            <button
+              class="box-button box-button-dark"
+              type="button"
+              data-box-hero-add
+              data-bk-i18n="boxReserveBox"
+            >
+              Reserve a box
+            </button>
+            <a
+              class="box-button box-button-light"
+              href="index.html"
+              data-bk-i18n="boxChooseLine"
+              >Choose another line</a
+            >
           </div>
         </div>
 
@@ -153,6 +465,7 @@
             <source srcset="assets/img/products/product-dessert-cups.webp" type="image/webp" />
             <img class="box-stage-main" src="assets/img/products/product-dessert-cups.png" alt="" data-box-main-image />
           </picture>
+
           <picture>
             <source srcset="assets/img/products/product-shrimp-tray.avif" type="image/avif" />
             <source srcset="assets/img/products/product-shrimp-tray.webp" type="image/webp" />
@@ -167,15 +480,24 @@
 
       <section class="box-menu" id="menu" aria-label="Box products">
         <div class="box-section-head" data-box-reveal>
-          <p class="box-kicker" data-bk-i18n="boxKickerDrop">Drop menu</p>
-          <h2 data-bk-i18n="boxMenuTitle">Pick the batch before it closes.</h2>
+          <p class="box-kicker" data-bk-i18n="boxKickerDrop">Preorder menu</p>
+          <h2 data-bk-i18n="boxMenuTitle">Box InHouse menu, made by preorder.</h2>
         </div>
 
         <div class="box-product-switch" data-box-product-switch data-box-reveal>
-          <button class="is-active" type="button" data-box-product="cups">Dessert Cups</button>
+          <button class="is-active" type="button" data-box-product="cups">
+            Dessert Cups
+          </button>
           <button type="button" data-box-product="shrimp">Crispy Shrimp</button>
           <button type="button" data-box-product="weekend">Weekend Box</button>
-          <button class="box-product-add" type="button" data-box-add-current data-bk-i18n="boxAddSelected">Add selected</button>
+          <button
+            class="box-product-add"
+            type="button"
+            data-box-add-current
+            data-bk-i18n="boxAddSelected"
+          >
+            Add selected
+          </button>
         </div>
 
         <div class="box-product-grid">
@@ -184,7 +506,8 @@
               <span data-bk-i18n="boxFeatured">Featured</span>
               <h3 data-box-title>Dessert cups tower</h3>
               <p data-box-description>
-                Layered Brazilian sweets packed for parties, office treats and family weekends.
+                Layered Brazilian sweets packed for parties, office treats and
+                family weekends.
               </p>
             </div>
             <strong data-box-price>from $42</strong>
@@ -192,40 +515,80 @@
 
           <article class="box-card" data-box-reveal>
             <picture>
-              <source srcset="assets/img/products/product-dessert-cups.avif" type="image/avif" />
-              <source srcset="assets/img/products/product-dessert-cups.webp" type="image/webp" />
-              <img src="assets/img/products/product-dessert-cups.png" alt="Dessert cups stacked in clear boxes" loading="lazy" decoding="async" />
+              <source
+                srcset="assets/img/products/product-dessert-cups.avif"
+                type="image/avif"
+              />
+              <source
+                srcset="assets/img/products/product-dessert-cups.webp"
+                type="image/webp"
+              />
+              <img
+                src="assets/img/products/product-dessert-cups.png"
+                alt="Dessert cups stacked in clear boxes"
+                loading="lazy"
+                decoding="async"
+              />
             </picture>
             <div>
               <span data-bk-i18n="boxSweetBox">Sweet box</span>
-              <strong>Brigadeiro, pistachio, coconut</strong>
+              <strong data-bk-i18n="boxSweetDesc"
+                >Brigadeiro, pistachio, coconut</strong
+              >
             </div>
           </article>
 
           <article class="box-card box-card-alt" data-box-reveal>
             <picture>
-              <source srcset="assets/img/products/product-shrimp-tray.avif" type="image/avif" />
-              <source srcset="assets/img/products/product-shrimp-tray.webp" type="image/webp" />
-              <img src="assets/img/products/product-shrimp-tray.png" alt="Crispy shrimp tray" loading="lazy" decoding="async" />
+              <source
+                srcset="assets/img/products/product-shrimp-tray.avif"
+                type="image/avif"
+              />
+              <source
+                srcset="assets/img/products/product-shrimp-tray.webp"
+                type="image/webp"
+              />
+              <img
+                src="assets/img/products/product-shrimp-tray.png"
+                alt="Crispy shrimp tray"
+                loading="lazy"
+                decoding="async"
+              />
             </picture>
             <div>
               <span data-bk-i18n="boxSavoryTray">Savory tray</span>
-              <strong>Crispy shrimp, potato sticks, green onion</strong>
+              <strong data-bk-i18n="boxSavoryDesc"
+                >Crispy shrimp, potato sticks, green onion</strong
+              >
             </div>
           </article>
         </div>
 
-        <div class="box-product-catalog" data-box-product-catalog aria-label="All Box InHouse products"></div>
+        <div
+          class="box-product-catalog"
+          data-box-product-catalog
+          aria-label="All Box InHouse products"
+        ></div>
       </section>
 
       <section class="box-order" id="order" aria-label="Order Box InHouse">
         <div class="box-order-panel box-order-teaser" data-box-reveal>
           <p class="box-kicker" data-bk-i18n="boxKickerOrder">Order cart</p>
-          <h2 data-bk-i18n="boxOrderTitle">Choose boxes, review the date, then send one clean WhatsApp request.</h2>
+          <h2 data-bk-i18n="boxOrderTitle">
+            Choose boxes, review the date, then send one clean WhatsApp request.
+          </h2>
           <p data-bk-i18n="boxOrderDesc">
-            Every selected item stays in one cart with quantity, pickup or delivery, date, notes and estimated total.
+            Every selected item stays in one cart with quantity, pickup or
+            delivery, date, notes and estimated total.
           </p>
-          <button class="box-button box-button-dark" type="button" data-box-open-cart data-bk-i18n="boxOpenCart">Open cart</button>
+          <button
+            class="box-button box-button-dark"
+            type="button"
+            data-box-open-cart
+            data-bk-i18n="boxOpenCart"
+          >
+            Open cart
+          </button>
         </div>
 
         <form
@@ -240,104 +603,191 @@
         >
           <div class="box-cart-head">
             <div>
-              <p class="box-kicker">Preorder cart</p>
-              <h2 id="box-cart-modal-title">Build the box request.</h2>
+              <p class="box-kicker" data-bk-i18n="boxCartKicker">
+                Preorder cart
+              </p>
+              <h2 id="box-cart-modal-title" data-bk-i18n="boxCartTitle">
+                Build the box request.
+              </h2>
             </div>
             <div class="box-cart-head-actions">
               <strong data-box-cart-count>0 items</strong>
-              <button class="box-cart-close" type="button" data-box-close-cart aria-label="Close cart">Close</button>
+              <button
+                class="box-cart-close"
+                type="button"
+                data-box-close-cart
+                aria-label="Close cart"
+              >
+                Close
+              </button>
             </div>
           </div>
 
           <div class="box-cart-lines" data-box-cart-lines></div>
 
-          <button class="box-button box-button-light box-cart-add" type="button" data-box-add-current>
-            Add selected box
-          </button>
+          <div class="box-cart-picker">
+            <label>
+              <span data-bk-i18n="boxFieldProduct">Add product</span>
+              <select data-box-product-select aria-label="Add product"></select>
+            </label>
+            <button
+              class="box-button box-button-light box-cart-add"
+              type="button"
+              data-box-add-selected
+              data-bk-i18n="boxAddToCart"
+            >
+              Add
+            </button>
+          </div>
 
           <div class="box-order-fields checkout-contact">
             <label>
-              <span>Name</span>
-              <input name="name" type="text" autocomplete="name" placeholder="Your name" required />
+              <span data-bk-i18n="boxFieldName">Name</span>
+              <input
+                name="name"
+                type="text"
+                autocomplete="name"
+                data-bk-i18n-placeholder="boxNamePlaceholder"
+                placeholder="Your name"
+                required
+              />
             </label>
             <label>
-              <span>WhatsApp</span>
-              <input name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+1 (203) 000-0000" required />
+              <span data-bk-i18n="boxFieldWhatsapp">WhatsApp</span>
+              <input
+                name="phone"
+                type="tel"
+                autocomplete="tel"
+                inputmode="tel"
+                placeholder="+1 (203) 000-0000"
+                required
+              />
             </label>
             <label>
               <span>Email</span>
-              <input name="email" type="email" autocomplete="email" placeholder="you@email.com" />
+              <input
+                name="email"
+                type="email"
+                autocomplete="email"
+                placeholder="you@email.com"
+              />
             </label>
           </div>
 
           <div class="box-order-fields">
             <label>
-              <span>For when?</span>
+              <span data-bk-i18n="boxFieldDate">For when?</span>
               <input name="date" type="date" data-box-date required />
             </label>
             <label>
-              <span>Preferred time</span>
-              <input name="time" type="text" placeholder="Saturday, 5-7 PM" />
+              <span data-bk-i18n="boxFieldTime">Preferred time</span>
+              <input
+                name="time"
+                type="text"
+                data-bk-i18n-placeholder="boxTimePlaceholder"
+                placeholder="Saturday, 5-7 PM"
+              />
             </label>
           </div>
 
           <fieldset class="box-fulfillment">
-            <legend>Fulfillment</legend>
+            <legend data-bk-i18n="boxFieldFulfillment">Fulfillment</legend>
             <label>
               <input type="radio" name="fulfillment" value="Pickup" checked />
-              <span>Pickup</span>
+              <span data-bk-i18n="boxPickup">Pickup</span>
             </label>
             <label>
               <input type="radio" name="fulfillment" value="Delivery request" />
-              <span>Delivery request</span>
+              <span data-bk-i18n="boxDelivery">Delivery request</span>
             </label>
           </fieldset>
 
           <section class="bk-delivery-panel" data-delivery-panel>
             <header>
               <div>
-                <h3>Delivery from Danbury</h3>
-                <p>Enter a ZIP to check the automatic radius and delivery fee.</p>
+                <h3 data-bk-i18n="boxDeliveryTitle">Delivery from Danbury</h3>
+                <p data-bk-i18n="boxDeliveryText">
+                  Enter a ZIP to check the automatic radius and delivery fee.
+                </p>
               </div>
             </header>
             <div class="bk-delivery-grid">
               <div>
                 <div class="bk-delivery-row">
                   <label>
-                    <span>Delivery ZIP</span>
-                    <input name="deliveryZip" type="text" inputmode="numeric" autocomplete="postal-code" maxlength="5" data-delivery-zip placeholder="06810" />
+                    <span data-bk-i18n="boxFieldZip">Delivery ZIP</span>
+                    <input
+                      name="deliveryZip"
+                      type="text"
+                      inputmode="numeric"
+                      autocomplete="postal-code"
+                      maxlength="5"
+                      data-delivery-zip
+                      placeholder="06810"
+                    />
                   </label>
-                  <button class="box-button box-button-light" type="button" data-delivery-check>Check</button>
+                  <button
+                    class="box-button box-button-light"
+                    type="button"
+                    data-delivery-check
+                    data-bk-i18n="boxCheckDelivery"
+                  >
+                    Check
+                  </button>
                 </div>
                 <label>
-                  <span>Delivery address</span>
-                  <input name="deliveryAddress" type="text" autocomplete="street-address" placeholder="Street, city, CT" />
+                  <span data-bk-i18n="boxFieldAddress">Delivery address</span>
+                  <input
+                    name="deliveryAddress"
+                    type="text"
+                    autocomplete="street-address"
+                    data-bk-i18n-placeholder="boxAddressPlaceholder"
+                    placeholder="Street, city, CT"
+                  />
                 </label>
                 <div class="bk-delivery-quote" data-delivery-quote>
-                  <strong>Pickup is free.</strong>
-                  <span>For delivery, enter the ZIP before sending.</span>
+                  <strong data-bk-i18n="boxPickupFree">Pickup is free.</strong>
+                  <span data-bk-i18n="boxDeliveryHint"
+                    >For delivery, enter the ZIP before sending.</span
+                  >
                 </div>
               </div>
-              <div class="bk-service-map" data-service-map aria-label="Danbury delivery radius"></div>
+              <div
+                class="bk-service-map"
+                data-service-map
+                aria-label="Danbury delivery radius"
+              ></div>
             </div>
           </section>
 
           <label class="box-notes">
-            <span>Notes</span>
-            <textarea name="notes" rows="4" placeholder="Delivery ZIP, allergies, number of guests, preferred flavor..."></textarea>
+            <span data-bk-i18n="boxFieldNotes">Notes</span>
+            <textarea
+              name="notes"
+              rows="4"
+              data-bk-i18n-placeholder="boxNotesPlaceholder"
+              placeholder="Delivery ZIP, allergies, number of guests, preferred flavor..."
+            ></textarea>
           </label>
 
           <div class="box-cart-total">
-            <span>Estimated total</span>
+            <span data-bk-i18n="boxEstimatedTotal">Estimated total</span>
             <strong data-box-cart-total>$0</strong>
           </div>
 
           <div class="box-message-preview">
-            <span>WhatsApp preview</span>
+            <span data-bk-i18n="boxWhatsappPreview">WhatsApp preview</span>
             <pre data-box-message-preview></pre>
           </div>
 
-          <a class="box-button box-button-dark box-cart-submit" href="#" data-box-order target="_blank" rel="noreferrer">
+          <a
+            class="box-button box-button-dark box-cart-submit"
+            href="#"
+            data-box-order
+            target="_blank"
+            rel="noreferrer"
+            data-bk-i18n="boxSendWhatsapp"
+          >
             Send preorder to WhatsApp
           </a>
         </form>
@@ -347,18 +797,24 @@
         <div class="box-order-list" id="how" data-box-reveal>
           <div>
             <span>01</span>
-            <strong>Choose batch</strong>
-            <p>Dessert, savory, or weekend box.</p>
+            <strong data-bk-i18n="boxStepOneTitle">Choose batch</strong>
+            <p data-bk-i18n="boxStepOneText">
+              Dessert, savory, or weekend box.
+            </p>
           </div>
           <div>
             <span>02</span>
-            <strong>Pick date</strong>
-            <p>Owner confirms available pickup or delivery windows.</p>
+            <strong data-bk-i18n="boxStepTwoTitle">Pick date</strong>
+            <p data-bk-i18n="boxStepTwoText">
+              Owner confirms available pickup or delivery windows.
+            </p>
           </div>
           <div>
             <span>03</span>
-            <strong>Pay and confirm</strong>
-            <p>Deposit or full payment according to the rule.</p>
+            <strong data-bk-i18n="boxStepThreeTitle">Pay and confirm</strong>
+            <p data-bk-i18n="boxStepThreeText">
+              Deposit or full payment according to the rule.
+            </p>
           </div>
         </div>
       </section>
@@ -366,25 +822,33 @@
 
     <footer class="box-footer">
       <strong>Box InHouse</strong>
-      <span>Limited Brazilian food boxes by preorder.</span>
-      <a href="index.html">Back to entry</a>
+      <span data-bk-i18n="boxFooterText"
+        >Limited Brazilian food boxes by preorder.</span
+      >
+      <a href="index.html" data-bk-i18n="boxBackEntry">Back to entry</a>
     </footer>
 
-    <button class="box-cart-fab" type="button" data-box-open-cart aria-label="Open Box InHouse cart">
-      <span>Cart</span>
-      <strong data-box-cart-floating-count>1 item</strong>
-      <em data-box-cart-floating-total>$42</em>
+    <button
+      class="box-cart-fab"
+      type="button"
+      data-box-open-cart
+      aria-label="Open Box InHouse cart"
+    >
+      <span data-bk-i18n="boxCartFloating">Cart</span>
+      <strong data-box-cart-floating-count>0 items</strong>
+      <em data-box-cart-floating-total>$0</em>
     </button>
 
-    <script src="assets/img/picture.js?v=82"></script>
-    <script src="assets/config/config.js?v=82"></script>
-    <script src="assets/api/client.js?v=82"></script>
+    <script src="assets/img/picture.js?v=113"></script>
+    <script src="assets/config/config.js?v=113"></script>
+    <script src="assets/api/client.js?v=113"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="assets/delivery/delivery.js?v=82"></script>
-    <script src="box.js?v=82"></script>
-    <script src="assets/header/header.js?v=82" defer></script>
-    <script src="assets/cart/cart-drawer.js?v=82" defer></script>
-    <script src="assets/i18n/box-i18n.js?v=82" defer></script>
-    <script type="module" src="assets/vendor/fluid-particles.js?v=82"></script>
+    <script src="assets/delivery/delivery.js?v=113"></script>
+    <script src="box.js?v=113"></script>
+    <script src="assets/header/header.js?v=113" defer></script>
+    <script src="assets/cart/cart-drawer.js?v=113" defer></script>
+    <script src="assets/i18n/box-i18n.js?v=113" defer></script>
+    <script type="module" src="assets/vendor/fluid-particles.js?v=113"></script>
+    <script src="assets/pwa/register-sw.js?v=113" defer></script>
   </body>
 </html>

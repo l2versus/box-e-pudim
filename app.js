@@ -38,7 +38,7 @@ const products = [
   {
     id: "gift-pudim",
     category: "puddings",
-    image: "assets/img/lifestyle/pudding-photo.png",
+    image: "assets/img/lifestyle/hero-premium.png",
     price: "from $34",
     lead: "48h",
     tag: "Gift-ready",
@@ -178,6 +178,54 @@ const products = [
       name: "Tabua Premium para Eventos",
       description: "Tabua premium de queijos, frutas e frios para encontros e mesas de evento."
     }
+  },
+  {
+    id: "cups-tower",
+    category: "box",
+    image: "assets/img/products/product-dessert-cups.png",
+    price: "from $42",
+    lead: "48h",
+    tag: "Box InHouse",
+    en: {
+      name: "Dessert Cups Box",
+      description: "Layered Brazilian sweets packed as dessert cups for parties, gifts and family weekends."
+    },
+    pt: {
+      name: "Box de Tacas de Sobremesa",
+      description: "Doces brasileiros em camadas, embalados em tacas para festas, presentes e fim de semana."
+    }
+  },
+  {
+    id: "shrimp-tray",
+    category: "box",
+    image: "assets/img/products/product-shrimp-tray.png",
+    price: "from $56",
+    lead: "48h",
+    tag: "Box InHouse",
+    en: {
+      name: "Crispy Shrimp Tray",
+      description: "Golden shrimp over crunchy potato sticks, prepared by schedule for pickup or delivery."
+    },
+    pt: {
+      name: "Bandeja de Camarao Crocante",
+      description: "Camarao dourado com batata palha crocante, preparado sob agenda para retirada ou entrega."
+    }
+  },
+  {
+    id: "weekend-family-box",
+    category: "box",
+    image: "assets/img/boxes/box-photo.png",
+    price: "custom",
+    lead: "48h",
+    tag: "Box InHouse",
+    en: {
+      name: "Weekend Family Box",
+      description: "Rotating Brazilian comfort food box for small gatherings and no-stress weekends."
+    },
+    pt: {
+      name: "Box Familia de Fim de Semana",
+      description: "Box rotativa de comida brasileira de conforto para encontros pequenos e fim de semana sem stress."
+    }
   }
 ];
 
@@ -186,6 +234,12 @@ const copy = {
     navMenu: "Menu",
     navOrder: "Order",
     navHow: "How it works",
+    marqueePreorder: "Preorder only",
+    marqueeWhatsapp: "WhatsApp ordering",
+    marqueeDelivery: "Pickup or delivery request",
+    marqueeBatches: "Limited weekly batches",
+    marqueeBilingual: "Bilingual storefront",
+    marqueeFresh: "Made fresh by preorder",
     ownerLogin: "Owner login",
     orderNow: "WhatsApp",
     heroEyebrow: "Brazilian pudding in small batches",
@@ -222,16 +276,17 @@ const copy = {
     deckFourTitle: "Party sweets",
     deckFourText: "Trays and bites planned around guest count, date and occasion.",
     menuEyebrow: "Menu",
-    menuTitle: "Choose what you want, then request the best date.",
+    menuTitle: "Brazilian pudding menu, made by preorder.",
     menuAside:
-      "Everything is made in small batches, with lead time and availability confirmed before payment.",
+      "Every item is made by preorder unless marked in stock. Lead time and availability are confirmed before payment.",
     tabPuddings: "Puddings",
     tabEvents: "Events",
-    chooseProduct: "Choose this",
+    tabBoxes: "Box InHouse",
+    chooseProduct: "Preorder",
     orderEyebrow: "Reserve your batch",
-    orderTitle: "Tell us what you are craving and when you want it.",
+    orderTitle: "Tell us what you want to preorder and when you need it.",
     orderText:
-      "Choose the product, date, quantity and pickup or delivery preference. WhatsApp opens with the details ready, so the order can be confirmed faster.",
+      "Choose the item, date, quantity and pickup or delivery preference. WhatsApp opens with the details ready, so the owner can confirm schedule and production.",
     metricNotice: "minimum notice",
     metricWhatsapp: "to WhatsApp",
     openCart: "Open preorder cart",
@@ -259,6 +314,17 @@ const copy = {
     deliveryWaiting: "Pickup is free.",
     deliveryWaitingSub: "For delivery, enter the ZIP before sending.",
     deliveryUnavailable: "Delivery needs confirmation.",
+    deliveryOutsideMessage: "Outside the automatic delivery radius. The owner can confirm by WhatsApp.",
+    deliveryFromDanbury: "from Danbury",
+    deliverySuffix: "delivery",
+    deliveryFreeUnlocked: "Free delivery unlocked",
+    deliveryFreeMin: "Free delivery from {amount} in this ZIP range.",
+    deliveryFreeRemaining: "{amount} away from free delivery",
+    deliveryFreeAlmost: "Almost there — only {amount} to go",
+    deliveryPickupAlways: "Pickup is always free",
+    deliveryEnterZip: "Enter your ZIP to calculate delivery",
+    cartUpsellTitle: "Add more to your bag",
+    messageFreeDelivery: "$0 (free delivery)",
     fieldNotes: "Notes",
     notesPlaceholder: "Birthday, allergies, delivery ZIP, preferred time...",
     cartLabel: "Preorder cart",
@@ -284,6 +350,9 @@ const copy = {
     footerTitle: "Ready for the next batch?",
     footerWhatsapp: "Order on WhatsApp",
     footerHowTitle: "How it works",
+    footerPickupTitle: "Pickup & delivery",
+    footerReserveDate: "Reserve a date",
+    footerRequestZip: "Request delivery ZIP",
     footerOwnerTitle: "Owner",
     chatStatus: "Guided preorder",
     chatIntro: "Hi, I can help you choose a dessert, check ordering rules and prepare your WhatsApp request.",
@@ -305,6 +374,11 @@ const copy = {
     messageDeliveryFee: "Delivery fee",
     messageTotal: "Estimated total",
     messageNotes: "Notes",
+    messageNotFilled: "Not filled yet",
+    messageAddressPending: "Address pending",
+    messagePickupLine: "Pickup in Danbury, CT",
+    messageConfirmWhatsapp: "Confirm on WhatsApp",
+    messageNoItems: "No items selected",
     fallbackTime: "Owner can suggest the best window",
     fallbackNotes: "No notes yet",
     assistantNotice: "Please order at least 48 hours ahead. Event trays may need 3 to 5 days.",
@@ -319,6 +393,12 @@ const copy = {
     navMenu: "Cardapio",
     navOrder: "Pedir",
     navHow: "Como funciona",
+    marqueePreorder: "Somente sob encomenda",
+    marqueeWhatsapp: "Pedido pelo WhatsApp",
+    marqueeDelivery: "Retirada ou entrega local",
+    marqueeBatches: "Lotes semanais limitados",
+    marqueeBilingual: "Vitrine bilingue",
+    marqueeFresh: "Feito fresco por encomenda",
     ownerLogin: "Login dona",
     orderNow: "WhatsApp",
     heroEyebrow: "Pudim brasileiro em pequenos lotes",
@@ -355,16 +435,17 @@ const copy = {
     deckFourTitle: "Docinhos para festa",
     deckFourText: "Bandejas planejadas por quantidade de pessoas, data e ocasiao.",
     menuEyebrow: "Cardapio",
-    menuTitle: "Escolha o que deseja e solicite a melhor data.",
+    menuTitle: "Cardapio de pudim brasileiro por encomenda.",
     menuAside:
-      "Tudo e feito em pequenos lotes, com prazo e disponibilidade confirmados antes do pagamento.",
+      "Todo item e feito por encomenda, a menos que esteja marcado como pronta entrega. Prazo e disponibilidade sao confirmados antes do pagamento.",
     tabPuddings: "Pudins",
     tabEvents: "Eventos",
-    chooseProduct: "Escolher",
+    tabBoxes: "Box InHouse",
+    chooseProduct: "Encomendar",
     orderEyebrow: "Reserve sua fornada",
-    orderTitle: "Conte o que voce quer e para quando precisa.",
+    orderTitle: "Conte o que voce quer encomendar e para quando precisa.",
     orderText:
-      "Escolha produto, data, quantidade e retirada ou entrega. O WhatsApp abre com os detalhes prontos para confirmar mais rapido.",
+      "Escolha item, data, quantidade e retirada ou entrega. O WhatsApp abre com os detalhes prontos para a dona confirmar agenda e producao.",
     metricNotice: "antecedencia",
     metricWhatsapp: "para WhatsApp",
     openCart: "Abrir carrinho",
@@ -392,6 +473,17 @@ const copy = {
     deliveryWaiting: "Retirada e gratis.",
     deliveryWaitingSub: "Para entrega, digite o ZIP antes de enviar.",
     deliveryUnavailable: "Entrega precisa de confirmacao.",
+    deliveryOutsideMessage: "Fora do raio automatico. A dona confirma pelo WhatsApp.",
+    deliveryFromDanbury: "de Danbury",
+    deliverySuffix: "entrega",
+    deliveryFreeUnlocked: "Entrega gratis desbloqueada",
+    deliveryFreeMin: "Entrega gratis a partir de {amount} nessa faixa.",
+    deliveryFreeRemaining: "Faltam {amount} pra frete gratis",
+    deliveryFreeAlmost: "Quase la, faltam so {amount}",
+    deliveryPickupAlways: "Retirada e sempre gratis",
+    deliveryEnterZip: "Informe o ZIP pra calcular o frete",
+    cartUpsellTitle: "Adicionar mais a sua sacola",
+    messageFreeDelivery: "$0 (entrega gratis)",
     fieldNotes: "Observacoes",
     notesPlaceholder: "Aniversario, alergias, ZIP da entrega, horario preferido...",
     cartLabel: "Carrinho de encomenda",
@@ -417,6 +509,9 @@ const copy = {
     footerTitle: "Pronto para a proxima fornada?",
     footerWhatsapp: "Pedir no WhatsApp",
     footerHowTitle: "Como pedir",
+    footerPickupTitle: "Retirada e entrega",
+    footerReserveDate: "Reservar uma data",
+    footerRequestZip: "Consultar ZIP de entrega",
     footerOwnerTitle: "Dona",
     chatStatus: "Pre-pedido guiado",
     chatIntro: "Oi, posso ajudar a escolher, explicar regras e preparar sua solicitacao para o WhatsApp.",
@@ -438,6 +533,11 @@ const copy = {
     messageDeliveryFee: "Taxa de entrega",
     messageTotal: "Total estimado",
     messageNotes: "Observacoes",
+    messageNotFilled: "Ainda nao preenchido",
+    messageAddressPending: "Endereco pendente",
+    messagePickupLine: "Retirada em Danbury, CT",
+    messageConfirmWhatsapp: "Confirmar no WhatsApp",
+    messageNoItems: "Nenhum item selecionado",
     fallbackTime: "A dona pode sugerir a melhor janela",
     fallbackNotes: "Sem observacoes ainda",
     assistantNotice: "O ideal e pedir com pelo menos 48h de antecedencia. Bandejas podem precisar de 3 a 5 dias.",
@@ -537,8 +637,12 @@ const heroProductPrice = document.querySelector("[data-hero-product-price]");
 const heroProductLede = document.querySelector("[data-hero-product-lede]");
 const heroProductIndex = document.querySelector("[data-hero-product-index]");
 
-function t(key) {
-  return copy[language][key] || copy.en[key] || key;
+function t(key, vars) {
+  let s = copy[language][key] || copy.en[key] || key;
+  if (vars) {
+    for (const k in vars) s = s.split(`{${k}}`).join(vars[k]);
+  }
+  return s;
 }
 
 function setMinimumDate() {
@@ -569,30 +673,201 @@ function visibleProducts() {
   return products.filter((product) => product.category === activeCategory);
 }
 
+function productAvailability(product) {
+  const mode = product.availabilityMode || (priceNumber(product.price) > 0 ? "preorder" : "quote");
+  const stock = Number(product.stockQty || 0);
+
+  if (mode === "in_stock" && stock > 0) {
+    return {
+      mode,
+      label: language === "pt" ? `Pronta entrega - ${stock} disp.` : `In stock - ${stock} available`,
+      action: language === "pt" ? "Reservar agora" : "Reserve now",
+    };
+  }
+
+  if (mode === "sold_out" || (mode === "in_stock" && stock <= 0)) {
+    return {
+      mode: "sold_out",
+      label: language === "pt" ? "Agenda cheia" : "Schedule full",
+      action: language === "pt" ? "Entrar na lista" : "Join waitlist",
+    };
+  }
+
+  if (mode === "quote") {
+    return {
+      mode,
+      label: language === "pt" ? "Sob consulta" : "Custom order",
+      action: language === "pt" ? "Pedir orcamento" : "Request quote",
+    };
+  }
+
+  return {
+    mode: "preorder",
+    label: language === "pt" ? `Encomenda ${product.lead}` : `${product.lead} preorder`,
+    action: language === "pt" ? "Encomendar" : "Preorder",
+  };
+}
+
+/* ============================================================
+   DUAL-MODE: cada produto pode ter "pronto agora" e/ou "próxima fornada".
+   Os overrides abaixo são fallback/demo — a verdade real vem do admin/API
+   (stockQty + AvailabilitySlot). hydrateAvailability() sobrescreve as vagas
+   com /api/availability quando o backend está no ar.
+   ============================================================ */
+const DUAL_MODE_OVERRIDES = {
+  "classic-pudim": { mode: "both", stockQty: 4, batchSlots: 8, apiCategory: "pudim" },
+  "berry-pudim": { mode: "made_to_order", batchSlots: 6, apiCategory: "pudim" },
+  "gift-pudim": { mode: "both", stockQty: 2, batchSlots: 6, apiCategory: "pudim" },
+  "cookie-gift-duo": { mode: "ready", stockQty: 12, apiCategory: "sweet" },
+};
+
+const AVAIL_ICONS = {
+  cal: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="16" rx="2"/><path d="M3 9h18M8 2.5v4M16 2.5v4"/></svg>',
+  chat: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8 9 9 0 0 1-4-1L3 20l1.5-4.5a8.4 8.4 0 0 1 7.5-12 8.4 8.4 0 0 1 9 8z"/></svg>',
+  clock: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+};
+
+function dualModeOf(product) {
+  const ov = DUAL_MODE_OVERRIDES[product.id] || {};
+  const isQuote = priceNumber(product.price) <= 0;
+  const mode = product.availabilityMode || ov.mode || (isQuote ? "quote" : "made_to_order");
+  return {
+    mode,
+    stockQty: Number(product.stockQty ?? ov.stockQty ?? 0),
+    batchSlots: Number(product.batchSlots ?? ov.batchSlots ?? 0),
+    apiCategory: product.apiCategory || ov.apiCategory || (product.category === "puddings" ? "pudim" : "sweet"),
+  };
+}
+
+function nextBatchLabel() {
+  const d = new Date();
+  const add = (6 - d.getDay() + 7) % 7 || 7; // próximo sábado futuro (base recorrente)
+  d.setDate(d.getDate() + add);
+  const iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  const label = d.toLocaleDateString(language === "pt" ? "pt-BR" : "en-US", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+  });
+  return { iso, label };
+}
+
+function availabilityFor(product) {
+  const dm = dualModeOf(product);
+  const rows = [];
+
+  if (dm.mode === "quote") {
+    rows.push({
+      kind: "quote",
+      title: language === "pt" ? "Sob consulta" : "By request",
+      sub: language === "pt" ? `Encomenda ${product.lead}` : `${product.lead} lead time`,
+    });
+    return { mode: "quote", rows, cta: language === "pt" ? "Pedir orçamento" : "Request a quote" };
+  }
+
+  if (dm.mode === "sold_out" || (dm.mode === "ready" && dm.stockQty <= 0)) {
+    rows.push({
+      kind: "soldout",
+      title: language === "pt" ? "Esgotado por enquanto" : "Sold out for now",
+      sub: language === "pt" ? "Entre na lista de espera" : "Join the waitlist",
+    });
+    return { mode: "sold_out", rows, cta: language === "pt" ? "Lista de espera" : "Join waitlist" };
+  }
+
+  const hasReady = (dm.mode === "ready" || dm.mode === "both") && dm.stockQty > 0;
+  const hasBatch = dm.mode === "made_to_order" || dm.mode === "both";
+
+  if (hasReady) {
+    rows.push({
+      kind: "ready",
+      title: language === "pt" ? `Pronto agora · ${dm.stockQty} un.` : `Ready now · ${dm.stockQty} left`,
+      sub: language === "pt" ? "Retirada ou entrega hoje" : "Pickup or delivery today",
+    });
+  }
+  if (hasBatch) {
+    const batch = nextBatchLabel();
+    rows.push({
+      kind: "batch",
+      apiCategory: dm.apiCategory,
+      batchIso: batch.iso,
+      slots: dm.batchSlots,
+      title: language === "pt" ? `Próxima fornada · ${batch.label}` : `Next batch · ${batch.label}`,
+    });
+  }
+
+  const mode = hasReady && hasBatch ? "both" : hasReady ? "ready" : "made_to_order";
+  const cta = hasReady && !hasBatch
+    ? (language === "pt" ? "Pegar agora" : "Grab it now")
+    : (language === "pt" ? "Adicionar ao pedido" : "Add to order");
+  return { mode, rows, cta };
+}
+
+function renderAvailRow(r) {
+  const slotsWord = language === "pt" ? "vagas" : "left";
+  if (r.kind === "ready") {
+    return `<div class="bk-avail-row is-ready"><span class="bk-avail-row__icon"><span class="bk-dot"></span></span><span class="bk-avail-row__text"><b>${r.title}</b><span>${r.sub}</span></span></div>`;
+  }
+  if (r.kind === "batch") {
+    return `<div class="bk-avail-row is-batch" data-batch-cat="${r.apiCategory}" data-batch-date="${r.batchIso}"><span class="bk-avail-row__icon">${AVAIL_ICONS.cal}</span><span class="bk-avail-row__text"><b>${r.title}</b><span><span data-avail-slots>${r.slots}</span> ${slotsWord}</span></span></div>`;
+  }
+  if (r.kind === "quote") {
+    return `<div class="bk-avail-row is-quote"><span class="bk-avail-row__icon">${AVAIL_ICONS.chat}</span><span class="bk-avail-row__text"><b>${r.title}</b><span>${r.sub}</span></span></div>`;
+  }
+  return `<div class="bk-avail-row is-soldout"><span class="bk-avail-row__icon">${AVAIL_ICONS.clock}</span><span class="bk-avail-row__text"><b>${r.title}</b><span>${r.sub}</span></span></div>`;
+}
+
+async function hydrateAvailability() {
+  if (!window.bkApi) return;
+  const rows = Array.from(grid.querySelectorAll(".bk-avail-row.is-batch[data-batch-date]"));
+  const byDate = {};
+  rows.forEach((row) => {
+    (byDate[row.dataset.batchDate] = byDate[row.dataset.batchDate] || []).push(row);
+  });
+  for (const [date, rowEls] of Object.entries(byDate)) {
+    try {
+      const res = await window.bkApi.getAvailability(date);
+      const map = {};
+      (res?.slots || []).forEach((s) => { map[s.category] = s.available; });
+      rowEls.forEach((row) => {
+        const available = map[row.dataset.batchCat];
+        if (available == null) return;
+        const span = row.querySelector("[data-avail-slots]");
+        if (span) span.textContent = available;
+        if (available <= 0) row.classList.add("is-soldout");
+      });
+    } catch (_) {
+      /* backend fora do ar: mantém as vagas estáticas do fallback */
+    }
+  }
+}
+
+function productPicture(product, content, attrs = "") {
+  const imageClass = product.image.includes("product-") ? "product-cutout" : "";
+  const classAttr = attrs.includes("class=") ? attrs : `class="${imageClass}" ${attrs}`.trim();
+  return window.bkPicture
+    ? window.bkPicture.html(product.image, `${classAttr} alt="${content.name}"`)
+    : `<img ${classAttr} src="${product.image}" alt="${content.name}" />`;
+}
+
 function renderProducts() {
   grid.innerHTML = visibleProducts()
     .map((product, index) => {
       const content = product[language];
-      const imageClass = product.image.includes("product-") ? "product-cutout" : "";
-      const pictureMarkup = window.bkPicture
-        ? window.bkPicture.html(product.image, `class="${imageClass}" alt="${content.name}"`)
-        : `<img class="${imageClass}" src="${product.image}" alt="${content.name}" />`;
+      const av = availabilityFor(product);
+      const pictureMarkup = productPicture(product, content, 'loading="lazy" decoding="async"');
+      const badge = product.tag ? `<span class="bk-pcard__badge">${product.tag}</span>` : "";
+      const rowsHtml = av.rows.map(renderAvailRow).join("");
       return `
-        <article class="product-card reveal" style="transition-delay:${index * 70}ms">
-          ${pictureMarkup}
-          <div class="product-card-content">
-            <span class="price">${product.price}</span>
-            <div class="product-meta">
-              <h3>${content.name}</h3>
-              <div class="product-tags">
-                <span>${product.lead}</span>
-                <span>${product.tag}</span>
-              </div>
+        <article class="product-card bk-pcard reveal" data-availability="${av.mode}" data-product-id="${product.id}" style="transition-delay:${index * 60}ms">
+          <div class="bk-pcard__media">${badge}${pictureMarkup}</div>
+          <div class="bk-pcard__body">
+            <div class="bk-pcard__head">
+              <h3 class="bk-pcard__title">${content.name}</h3>
+              <span class="bk-pcard__price">${priceLabel(product.price)}</span>
             </div>
-            <p>${content.description}</p>
-            <button class="button select-product" type="button" data-select-product="${product.id}">
-              ${t("chooseProduct")}
-            </button>
+            <p class="bk-pcard__desc">${content.description}</p>
+            <div class="bk-pcard__avail">${rowsHtml}</div>
+            <button class="bk-pcard__cta select-product" type="button" data-select-product="${product.id}">${av.cta}</button>
           </div>
         </article>
       `;
@@ -600,14 +875,16 @@ function renderProducts() {
     .join("");
   observeReveals();
   wireCardLight();
+  hydrateAvailability();
 }
 
 function updateProductSelect(selectedId = productSelect.value || products[0].id) {
   if (!productSelect) return;
   productSelect.innerHTML = products
-    .map((product) => `<option value="${product.id}">${product[language].name} - ${product.price}</option>`)
+    .map((product) => `<option value="${product.id}">${product[language].name} - ${priceLabel(product.price)}</option>`)
     .join("");
   productSelect.value = products.some((product) => product.id === selectedId) ? selectedId : products[0].id;
+  renderCartProductPicker(productSelect.value);
 }
 
 function selectedProduct() {
@@ -623,8 +900,46 @@ function priceNumber(price) {
   return match ? Number(match[1]) : 0;
 }
 
+function renderCartProductPicker(selectedId = productSelect?.value || products[0].id) {
+  if (!productSelect) return;
+  const host = productSelect.closest("label");
+  if (!host) return;
+  let picker = host.querySelector("[data-cart-product-picker]");
+  if (!picker) {
+    picker = document.createElement("div");
+    picker.className = "cart-product-picker";
+    picker.setAttribute("data-cart-product-picker", "");
+    productSelect.insertAdjacentElement("afterend", picker);
+  }
+
+  picker.innerHTML = products.map((product) => {
+    const content = product[language];
+    const availability = productAvailability(product);
+    const active = product.id === selectedId ? " is-active" : "";
+    const image = productPicture(product, content, 'class="cart-product-thumb" loading="lazy" decoding="async"');
+    return `
+      <button class="cart-product-choice${active}" type="button" data-cart-pick-product="${product.id}">
+        ${image}
+        <span>
+          <strong>${content.name}</strong>
+          <small>${priceLabel(product.price)} - ${availability.label}</small>
+        </span>
+      </button>
+    `;
+  }).join("");
+}
+
 function money(value) {
-  return value > 0 ? `$${value.toFixed(2).replace(/\.00$/, "")}` : "custom";
+  return value > 0 ? `$${value.toFixed(2).replace(/\.00$/, "")}` : (language === "pt" ? "sob consulta" : "custom");
+}
+
+function priceLabel(price) {
+  const value = String(price || "");
+  if (language === "pt") {
+    if (/^from\s+/i.test(value)) return value.replace(/^from\s+/i, "a partir de ");
+    if (/custom/i.test(value)) return "sob consulta";
+  }
+  return value;
 }
 
 function openCartModal(trigger) {
@@ -632,10 +947,6 @@ function openCartModal(trigger) {
   lastCartTrigger = trigger || document.activeElement;
   document.body.classList.add("cart-modal-open");
   cartModal.setAttribute("aria-hidden", "false");
-  window.setTimeout(() => {
-    const focusTarget = cartModal.querySelector("[data-date-input]") || cartModal.querySelector("button, input, select, textarea, a");
-    focusTarget?.focus({ preventScroll: true });
-  }, 120);
 }
 
 function closeCartModal() {
@@ -670,11 +981,27 @@ function isDeliverySelected() {
 }
 
 function deliveryFee() {
-  return isDeliverySelected() && activeDeliveryQuote?.served ? (activeDeliveryQuote.feeCents || 0) / 100 : 0;
+  return isDeliverySelected() && activeDeliveryQuote?.served && !hasFreeDelivery()
+    ? (activeDeliveryQuote.feeCents || 0) / 100
+    : 0;
 }
 
 function orderTotal() {
   return cartTotal() + deliveryFee();
+}
+
+function freeDeliveryMinCents() {
+  return Number(activeDeliveryQuote?.tier?.freeMinCents || 0);
+}
+
+function hasFreeDelivery() {
+  const min = freeDeliveryMinCents();
+  return isDeliverySelected() && activeDeliveryQuote?.served && min > 0 && Math.round(cartTotal() * 100) >= min;
+}
+
+function freeDeliveryMinLabel() {
+  const min = freeDeliveryMinCents();
+  return min > 0 && window.bkDelivery ? window.bkDelivery.moneyFromCents(min) : "";
 }
 
 function renderDeliveryQuote(quote = activeDeliveryQuote) {
@@ -690,18 +1017,85 @@ function renderDeliveryQuote(quote = activeDeliveryQuote) {
     return;
   }
   if (quote.served) {
-    deliveryQuoteBox.innerHTML = `<strong>${quote.feeLabel} delivery</strong><span>${quote.zip} - ${quote.distanceMiles} mi from Danbury - ${quote.tier.label}</span>`;
+    const minCents = freeDeliveryMinCents();
+    const remainingCents = Math.max(0, minCents - Math.round(cartTotal() * 100));
+    const remainingLabel = window.bkDelivery
+      ? window.bkDelivery.moneyFromCents(remainingCents)
+      : `$${(remainingCents / 100).toFixed(2)}`;
+    const freeCopy = !minCents
+      ? ""
+      : hasFreeDelivery()
+        ? t("deliveryFreeUnlocked")
+        : t(remainingCents / minCents <= 0.2 ? "deliveryFreeAlmost" : "deliveryFreeRemaining", { amount: remainingLabel });
+    const feeTitle = hasFreeDelivery()
+      ? t("deliveryFreeUnlocked")
+      : `${quote.feeLabel} ${t("deliverySuffix")}`;
+    deliveryQuoteBox.innerHTML = `<strong>${feeTitle}</strong><span>${quote.zip} - ${quote.distanceMiles} mi ${t("deliveryFromDanbury")} - ${quote.tier.label}${freeCopy ? ` - ${freeCopy}` : ""}</span>`;
     return;
   }
-  deliveryQuoteBox.innerHTML = `<strong>${t("deliveryUnavailable")}</strong><span>${quote.zip || ""} ${quote.distanceMiles ? `- ${quote.distanceMiles} mi` : ""} - ${quote.message}</span>`;
+  deliveryQuoteBox.innerHTML = `<strong>${t("deliveryUnavailable")}</strong><span>${quote.zip || ""} ${quote.distanceMiles ? `- ${quote.distanceMiles} mi` : ""} - ${t("deliveryOutsideMessage")}</span>`;
+}
+
+function renderFreeShippingMeter() {
+  const meter = document.querySelector("[data-ship-meter]");
+  if (!meter) return;
+  const label = meter.querySelector("[data-ship-label]");
+  const pct = meter.querySelector("[data-ship-pct]");
+  const fill = meter.querySelector("[data-ship-fill]");
+  meter.classList.remove("is-pickup", "is-done");
+
+  // Retirada: frete nao se aplica
+  if (!isDeliverySelected()) {
+    meter.hidden = false;
+    meter.classList.add("is-pickup");
+    if (label) label.textContent = t("deliveryPickupAlways");
+    if (pct) pct.textContent = "";
+    if (fill) fill.style.width = "100%";
+    return;
+  }
+  // Delivery sem ZIP conferido ainda
+  if (!activeDeliveryQuote || !activeDeliveryQuote.served) {
+    meter.hidden = false;
+    if (label) label.textContent = t("deliveryEnterZip");
+    if (pct) pct.textContent = "";
+    if (fill) fill.style.width = "0%";
+    return;
+  }
+  const minCents = freeDeliveryMinCents();
+  if (minCents <= 0) {
+    meter.hidden = true;
+    return;
+  }
+  const subCents = Math.round(cartTotal() * 100);
+  const remainingCents = Math.max(0, minCents - subCents);
+  const pctVal = Math.min(100, Math.round((subCents / minCents) * 100));
+  meter.hidden = false;
+  if (fill) fill.style.width = `${pctVal}%`;
+  if (pct) pct.textContent = `${pctVal}%`;
+  if (remainingCents <= 0) {
+    meter.classList.add("is-done");
+    if (label) label.textContent = t("deliveryFreeUnlocked");
+  } else {
+    const amount = window.bkDelivery
+      ? window.bkDelivery.moneyFromCents(remainingCents)
+      : `$${(remainingCents / 100).toFixed(2)}`;
+    if (label) {
+      label.textContent = t(remainingCents / minCents <= 0.2 ? "deliveryFreeAlmost" : "deliveryFreeRemaining", { amount });
+    }
+  }
 }
 
 async function checkDeliveryZip() {
   if (!deliveryZipInput || !window.bkDelivery) return null;
+  const deliveryRadio = orderForm?.querySelector('input[name="fulfillment"][value*="Delivery"], input[name="fulfillment"][value*="entrega"]');
+  if (deliveryRadio && !deliveryRadio.checked) {
+    deliveryRadio.checked = true;
+  }
   const zip = window.bkDelivery.sanitizeZip(deliveryZipInput.value);
   deliveryZipInput.value = zip;
   activeDeliveryQuote = window.bkDelivery.quoteByZip(zip);
   renderDeliveryQuote(activeDeliveryQuote);
+  renderDeliveryMap();
   renderCart();
   updateMessage();
   return activeDeliveryQuote;
@@ -751,7 +1145,7 @@ function renderCart() {
           ${cartImg}
           <div>
             <strong>${content.name}</strong>
-            <small>${item.product.price} - ${item.product.lead} - ${item.product.tag}</small>
+            <small>${priceLabel(item.product.price)} - ${item.product.lead} - ${item.product.tag}</small>
           </div>
           <div class="cart-line-actions">
             <div class="quantity-stepper">
@@ -759,7 +1153,7 @@ function renderCart() {
               <b>${item.quantity}</b>
               <button type="button" data-cart-quantity="plus" aria-label="Increase ${content.name}">+</button>
             </div>
-            <span>${linePrice > 0 ? money(linePrice) : "custom"}</span>
+            <span>${linePrice > 0 ? money(linePrice) : priceLabel(item.product.price)}</span>
             <button class="cart-remove" type="button" data-cart-remove aria-label="${removeLabel} ${content.name}">${removeLabel}</button>
           </div>
         </article>
@@ -773,14 +1167,18 @@ function renderCart() {
 
   const count = cartQuantity();
   if (cartCount) cartCount.textContent = language === "pt" ? `${count} itens` : `${count} items`;
-  if (cartTotalNode) cartTotalNode.textContent = money(orderTotal());
+  document.querySelectorAll("[data-bk-header]").forEach((item) => item.setAttribute("data-bk-cart-count", String(count)));
+  if (cartTotalNode) cartTotalNode.textContent = count > 0 ? money(orderTotal()) : "$0";
   if (cartFloatingCount) {
     cartFloatingCount.textContent =
       language === "pt"
         ? `${count} ${count === 1 ? "item" : "itens"}`
         : `${count} ${count === 1 ? "item" : "items"}`;
   }
-  if (cartFloatingTotal) cartFloatingTotal.textContent = money(orderTotal());
+  if (cartFloatingTotal) cartFloatingTotal.textContent = count > 0 ? money(orderTotal()) : "$0";
+  const floatingCart = cartFloatingCount?.closest(".cart-fab");
+  if (floatingCart) floatingCart.hidden = count === 0;
+  renderFreeShippingMeter();
 }
 
 function buildMessage() {
@@ -790,13 +1188,17 @@ function buildMessage() {
   const phone = String(data.get("phone") || "").trim();
   const zip = String(data.get("deliveryZip") || "").trim();
   const address = String(data.get("deliveryAddress") || "").trim();
-  const deliveryLine = isDeliverySelected()
-    ? `${address || "Address pending"}${zip ? ` - ZIP ${zip}` : ""}`
-    : "Pickup in Danbury, CT";
-  const feeLine = isDeliverySelected()
+  const deliverySelected = isDeliverySelected();
+  const fulfillmentLine = deliverySelected ? t("delivery") : t("pickup");
+  const deliveryLine = deliverySelected
+    ? `${address || t("messageAddressPending")}${zip ? ` - ZIP ${zip}` : ""}`
+    : t("messagePickupLine");
+  const feeLine = deliverySelected
     ? activeDeliveryQuote?.served
-      ? activeDeliveryQuote.feeLabel
-      : "Confirm on WhatsApp"
+      ? hasFreeDelivery()
+        ? t("messageFreeDelivery")
+        : activeDeliveryQuote.feeLabel
+      : t("messageConfirmWhatsapp")
     : "$0";
   const items = cartItems();
   const itemLines = items.length
@@ -804,19 +1206,19 @@ function buildMessage() {
         .map((item) => {
           const product = item.product;
           const linePrice = priceNumber(product.price) * item.quantity;
-          return `- ${item.quantity}x ${product[language].name} (${linePrice > 0 ? money(linePrice) : product.price})`;
+          return `- ${item.quantity}x ${product[language].name} (${linePrice > 0 ? money(linePrice) : priceLabel(product.price)})`;
         })
         .join("\n")
-    : language === "pt" ? "- Nenhum item selecionado" : "- No items selected";
+    : `- ${t("messageNoItems")}`;
   return `${t("messageIntro")}
 
-${t("messageCustomer")}: ${name || "Not filled yet"}
-${t("messagePhone")}: ${phone || "Not filled yet"}
+${t("messageCustomer")}: ${name || t("messageNotFilled")}
+${t("messagePhone")}: ${phone || t("messageNotFilled")}
 ${t("messageItems")}:
 ${itemLines}
 ${t("messageDate")}: ${data.get("date")}
 ${t("messageTime")}: ${data.get("time") || t("fallbackTime")}
-${t("messageFulfillment")}: ${data.get("fulfillment")}
+${t("messageFulfillment")}: ${fulfillmentLine}
 ${t("messageDelivery")}: ${deliveryLine}
 ${t("messageDeliveryFee")}: ${feeLine}
 ${t("messageTotal")}: ${money(orderTotal())}
@@ -947,6 +1349,46 @@ function buildOrderPayload() {
   };
 }
 
+function saveLocalOrderSnapshot(status = "requested") {
+  try {
+    const data = new FormData(orderForm);
+    const delivery = isDeliverySelected();
+    const orders = JSON.parse(window.localStorage.getItem("bp-local-orders") || "[]");
+    const id = `local-${Date.now()}`;
+    const order = {
+      id,
+      number: id.replace("local-", "L"),
+      status,
+      source: "Brazilian Pudding",
+      createdAt: new Date().toISOString(),
+      requestedFor: requestedForIso(String(data.get("date") || "").trim()),
+      requestedTz: "America/New_York",
+      fulfillment: delivery ? "delivery" : "pickup",
+      deliveryAddress: delivery ? String(data.get("deliveryAddress") || "").trim() : "",
+      deliveryZip: delivery ? String(data.get("deliveryZip") || "").trim() : "",
+      customer: {
+        name: String(data.get("name") || "").trim() || "Cliente",
+        phone: String(data.get("phone") || "").trim(),
+        email: String(data.get("email") || "").trim(),
+        preferredLang: language,
+      },
+      items: cartItems().map((item) => ({
+        productId: item.product.id,
+        qty: item.quantity,
+        product: { name: item.product[language].name },
+      })),
+      totalCents: Math.round(orderTotal() * 100),
+      currency: "USD",
+      message: buildMessage(),
+      notes: String(data.get("notes") || "").trim(),
+    };
+    window.localStorage.setItem("bp-local-orders", JSON.stringify([order, ...orders].slice(0, 120)));
+    return order;
+  } catch {
+    return null;
+  }
+}
+
 function validateCheckout() {
   const data = new FormData(orderForm);
   if (!cartItems().length) return language === "pt" ? "Adicione pelo menos 1 item." : "Add at least 1 item.";
@@ -988,6 +1430,7 @@ async function submitCheckout(event) {
       const order = await window.bkApi.createOrder(buildOrderPayload());
       message = `${message}\n\nOrder: #${order.number}`;
     } else {
+      saveLocalOrderSnapshot("requested");
       saveLocalLeadSnapshot("API offline");
     }
   } catch {
@@ -996,6 +1439,7 @@ async function submitCheckout(event) {
     } catch {
       saveLocalLeadSnapshot("API fallback");
     }
+    saveLocalOrderSnapshot("requested");
   } finally {
     orderLink.removeAttribute("aria-busy");
     orderLink.textContent = originalText;
@@ -1102,7 +1546,7 @@ function setHeroFlavor(flavor) {
     heroProductName.textContent = feature[language].shortName;
     heroProductDescription.textContent = feature[language].description;
     heroProductLabel.textContent = feature[language].label;
-    heroProductPrice.textContent = feature.price;
+    heroProductPrice.textContent = priceLabel(feature.price);
     heroProductLede.textContent = feature[language].lede;
     heroProductIndex.textContent = `${String(heroFeatureOrder.indexOf(normalized) + 1).padStart(2, "0")} / ${String(heroFeatureOrder.length).padStart(2, "0")}`;
   }
@@ -1340,9 +1784,10 @@ document.addEventListener("click", (event) => {
     return;
   }
 
-  const addSelectedButton = event.target.closest("[data-add-selected-product]");
-  if (addSelectedButton) {
-    addToCart(productSelect.value, 1, true);
+  const cartPickProduct = event.target.closest("[data-cart-pick-product]");
+  if (cartPickProduct) {
+    // 1-tap: o thumb do picker adiciona direto (openCart=false, ja estamos na sacola)
+    addToCart(cartPickProduct.dataset.cartPickProduct, 1, false);
     return;
   }
 
@@ -1425,10 +1870,12 @@ document.querySelector("[data-language-toggle]").addEventListener("click", () =>
 
 orderForm.addEventListener("input", () => {
   renderDeliveryQuote();
+  renderFreeShippingMeter();
   updateMessage();
 });
 orderForm.addEventListener("change", () => {
   renderDeliveryQuote();
+  renderFreeShippingMeter();
   updateMessage();
 });
 deliveryCheckButton?.addEventListener("click", checkDeliveryZip);
@@ -1477,9 +1924,11 @@ document.addEventListener("bk:delivery-settings-loaded", () => {
   renderDeliveryMap();
   renderCart();
 });
+document.addEventListener("bk:cart-opened", () => {
+  window.setTimeout(renderDeliveryMap, 140);
+});
 
 setMinimumDate();
-preorderCart = [{ productId: "classic-pudim", quantity: 1 }];
 applyTranslations();
 setHeroFlavor("classic");
 observeReveals();

@@ -12,6 +12,24 @@
       label: 'Taças de Sobremesa',
       tag: 'Doces',
     },
+    classicPudim: {
+      title: 'Pudim brasileiro classico',
+      description: 'Pudim de caramelo brilhante como sobremesa junto do pedido Box InHouse.',
+      label: 'Pudim Classico',
+      tag: 'Sobremesa',
+    },
+    berryPudim: {
+      title: 'Pudim de frutas vermelhas',
+      description: 'Pudim cremoso com calda de frutas vermelhas para complementar o pedido.',
+      label: 'Pudim Frutas Vermelhas',
+      tag: 'Sobremesa',
+    },
+    giftPudim: {
+      title: 'Pudim para presente',
+      description: 'Apresentacao caprichada de pudim para enviar junto de boxes e presentes.',
+      label: 'Pudim Presente',
+      tag: 'Sobremesa',
+    },
     shrimp: {
       title: 'Bandeja de camarão crocante',
       description: 'Camarão dourado sobre batata palha crocante, preparado para retirada ou entrega sob agendamento.',

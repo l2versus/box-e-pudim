@@ -1,3 +1,13 @@
+// Dev helper: unregister service workers and clear caches on localhost to avoid stale SW issues
+if (location.hostname === '127.0.0.1' || location.hostname === 'localhost') {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then((regs) => regs.forEach((r) => r.unregister())).catch(() => { });
+  }
+  if (window.caches) {
+    caches.keys().then((keys) => keys.forEach((k) => caches.delete(k))).catch(() => { });
+  }
+}
+
 const shell = document.querySelector("[data-entry-shell]");
 const panels = [...document.querySelectorAll("[data-choice]")];
 const links = [...document.querySelectorAll("[data-choice-link]")];

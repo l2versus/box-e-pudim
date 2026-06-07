@@ -11,7 +11,10 @@
     "build": "node -e \"console.log('Static site: no build step')\"",
     "dev": "node dev-server.mjs",
     "deploy:vercel": "vercel --prod",
-    "start": "node dev-server.mjs"
+    "start": "node dev-server.mjs",
+    "validate:jsonld": "node scripts/validate-jsonld.mjs",
+    "bump:version": "node scripts/bump-version.mjs",
+    "check": "npm run validate:jsonld"
   },
   "author": "Brazilian Kitchen",
   "license": "UNLICENSED",

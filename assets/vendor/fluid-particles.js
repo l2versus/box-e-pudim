@@ -31,6 +31,20 @@ const PALETTES = {
   },
 };
 
+function shouldUseStaticFallback() {
+  const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+  const slowConnection =
+    connection?.saveData ||
+    connection?.effectiveType === 'slow-2g' ||
+    connection?.effectiveType === '2g';
+
+  return (
+    matchMedia('(prefers-reduced-motion: reduce)').matches ||
+    matchMedia('(max-width: 480px)').matches ||
+    slowConnection
+  );
+}
+
 class FluidParticles {
   constructor(host, options = {}) {
     this.host = host;
@@ -49,7 +63,7 @@ class FluidParticles {
     this.afId = null;
     this.hostRect = null;
 
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (shouldUseStaticFallback()) {
       host.classList.add('fluid-particles--static');
       return;
     }
