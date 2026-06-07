@@ -3,6 +3,7 @@ import { db } from '../../db.js';
 import { idempotency } from '../../middleware/idempotency.js';
 import { publish } from '../../lib/outbox.js';
 import { getDeliverySettings, quoteDeliveryByZip } from '../../lib/delivery-settings.js';
+import { defaultCapacityFor } from '../../lib/capacity.js';
 
 const ItemSchema = z.object({
   productSlug: z.string().trim().min(1).max(80),
@@ -116,6 +117,16 @@ export default async function ordersRoutes(app) {
           // Lock + check capacity de cada categoria envolvida.
           // Cast explícito ::"ProductCategory" porque Postgres não auto-converte string→enum.
           for (const [category, qtyNeeded] of categoryQty.entries()) {
+            // Garante o slot do dia. Se a dona ainda não configurou (ou a data
+            // está além da janela do seed), cria com a capacidade padrão — assim
+            // nenhum pedido é perdido por falta de slot. A dona pode reduzir o
+            // limite (até 0 = fechado) pela Agenda do admin depois.
+            await tx.availabilitySlot.upsert({
+              where: { date_category: { date: dayUtc, category } },
+              update: {},
+              create: { date: dayUtc, category, capacityMax: defaultCapacityFor(category), reserved: 0 },
+            });
+
             const rows = await tx.$queryRaw`
               SELECT id, "capacityMax", reserved
               FROM "AvailabilitySlot"
@@ -125,7 +136,8 @@ export default async function ordersRoutes(app) {
             `;
             const slot = rows[0];
             if (!slot) {
-              throw new HttpError(400, 'no_capacity_slot', `No capacity slot for ${category} on ${data.requestedFor}`);
+              // Não deveria acontecer (upsert acima garante a linha), mas falha segura.
+              throw new HttpError(500, 'capacity_slot_missing', `Capacity slot missing for ${category}`);
             }
             if (slot.reserved + qtyNeeded > slot.capacityMax) {
               throw new HttpError(409, 'capacity_full', `${category} fully booked on ${data.requestedFor}`);

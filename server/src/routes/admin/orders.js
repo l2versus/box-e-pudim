@@ -86,23 +86,32 @@ export default async function adminOrdersRoutes(app) {
 
         assertTransition(order.status, toStatus);
 
-        // Side-effect: cancelled libera capacity
-        if (toStatus === 'cancelled' && order.status !== 'cancelled') {
-          // Decrementa reserved nas categorias dos itens
+        // Side-effect: cancelled/refunded libera a capacidade reservada.
+        // Libera pela QUANTIDADE real de cada categoria (não 1 fixo), senão a
+        // capacidade vaza em pedidos com múltiplos itens.
+        if ((toStatus === 'cancelled' || toStatus === 'refunded') && order.status !== toStatus) {
           const items = await tx.orderItem.findMany({
             where: { orderId: order.id },
             include: { product: { select: { category: true } } },
           });
-          const categories = [...new Set(items.map((i) => i.product.category))];
+          const categoryQty = new Map();
+          for (const it of items) {
+            categoryQty.set(it.product.category, (categoryQty.get(it.product.category) || 0) + it.qty);
+          }
           const dayUtc = new Date(Date.UTC(
             order.requestedFor.getUTCFullYear(),
             order.requestedFor.getUTCMonth(),
             order.requestedFor.getUTCDate(),
           ));
-          for (const category of categories) {
-            await tx.availabilitySlot.updateMany({
-              where: { date: dayUtc, category, reserved: { gt: 0 } },
-              data: { reserved: { decrement: 1 } },
+          for (const [category, qty] of categoryQty.entries()) {
+            const slot = await tx.availabilitySlot.findUnique({
+              where: { date_category: { date: dayUtc, category } },
+              select: { id: true, reserved: true },
+            });
+            if (!slot) continue;
+            await tx.availabilitySlot.update({
+              where: { id: slot.id },
+              data: { reserved: Math.max(0, slot.reserved - qty) },
             });
           }
         }
