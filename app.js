@@ -547,6 +547,165 @@ const copy = {
       "Para festas, envie data, numero de pessoas, produto e orcamento. Eu preparo isso para o WhatsApp.",
     assistantDefault:
       "Posso ajudar com cardapio, prazo, retirada, entrega e eventos. Para finalizar, preparo o pedido no WhatsApp."
+  },
+  es: {
+    navMenu: "Menú",
+    navOrder: "Pedir",
+    navHow: "Cómo funciona",
+    marqueePreorder: "Solo por encargo",
+    marqueeWhatsapp: "Pedido por WhatsApp",
+    marqueeDelivery: "Para recoger o entrega local",
+    marqueeBatches: "Lotes semanales limitados",
+    marqueeBilingual: "Vitrina bilingüe",
+    marqueeFresh: "Hecho fresco por encargo",
+    ownerLogin: "Acceso de la dueña",
+    orderNow: "WhatsApp",
+    heroEyebrow: "Pudim brasileño en pequeños lotes",
+    heroTitle: "Pudim Brasileño Clásico",
+    heroLede:
+      "Pudim de caramelo cremoso y dulces brasileños hechos frescos por encargo para fines de semana, regalos y eventos.",
+    startOrder: "Reservar el mío",
+    askConcierge: "Hablar con el concierge",
+    stackOne: "Elegir sabor",
+    stackTwo: "Elegir fecha",
+    stackThree: "Confirmar por WhatsApp",
+    commandLabel: "Favorito de la semana",
+    commandBadge: "Fresco",
+    commandProductText: "Caramelo, textura cremosa, recogida acordada",
+    commandActionOne: "48h antes",
+    commandActionTwo: "Recoger o entrega",
+    heroControlLabel: "Esta semana",
+    heroControlTitle: "desde $28",
+    heroControlText: "Anticipación mínima de 48h. La dueña confirma cada pedido antes de la producción.",
+    heroBuyNow: "Reservar",
+    orbitOneLabel: "Estado del lote",
+    orbitOneTitle: "5 cupos disponibles",
+    orbitOneText: "Ventana del sábado",
+    orbitTwoLabel: "Recoger",
+    orbitTwoText: "Con hora acordada",
+    deckOneLabel: "Hecho para momentos reales",
+    deckOneTitle: "Sabor de Brasil para el domingo, el regalo y la fiesta.",
+    deckOneText:
+      "Del almuerzo en familia a la mesa de cumpleaños, cada pedido empieza por la fecha, la ocasión y las ganas.",
+    deckTwoTitle: "Pudim clásico",
+    deckTwoText: "Caramelo brillante y textura cremosa para la mesa familiar y las ganas de fin de semana.",
+    deckThreeTitle: "Pudim para regalar",
+    deckThreeText: "Presentación bonita para cumpleaños, cena especial y nostalgia de Brasil.",
+    deckFourTitle: "Dulces para fiesta",
+    deckFourText: "Bandejas planificadas por cantidad de personas, fecha y ocasión.",
+    menuEyebrow: "Menú",
+    menuTitle: "Menú de pudim brasileño por encargo.",
+    menuAside:
+      "Cada artículo se hace por encargo, salvo que esté marcado como entrega inmediata. El plazo y la disponibilidad se confirman antes del pago.",
+    tabPuddings: "Pudines",
+    tabEvents: "Eventos",
+    tabBoxes: "Box InHouse",
+    chooseProduct: "Encargar",
+    orderEyebrow: "Reserva tu hornada",
+    orderTitle: "Cuéntanos qué quieres encargar y para cuándo lo necesitas.",
+    orderText:
+      "Elige artículo, fecha, cantidad y recogida o entrega. El WhatsApp se abre con los detalles listos para que la dueña confirme la agenda y la producción.",
+    metricNotice: "anticipación",
+    metricWhatsapp: "para WhatsApp",
+    openCart: "Abrir carrito",
+    fieldProduct: "Agregar producto",
+    fieldName: "Nombre",
+    namePlaceholder: "Tu nombre",
+    fieldPhone: "WhatsApp",
+    phonePlaceholder: "+1 (203) 000-0000",
+    fieldEmail: "Email",
+    emailPlaceholder: "tu@email.com",
+    fieldDate: "Fecha deseada",
+    fieldTime: "Horario deseado",
+    timePlaceholder: "Sábado, 5-7 PM",
+    fieldQuantity: "Cantidad",
+    fieldFulfillment: "Modalidad",
+    pickup: "Recoger",
+    delivery: "Solicitar entrega",
+    deliveryTitle: "Entrega saliendo de Danbury",
+    deliveryText: "Escribe el ZIP para verificar el radio automático y la tarifa.",
+    fieldZip: "ZIP de la entrega",
+    zipPlaceholder: "06810",
+    fieldAddress: "Dirección de la entrega",
+    addressPlaceholder: "Calle, ciudad, CT",
+    checkDelivery: "Verificar",
+    deliveryWaiting: "Recoger es gratis.",
+    deliveryWaitingSub: "Para entrega, escribe el ZIP antes de enviar.",
+    deliveryUnavailable: "La entrega necesita confirmación.",
+    deliveryOutsideMessage: "Fuera del radio automático. La dueña confirma por WhatsApp.",
+    deliveryFromDanbury: "desde Danbury",
+    deliverySuffix: "entrega",
+    deliveryFreeUnlocked: "Entrega gratis desbloqueada",
+    deliveryFreeMin: "Entrega gratis a partir de {amount} en ese rango.",
+    deliveryFreeRemaining: "Faltan {amount} para envío gratis",
+    deliveryFreeAlmost: "Casi llegas, faltan solo {amount}",
+    deliveryPickupAlways: "Recoger siempre es gratis",
+    deliveryEnterZip: "Ingresa el ZIP para calcular el envío",
+    cartUpsellTitle: "Agregar más a tu bolsa",
+    messageFreeDelivery: "$0 (entrega gratis)",
+    fieldNotes: "Observaciones",
+    notesPlaceholder: "Cumpleaños, alergias, ZIP de la entrega, horario preferido...",
+    cartLabel: "Carrito de encargo",
+    cartTitle: "Tu pedido planificado",
+    cartAdd: "Agregar",
+    cartTotalLabel: "Total estimado",
+    cartTeaserLabel: "Pedido en vivo",
+    cartTeaserTitle: "Revisa todo antes del WhatsApp.",
+    cartTeaserText:
+      "Productos, cantidad, fecha, recogida o entrega y observaciones quedan juntos en un carrito.",
+    cartFloatingLabel: "Carrito",
+    previewLabel: "Vista previa del mensaje en WhatsApp",
+    sendToWhatsapp: "Enviar a WhatsApp",
+    howEyebrow: "Ritmo de hornada fresca",
+    howTitle: "Elige, reserva y disfruta dulces brasileños hechos en el momento justo.",
+    stepOneTitle: "Elige tu favorito",
+    stepOneText: "Selecciona sabores de pudim o dulces de evento planificados para tu fecha.",
+    stepTwoTitle: "Envía la fecha",
+    stepTwoText: "Indica el día ideal, la cantidad, el horario de recogida o el ZIP de la entrega.",
+    stepThreeTitle: "Confirma por WhatsApp",
+    stepThreeText: "La dueña confirma disponibilidad, pago, recogida y detalles finales.",
+    footerText: "Pudines y dulces brasileños por encargo en EE. UU.",
+    footerTitle: "¿Listo para la próxima hornada?",
+    footerWhatsapp: "Pedir por WhatsApp",
+    footerHowTitle: "Cómo pedir",
+    footerPickupTitle: "Recogida y entrega",
+    footerReserveDate: "Reservar una fecha",
+    footerRequestZip: "Consultar ZIP de entrega",
+    footerOwnerTitle: "Dueña",
+    chatStatus: "Pre-pedido guiado",
+    chatIntro: "Hola, puedo ayudarte a elegir, explicar las reglas y preparar tu solicitud para el WhatsApp.",
+    quickNotice: "¿Con cuánto tiempo?",
+    quickDelivery: "¿Entrega?",
+    quickEvents: "¿Fiesta?",
+    chatPlaceholder: "Pregunta sobre el encargo, la recogida o la entrega",
+    messageIntro: "¡Hola! Me gustaría solicitar un encargo.",
+    messageProduct: "Producto",
+    messageItems: "Artículos",
+    messageDate: "Fecha deseada",
+    messageTime: "Horario deseado",
+    messageQuantity: "Cantidad",
+    messageFulfillment: "Modalidad",
+    messageCustomer: "Cliente",
+    messagePhone: "WhatsApp",
+    messageDelivery: "Entrega",
+    messageDeliveryZip: "ZIP",
+    messageDeliveryFee: "Tarifa de entrega",
+    messageTotal: "Total estimado",
+    messageNotes: "Observaciones",
+    messageNotFilled: "Aún sin completar",
+    messageAddressPending: "Dirección pendiente",
+    messagePickupLine: "Recogida en Danbury, CT",
+    messageConfirmWhatsapp: "Confirmar por WhatsApp",
+    messageNoItems: "Ningún artículo seleccionado",
+    fallbackTime: "La dueña puede sugerir la mejor ventana",
+    fallbackNotes: "Sin observaciones aún",
+    assistantNotice: "Lo ideal es pedir con al menos 48h de anticipación. Las bandejas pueden necesitar de 3 a 5 días.",
+    assistantDelivery:
+      "La entrega depende del ZIP code, la ruta y el tamaño del pedido. Envía el ZIP y la dueña confirma la tarifa por WhatsApp.",
+    assistantEvents:
+      "Para fiestas, envía la fecha, el número de personas, el producto y el presupuesto. Yo lo preparo para el WhatsApp.",
+    assistantDefault:
+      "Puedo ayudarte con el menú, el plazo, la recogida, la entrega y los eventos. Para finalizar, preparo el pedido en el WhatsApp."
   }
 };
 
@@ -585,13 +744,39 @@ const heroFeatures = {
   }
 };
 
+// Conteudo ES anexado aos produtos e hero sem reescrever cada objeto en/pt.
+const ES_PRODUCTS = {
+  "classic-pudim": { name: "Pudim Brasileño Clásico", description: "Caramelo brillante, textura sedosa y empaque cuidado para recoger el fin de semana." },
+  "berry-pudim": { name: "Pudim de Frutos Rojos", description: "Pudim cremoso con cobertura brillante de frutos rojos para regalo y cumpleaños." },
+  "gift-pudim": { name: "Pudim para Regalo", description: "Presentación elegante para cumpleaños, cena especial y nostalgia de Brasil." },
+  "brigadeiro-tray": { name: "Bandeja de Dulces", description: "Brigadeiros y postres planeados según la cantidad de personas y el horario del evento." },
+  "event-dessert-table": { name: "Mesa de Postres para Evento", description: "Pudim, dulces y montaje de postres planeados según la fecha, los invitados y el horario." },
+  "berry-celebration-cake": { name: "Pastel de Cumpleaños con Frutos Rojos", description: "Pastel en capas con crema, frutos rojos y presentación premium para cumpleaños." },
+  "cookie-gift-duo": { name: "Dúo de Galletas Gourmet", description: "Galletas suaves para complementar regalos, recuerdos y cajas de celebración." },
+  "premium-gift-hamper": { name: "Canasta Premium Personalizada", description: "Canasta a la medida con dulces, bebidas, flores y montaje elegante para regalar." },
+  "love-gift-box": { name: "Box Romántico", description: "Box romántico personalizado con dulces, mimos y decoración con globo rojo." },
+  "birthday-breakfast-tray": { name: "Bandeja de Cumpleaños", description: "Bandeja de cumpleaños con dulces, bebidas y detalles personalizados." },
+  "charcuterie-event-board": { name: "Tabla Premium para Eventos", description: "Tabla premium de quesos, frutas y embutidos para reuniones y mesas de evento." },
+  "cups-tower": { name: "Box de Copas de Postre", description: "Dulces brasileños en capas, servidos en copas para fiestas, regalos y fin de semana." },
+  "shrimp-tray": { name: "Bandeja de Camarón Crujiente", description: "Camarón dorado con papa en hilos crujiente, preparado por agenda para recoger o entrega a domicilio." },
+  "weekend-family-box": { name: "Box Familiar de Fin de Semana", description: "Box rotativo de comida brasileña reconfortante para reuniones pequeñas y fines de semana sin estrés." },
+};
+products.forEach((p) => { if (ES_PRODUCTS[p.id]) p.es = ES_PRODUCTS[p.id]; });
+
+const ES_HERO = {
+  classic: { shortName: "Pudim Clásico", label: "Pudim Clásico", lede: "Pudim de caramelo cremoso y dulces brasileños hechos por encargo en EE. UU.", description: "Caramelo, textura sedosa, recogida coordinada" },
+  berry: { shortName: "Frutos Rojos", label: "Frutos Rojos", lede: "Pudim brasileño cremoso con cobertura intensa de frutos rojos para regalo y cumpleaños.", description: "Frutos rojos, textura sedosa, recogida coordinada" },
+};
+Object.keys(ES_HERO).forEach((k) => { if (heroFeatures[k]) heroFeatures[k].es = ES_HERO[k]; });
+
 const heroFeatureOrder = Object.keys(heroFeatures);
 
 // Idioma persistente: lê do localStorage; default EN (site é US-based, vendido por BR)
+const LANGS = ["en", "pt", "es"];
 let language = (() => {
   try {
     const saved = window.localStorage.getItem("bp-lang");
-    return saved === "pt" || saved === "en" ? saved : "en";
+    return LANGS.includes(saved) ? saved : "en";
   } catch {
     return "en";
   }
@@ -638,11 +823,16 @@ const heroProductLede = document.querySelector("[data-hero-product-lede]");
 const heroProductIndex = document.querySelector("[data-hero-product-index]");
 
 function t(key, vars) {
-  let s = copy[language][key] || copy.en[key] || key;
+  let s = (copy[language] || copy.en)[key] || copy.en[key] || key;
   if (vars) {
     for (const k in vars) s = s.split(`{${k}}`).join(vars[k]);
   }
   return s;
+}
+
+// Helper trilingue inline: escolhe a string pelo idioma atual com fallback EN.
+function pick(map) {
+  return map[language] ?? map.en;
 }
 
 function setMinimumDate() {
@@ -680,31 +870,31 @@ function productAvailability(product) {
   if (mode === "in_stock" && stock > 0) {
     return {
       mode,
-      label: language === "pt" ? `Pronta entrega - ${stock} disp.` : `In stock - ${stock} available`,
-      action: language === "pt" ? "Reservar agora" : "Reserve now",
+      label: pick({ en: `In stock - ${stock} available`, pt: `Pronta entrega - ${stock} disp.`, es: `En stock - ${stock} disp.` }),
+      action: pick({ en: "Reserve now", pt: "Reservar agora", es: "Reservar ahora" }),
     };
   }
 
   if (mode === "sold_out" || (mode === "in_stock" && stock <= 0)) {
     return {
       mode: "sold_out",
-      label: language === "pt" ? "Agenda cheia" : "Schedule full",
-      action: language === "pt" ? "Entrar na lista" : "Join waitlist",
+      label: pick({ en: "Schedule full", pt: "Agenda cheia", es: "Agenda llena" }),
+      action: pick({ en: "Join waitlist", pt: "Entrar na lista", es: "Unirme a la lista" }),
     };
   }
 
   if (mode === "quote") {
     return {
       mode,
-      label: language === "pt" ? "Sob consulta" : "Custom order",
-      action: language === "pt" ? "Pedir orcamento" : "Request quote",
+      label: pick({ en: "Custom order", pt: "Sob consulta", es: "Por encargo" }),
+      action: pick({ en: "Request quote", pt: "Pedir orcamento", es: "Pedir cotización" }),
     };
   }
 
   return {
     mode: "preorder",
-    label: language === "pt" ? `Encomenda ${product.lead}` : `${product.lead} preorder`,
-    action: language === "pt" ? "Encomendar" : "Preorder",
+    label: pick({ en: `${product.lead} preorder`, pt: `Encomenda ${product.lead}`, es: `Encargo ${product.lead}` }),
+    action: pick({ en: "Preorder", pt: "Encomendar", es: "Encargar" }),
   };
 }
 
@@ -744,7 +934,7 @@ function nextBatchLabel() {
   const add = (6 - d.getDay() + 7) % 7 || 7; // próximo sábado futuro (base recorrente)
   d.setDate(d.getDate() + add);
   const iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-  const label = d.toLocaleDateString(language === "pt" ? "pt-BR" : "en-US", {
+  const label = d.toLocaleDateString(pick({ en: "en-US", pt: "pt-BR", es: "es-US" }), {
     weekday: "short",
     day: "numeric",
     month: "short",
@@ -759,19 +949,19 @@ function availabilityFor(product) {
   if (dm.mode === "quote") {
     rows.push({
       kind: "quote",
-      title: language === "pt" ? "Sob consulta" : "By request",
-      sub: language === "pt" ? `Encomenda ${product.lead}` : `${product.lead} lead time`,
+      title: pick({ en: "By request", pt: "Sob consulta", es: "Por encargo" }),
+      sub: pick({ en: `${product.lead} lead time`, pt: `Encomenda ${product.lead}`, es: `Plazo ${product.lead}` }),
     });
-    return { mode: "quote", rows, cta: language === "pt" ? "Pedir orçamento" : "Request a quote" };
+    return { mode: "quote", rows, cta: pick({ en: "Request a quote", pt: "Pedir orçamento", es: "Pedir cotización" }) };
   }
 
   if (dm.mode === "sold_out" || (dm.mode === "ready" && dm.stockQty <= 0)) {
     rows.push({
       kind: "soldout",
-      title: language === "pt" ? "Esgotado por enquanto" : "Sold out for now",
-      sub: language === "pt" ? "Entre na lista de espera" : "Join the waitlist",
+      title: pick({ en: "Sold out for now", pt: "Esgotado por enquanto", es: "Agotado por ahora" }),
+      sub: pick({ en: "Join the waitlist", pt: "Entre na lista de espera", es: "Entra a la lista de espera" }),
     });
-    return { mode: "sold_out", rows, cta: language === "pt" ? "Lista de espera" : "Join waitlist" };
+    return { mode: "sold_out", rows, cta: pick({ en: "Join waitlist", pt: "Lista de espera", es: "Lista de espera" }) };
   }
 
   const hasReady = (dm.mode === "ready" || dm.mode === "both") && dm.stockQty > 0;
@@ -780,8 +970,8 @@ function availabilityFor(product) {
   if (hasReady) {
     rows.push({
       kind: "ready",
-      title: language === "pt" ? `Pronto agora · ${dm.stockQty} un.` : `Ready now · ${dm.stockQty} left`,
-      sub: language === "pt" ? "Retirada ou entrega hoje" : "Pickup or delivery today",
+      title: pick({ en: `Ready now · ${dm.stockQty} left`, pt: `Pronto agora · ${dm.stockQty} un.`, es: `Listo ahora · ${dm.stockQty} u.` }),
+      sub: pick({ en: "Pickup or delivery today", pt: "Retirada ou entrega hoje", es: "Recoger o entrega hoy" }),
     });
   }
   if (hasBatch) {
@@ -791,19 +981,19 @@ function availabilityFor(product) {
       apiCategory: dm.apiCategory,
       batchIso: batch.iso,
       slots: dm.batchSlots,
-      title: language === "pt" ? `Próxima fornada · ${batch.label}` : `Next batch · ${batch.label}`,
+      title: pick({ en: `Next batch · ${batch.label}`, pt: `Próxima fornada · ${batch.label}`, es: `Próxima hornada · ${batch.label}` }),
     });
   }
 
   const mode = hasReady && hasBatch ? "both" : hasReady ? "ready" : "made_to_order";
   const cta = hasReady && !hasBatch
-    ? (language === "pt" ? "Pegar agora" : "Grab it now")
-    : (language === "pt" ? "Adicionar ao pedido" : "Add to order");
+    ? pick({ en: "Grab it now", pt: "Pegar agora", es: "Tomar ahora" })
+    : pick({ en: "Add to order", pt: "Adicionar ao pedido", es: "Agregar al pedido" });
   return { mode, rows, cta };
 }
 
 function renderAvailRow(r) {
-  const slotsWord = language === "pt" ? "vagas" : "left";
+  const slotsWord = pick({ en: "left", pt: "vagas", es: "cupos" });
   if (r.kind === "ready") {
     return `<div class="bk-avail-row is-ready"><span class="bk-avail-row__icon"><span class="bk-dot"></span></span><span class="bk-avail-row__text"><b>${r.title}</b><span>${r.sub}</span></span></div>`;
   }
@@ -852,7 +1042,7 @@ function productPicture(product, content, attrs = "") {
 function renderProducts() {
   grid.innerHTML = visibleProducts()
     .map((product, index) => {
-      const content = product[language];
+      const content = product[language] || product.en;
       const av = availabilityFor(product);
       const pictureMarkup = productPicture(product, content, 'loading="lazy" decoding="async"');
       const badge = product.tag ? `<span class="bk-pcard__badge">${product.tag}</span>` : "";
@@ -881,7 +1071,7 @@ function renderProducts() {
 function updateProductSelect(selectedId = productSelect.value || products[0].id) {
   if (!productSelect) return;
   productSelect.innerHTML = products
-    .map((product) => `<option value="${product.id}">${product[language].name} - ${priceLabel(product.price)}</option>`)
+    .map((product) => `<option value="${product.id}">${(product[language] || product.en).name} - ${priceLabel(product.price)}</option>`)
     .join("");
   productSelect.value = products.some((product) => product.id === selectedId) ? selectedId : products[0].id;
   renderCartProductPicker(productSelect.value);
@@ -913,7 +1103,7 @@ function renderCartProductPicker(selectedId = productSelect?.value || products[0
   }
 
   picker.innerHTML = products.map((product) => {
-    const content = product[language];
+    const content = product[language] || product.en;
     const availability = productAvailability(product);
     const active = product.id === selectedId ? " is-active" : "";
     const image = productPicture(product, content, 'class="cart-product-thumb" loading="lazy" decoding="async"');
@@ -930,7 +1120,7 @@ function renderCartProductPicker(selectedId = productSelect?.value || products[0
 }
 
 function money(value) {
-  return value > 0 ? `$${value.toFixed(2).replace(/\.00$/, "")}` : (language === "pt" ? "sob consulta" : "custom");
+  return value > 0 ? `$${value.toFixed(2).replace(/\.00$/, "")}` : pick({ en: "custom", pt: "sob consulta", es: "a consultar" });
 }
 
 function priceLabel(price) {
@@ -938,6 +1128,9 @@ function priceLabel(price) {
   if (language === "pt") {
     if (/^from\s+/i.test(value)) return value.replace(/^from\s+/i, "a partir de ");
     if (/custom/i.test(value)) return "sob consulta";
+  } else if (language === "es") {
+    if (/^from\s+/i.test(value)) return value.replace(/^from\s+/i, "desde ");
+    if (/custom/i.test(value)) return "a consultar";
   }
   return value;
 }
@@ -1134,9 +1327,9 @@ function renderCart() {
   const items = cartItems();
   cartLines.innerHTML = items
     .map((item) => {
-      const content = item.product[language];
+      const content = item.product[language] || item.product.en;
       const linePrice = priceNumber(item.product.price) * item.quantity;
-      const removeLabel = language === "pt" ? "Remover" : "Remove";
+      const removeLabel = pick({ en: "Remove", pt: "Remover", es: "Quitar" });
       const cartImg = window.bkPicture
         ? window.bkPicture.html(item.product.image, `alt="${content.name}"`)
         : `<img src="${item.product.image}" alt="${content.name}" />`;
@@ -1162,18 +1355,19 @@ function renderCart() {
     .join("");
 
   if (!items.length) {
-    cartLines.innerHTML = `<div class="cart-empty">${language === "pt" ? "Adicione produtos do cardapio para montar sua encomenda." : "Add menu items to build your preorder."}</div>`;
+    cartLines.innerHTML = `<div class="cart-empty">${pick({ en: "Add menu items to build your preorder.", pt: "Adicione produtos do cardapio para montar sua encomenda.", es: "Agrega productos del menú para armar tu encargo." })}</div>`;
   }
 
   const count = cartQuantity();
-  if (cartCount) cartCount.textContent = language === "pt" ? `${count} itens` : `${count} items`;
+  if (cartCount) cartCount.textContent = pick({ en: `${count} items`, pt: `${count} itens`, es: `${count} artículos` });
   document.querySelectorAll("[data-bk-header]").forEach((item) => item.setAttribute("data-bk-cart-count", String(count)));
   if (cartTotalNode) cartTotalNode.textContent = count > 0 ? money(orderTotal()) : "$0";
   if (cartFloatingCount) {
-    cartFloatingCount.textContent =
-      language === "pt"
-        ? `${count} ${count === 1 ? "item" : "itens"}`
-        : `${count} ${count === 1 ? "item" : "items"}`;
+    cartFloatingCount.textContent = pick({
+      en: `${count} ${count === 1 ? "item" : "items"}`,
+      pt: `${count} ${count === 1 ? "item" : "itens"}`,
+      es: `${count} ${count === 1 ? "artículo" : "artículos"}`,
+    });
   }
   if (cartFloatingTotal) cartFloatingTotal.textContent = count > 0 ? money(orderTotal()) : "$0";
   const floatingCart = cartFloatingCount?.closest(".cart-fab");
@@ -1206,7 +1400,7 @@ function buildMessage() {
         .map((item) => {
           const product = item.product;
           const linePrice = priceNumber(product.price) * item.quantity;
-          return `- ${item.quantity}x ${product[language].name} (${linePrice > 0 ? money(linePrice) : priceLabel(product.price)})`;
+          return `- ${item.quantity}x ${(product[language] || product.en).name} (${linePrice > 0 ? money(linePrice) : priceLabel(product.price)})`;
         })
         .join("\n")
     : `- ${t("messageNoItems")}`;
@@ -1250,7 +1444,7 @@ function saveLeadSnapshot() {
       time: data.get("time") || t("fallbackTime"),
       fulfillment: data.get("fulfillment"),
       total: money(cartTotal()),
-      items: items.map((item) => `${item.quantity}x ${item.product[language].name}`),
+      items: items.map((item) => `${item.quantity}x ${(item.product[language] || item.product.en).name}`),
       message: buildMessage(),
       note: "Sem API: lead salvo antes de abrir o WhatsApp."
     };
@@ -1296,7 +1490,7 @@ function saveLocalLeadSnapshot(status = "Novo lead") {
       time: data.get("time") || t("fallbackTime"),
       fulfillment: data.get("fulfillment"),
       total: money(orderTotal()),
-      items: items.map((item) => `${item.quantity}x ${item.product[language].name}`),
+      items: items.map((item) => `${item.quantity}x ${(item.product[language] || item.product.en).name}`),
       message: buildMessage(),
       note: "Fallback local: confira a API para confirmar se o pedido entrou.",
     };
@@ -1375,7 +1569,7 @@ function saveLocalOrderSnapshot(status = "requested") {
       items: cartItems().map((item) => ({
         productId: item.product.id,
         qty: item.quantity,
-        product: { name: item.product[language].name },
+        product: { name: (item.product[language] || item.product.en).name },
       })),
       totalCents: Math.round(orderTotal() * 100),
       currency: "USD",
@@ -1391,23 +1585,23 @@ function saveLocalOrderSnapshot(status = "requested") {
 
 function validateCheckout() {
   const data = new FormData(orderForm);
-  if (!cartItems().length) return language === "pt" ? "Adicione pelo menos 1 item." : "Add at least 1 item.";
-  if (!String(data.get("name") || "").trim()) return language === "pt" ? "Informe seu nome." : "Enter your name.";
-  if (!String(data.get("phone") || "").trim()) return language === "pt" ? "Informe seu WhatsApp." : "Enter your WhatsApp.";
-  if (!String(data.get("date") || "").trim()) return language === "pt" ? "Escolha a data." : "Choose a date.";
+  if (!cartItems().length) return pick({ en: "Add at least 1 item.", pt: "Adicione pelo menos 1 item.", es: "Agrega al menos 1 artículo." });
+  if (!String(data.get("name") || "").trim()) return pick({ en: "Enter your name.", pt: "Informe seu nome.", es: "Ingresa tu nombre." });
+  if (!String(data.get("phone") || "").trim()) return pick({ en: "Enter your WhatsApp.", pt: "Informe seu WhatsApp.", es: "Ingresa tu WhatsApp." });
+  if (!String(data.get("date") || "").trim()) return pick({ en: "Choose a date.", pt: "Escolha a data.", es: "Elige la fecha." });
   if (!window.bkIsValidPreorderDate(String(data.get("date") || ""))) {
     const lead = window.BK_CONFIG?.leadTimeHours || 48;
-    return language === "pt" ? `A data precisa respeitar ${lead}h de antecedencia.` : `Date must be at least ${lead}h ahead.`;
+    return pick({ en: `Date must be at least ${lead}h ahead.`, pt: `A data precisa respeitar ${lead}h de antecedencia.`, es: `La fecha debe respetar ${lead}h de anticipación.` });
   }
   if (isDeliverySelected()) {
     const zip = String(data.get("deliveryZip") || "").trim();
     const address = String(data.get("deliveryAddress") || "").trim();
-    if (!zip) return language === "pt" ? "Informe o ZIP da entrega." : "Enter the delivery ZIP.";
-    if (!address) return language === "pt" ? "Informe o endereco da entrega." : "Enter the delivery address.";
+    if (!zip) return pick({ en: "Enter the delivery ZIP.", pt: "Informe o ZIP da entrega.", es: "Ingresa el ZIP de la entrega." });
+    if (!address) return pick({ en: "Enter the delivery address.", pt: "Informe o endereco da entrega.", es: "Ingresa la dirección de la entrega." });
     const quote = activeDeliveryQuote?.zip === zip ? activeDeliveryQuote : window.bkDelivery?.quoteByZip(zip);
     activeDeliveryQuote = quote;
     renderDeliveryQuote(quote);
-    if (!quote?.served) return language === "pt" ? "Esse ZIP precisa ser confirmado no WhatsApp." : "This ZIP needs WhatsApp confirmation.";
+    if (!quote?.served) return pick({ en: "This ZIP needs WhatsApp confirmation.", pt: "Esse ZIP precisa ser confirmado no WhatsApp.", es: "Este ZIP necesita confirmación por WhatsApp." });
   }
   return "";
 }
@@ -1422,7 +1616,7 @@ async function submitCheckout(event) {
 
   const originalText = orderLink.textContent;
   orderLink.setAttribute("aria-busy", "true");
-  orderLink.textContent = language === "pt" ? "Enviando..." : "Sending...";
+  orderLink.textContent = pick({ en: "Sending...", pt: "Enviando...", es: "Enviando..." });
   let message = buildMessage();
 
   try {
@@ -1533,7 +1727,7 @@ function setHeroFlavor(flavor) {
   const normalized = heroFeatures[flavor] ? flavor : "classic";
   const feature = heroFeatures[normalized];
   const product = products.find((item) => item.id === feature.id);
-  const content = product?.[language];
+  const content = product?.[language] || product?.en;
   heroProductStage.dataset.activeFlavor = normalized;
   heroProductStage.querySelectorAll("[data-hero-product-image]").forEach((image) => {
     image.classList.toggle("is-active", image.dataset.heroProductImage === normalized);
@@ -1542,12 +1736,13 @@ function setHeroFlavor(flavor) {
     button.classList.toggle("is-active", button.dataset.heroFlavor === normalized);
   });
   if (product && content) {
+    const f = feature[language] || feature.en;
     heroProductTitle.textContent = content.name;
-    heroProductName.textContent = feature[language].shortName;
-    heroProductDescription.textContent = feature[language].description;
-    heroProductLabel.textContent = feature[language].label;
+    heroProductName.textContent = f.shortName;
+    heroProductDescription.textContent = f.description;
+    heroProductLabel.textContent = f.label;
     heroProductPrice.textContent = priceLabel(feature.price);
-    heroProductLede.textContent = feature[language].lede;
+    heroProductLede.textContent = f.lede;
     heroProductIndex.textContent = `${String(heroFeatureOrder.indexOf(normalized) + 1).padStart(2, "0")} / ${String(heroFeatureOrder.length).padStart(2, "0")}`;
   }
 }
@@ -1861,11 +2056,17 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-document.querySelector("[data-language-toggle]").addEventListener("click", () => {
-  language = language === "en" ? "pt" : "en";
+function setLanguage(next) {
+  language = LANGS.includes(next) ? next : "en";
   try { window.localStorage.setItem("bp-lang", language); } catch {}
   applyTranslations();
   document.dispatchEvent(new CustomEvent("bp:lang-change", { detail: { lang: language } }));
+}
+// O header novo (bk-lang) chama isto direto pra alcancar PT/EN/ES.
+// O toggle legado escondido continua funcionando, ciclando os 3 idiomas.
+window.bkSetLegacyLang = setLanguage;
+document.querySelector("[data-language-toggle]")?.addEventListener("click", () => {
+  setLanguage(LANGS[(LANGS.indexOf(language) + 1) % LANGS.length]);
 });
 
 orderForm.addEventListener("input", () => {

@@ -227,6 +227,115 @@
       boxSavoryTray: 'Bandeja salgada',
       boxSavoryDesc: 'Camarao crocante, batata palha, cebolinha',
     },
+    es: {
+      bkAnnounceBatchClose: 'El lote del sábado cierra en',
+      bkAnnouncePickupOrlando: 'Recoger en el local o entrega en Danbury',
+      bkAnnounceFamilyBoxes: 'Boxes tamaño familiar preparados por encargo',
+      bkAnnounceSlotsLeft: 'Solo quedan 5 lugares para este fin de semana',
+      bkAnnounceBoxSlots: 'Solo 3 lugares de box este fin de semana',
+      bkAnnounceCode: 'Usa el código FRESH10 en tu primer lote',
+      bkAnnounceSecondBox: 'Ahorra $8 en tu segundo box del mes',
+      bkAnnounceTwoDoors: 'Dos puertas, una cocina',
+      bkAnnounceUSOnly: 'Recoger o entrega local, solo EE. UU.',
+      bkAnnouncePreorderUS: 'Dulces y boxes brasileños por encargo',
+      bkSwitchPudim: 'Pudim',
+      bkSwitchBox: 'Box',
+      bkSwitchHome: 'Inicio',
+      bkBrandPuddingTag: 'Dulces en lotes pequeños',
+      bkBrandBoxTag: 'Boxes brasileños',
+      bkBrandKitchenTag: 'Preventa en EE. UU.',
+      // index.html (entry split-screen)
+      entrySignature: 'Postre de autor',
+      entryPuddingTitle: 'Brazilian Pudding',
+      entryPuddingDesc: 'Pudim cremoso, especiales con frutos rojos y dulces para regalar, hechos al momento con cita previa.',
+      entryEnterPudding: 'Entrar a la tienda de pudim',
+      entry48h: 'Preventa 48h',
+      entryPickup: 'recoger o entrega',
+      entryWAOrder: 'pedido por WhatsApp',
+      entryBrazilianBoxes: 'Boxes brasileños',
+      entryBoxTitle: 'Box InHouse',
+      entryBoxDesc: 'Copas de postre, bandejas saladas y boxes de fin de semana preparados con agenda.',
+      entryEnterBox: 'Entrar a la cocina de boxes',
+      entryLimited: 'lotes limitados',
+      entryFamily: 'porciones familiares',
+      entryWeekend: 'drops de fin de semana',
+      entryChooseTable: 'Elige tu mesa',
+      entryTwoDoors: 'Dos puertas, una cocina, todo hecho por encargo.',
+      entryDessertRoute: 'Ruta de los postres',
+      entryPudimCakes: 'Pudim, pasteles y momentos especiales.',
+      entryPudimRouteDesc: 'Para cumpleaños, sábados en familia, mesas de postres y dulces premium por encargo.',
+      entryComfortRoute: 'Ruta de la comida',
+      entryLunchBoxes: 'Boxes de almuerzo, bandejas y drops de fin de semana.',
+      entryLunchDesc: 'Para porciones familiares, bandejas saladas, boxes de comida y boxes especiales con agenda.',
+      entryEvents: 'eventos',
+      entryGiftReady: 'para regalar',
+      entryWeekly: 'semanal',
+      entrySavory: 'salado',
+      entryFamilyTag: 'familia',
+      bkSearchPlaceholder: 'Buscar...',
+      bkOpenShop: 'Abrir tienda',
+      bkOrderWA: 'WhatsApp',
+      bkOrderWAFull: 'Pedir por WhatsApp',
+      bkDrawerOtherLine: 'Otra línea',
+      bkDrawerChoose: 'Elegir otra sección',
+      bkNavMenu: 'Menú',
+      bkNavOrder: 'Pedido',
+      bkNavHow: 'Cómo funciona',
+      bkNavPreorder: 'Reservar',
+      // box.html
+      boxKickerHero: 'Boxes brasileños con cita previa',
+      boxHeroTitle: 'Comida reconfortante lista para compartir.',
+      boxHeroDesc: 'Copas de postre, bandejas saladas y boxes de fin de semana preparados en lotes limitados para recoger o entrega.',
+      boxReserveBox: 'Reservar box',
+      boxChooseLine: 'Elegir otra línea',
+      boxKickerDrop: 'Menú de encargos',
+      boxMenuTitle: 'Menú Box InHouse por encargo.',
+      boxFeatured: 'Destacado',
+      boxKickerOrder: 'Carrito del pedido',
+      boxOrderTitle: 'Pedido único por WhatsApp.',
+      boxOrderDesc: 'Cada artículo elegido queda en un solo carrito con cantidad, recoger o entrega, fecha, notas y total estimado.',
+      boxOpenCart: 'Abrir carrito',
+      boxAddSelected: 'Agregar',
+      boxCartKicker: 'Carrito del encargo',
+      boxCartTitle: 'Arma el pedido mixto.',
+      boxFieldProduct: 'Agregar producto',
+      boxAddToCart: 'Agregar',
+      boxFieldName: 'Nombre',
+      boxNamePlaceholder: 'Tu nombre',
+      boxFieldWhatsapp: 'WhatsApp',
+      boxFieldDate: '¿Para cuándo?',
+      boxFieldTime: 'Horario deseado',
+      boxTimePlaceholder: 'Sábado, 5-7 PM',
+      boxFieldFulfillment: 'Forma',
+      boxPickup: 'Recoger',
+      boxDelivery: 'Solicitar entrega',
+      boxDeliveryTitle: 'Entrega desde Danbury',
+      boxDeliveryText: 'Escribe el ZIP para verificar el radio automático y la tarifa.',
+      boxFieldZip: 'ZIP de entrega',
+      boxCheckDelivery: 'Verificar',
+      boxFieldAddress: 'Dirección de entrega',
+      boxAddressPlaceholder: 'Calle, ciudad, CT',
+      boxPickupFree: 'Recoger es gratis.',
+      boxDeliveryHint: 'Para entrega, escribe el ZIP antes de enviar.',
+      boxFieldNotes: 'Notas',
+      boxNotesPlaceholder: 'ZIP de entrega, alergias, número de personas, sabor preferido...',
+      boxEstimatedTotal: 'Total estimado',
+      boxWhatsappPreview: 'Vista previa en WhatsApp',
+      boxSendWhatsapp: 'Enviar pedido por WhatsApp',
+      boxCartFloating: 'Carrito',
+      boxStepOneTitle: 'Elige el artículo',
+      boxStepOneText: 'Postre, salado, comida o pudim adicional.',
+      boxStepTwoTitle: 'Elige la fecha',
+      boxStepTwoText: 'La dueña confirma los horarios disponibles para recoger o entrega.',
+      boxStepThreeTitle: 'Paga y confirma',
+      boxStepThreeText: 'Señal o pago total según la regla acordada.',
+      boxFooterText: 'Boxes y dulces brasileños por encargo en Danbury, CT.',
+      boxBackEntry: 'Volver a la entrada',
+      boxSweetBox: 'Box dulce',
+      boxSweetDesc: 'Brigadeiro, pistacho, coco',
+      boxSavoryTray: 'Bandeja salada',
+      boxSavoryDesc: 'Camarón crocante, papas paja, cebollín',
+    },
   };
 
   function applyHeaderI18n(langCode) {
@@ -319,16 +428,17 @@
   ---------------------------------------- */
   const langs = document.querySelectorAll('[data-bk-lang]');
   if (langs.length) {
+    const LANGS = ['en', 'pt', 'es'];
     const readLang = () => {
       try {
         const saved = localStorage.getItem('bp-lang');
-        return saved === 'pt' || saved === 'en' ? saved : 'en';
+        return LANGS.includes(saved) ? saved : 'en';
       } catch { return 'en'; }
     };
     const writeLang = (v) => { try { localStorage.setItem('bp-lang', v); } catch { } };
 
     const setActive = (which) => {
-      const next = which === 'pt' ? 'pt' : 'en';
+      const next = LANGS.includes(which) ? which : 'en';
       langs.forEach((l) => { l.dataset.active = next; });
       document.documentElement.setAttribute('lang', next);
       writeLang(next);
@@ -340,26 +450,27 @@
 
     // Quando o app.js legacy emite, sincroniza também
     document.addEventListener('bp:lang-change', (e) => {
-      const next = e?.detail?.lang === 'pt' ? 'pt' : 'en';
+      const next = LANGS.includes(e?.detail?.lang) ? e.detail.lang : 'en';
       langs.forEach((l) => { if (l.dataset.active !== next) l.dataset.active = next; });
       applyHeaderI18n(next);
     });
 
     // Cada toggle (header e drawer) bridges pro legacy uma vez só
     let bridging = false;
+    const cycleLang = (cur) => LANGS[(LANGS.indexOf(cur) + 1) % LANGS.length];
     langs.forEach((lang) => {
       lang.addEventListener('click', (e) => {
         if (bridging) return;
         const span = e.target.closest('[data-lang]');
-        const target = span ? span.dataset.lang : (lang.dataset.active === 'en' ? 'pt' : 'en');
+        const target = span ? span.dataset.lang : cycleLang(lang.dataset.active);
         if (target === lang.dataset.active) return;
         setActive(target);
 
         bridging = true;
-        const legacyA = document.querySelector('[data-language-toggle]');
-        const legacyB = document.querySelector('.box-language-toggle');
-        if (legacyA) legacyA.click();
-        if (legacyB) legacyB.click();
+        // Pudim (app.js) e Box (box.js) expoem setters diretos; o .click() legado
+        // e binario PT<->EN e nao alcanca 'es', entao preferimos o setter quando existe.
+        if (typeof window.bkSetLegacyLang === 'function') window.bkSetLegacyLang(target);
+        else document.querySelector('[data-language-toggle]')?.click();
         bridging = false;
 
         document.dispatchEvent(new CustomEvent('bk:lang-change', { detail: { lang: target } }));

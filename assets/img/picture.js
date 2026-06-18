@@ -20,6 +20,11 @@
   }
 
   function html(src, attrs = '') {
+    // data: URL (foto enviada pelo admin) nao tem variantes avif/webp, e a virgula
+    // do base64 quebra o srcset do <source>. Retorna um <img> simples nesse caso.
+    if (typeof src === 'string' && src.startsWith('data:')) {
+      return `<img src="${src}" ${attrs} />`;
+    }
     const v = variants(src);
     return (
       '<picture>' +
@@ -32,6 +37,7 @@
 
   function swap(imgEl, newSrc) {
     if (!imgEl) return;
+    if (typeof newSrc === 'string' && newSrc.startsWith('data:')) { imgEl.src = newSrc; return; }
     const v = variants(newSrc);
     const picture = imgEl.closest('picture');
     if (picture) {

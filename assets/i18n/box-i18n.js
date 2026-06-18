@@ -122,16 +122,42 @@
     },
   };
 
+  const ES = {
+    cups: { title: 'Torre de copas de postre', description: 'Dulces brasileños en capas, empacados individualmente para fiestas, la oficina y los fines de semana en familia.', label: 'Copas de Postre', tag: 'Dulces' },
+    classicPudim: { title: 'Pudim brasileño clásico', description: 'Pudim de caramelo brillante como postre junto a tu pedido Box InHouse.', label: 'Pudim Clásico', tag: 'Postre' },
+    berryPudim: { title: 'Pudim de frutos rojos', description: 'Pudim cremoso con salsa de frutos rojos para complementar tu pedido.', label: 'Pudim Frutos Rojos', tag: 'Postre' },
+    giftPudim: { title: 'Pudim para regalo', description: 'Presentación cuidada de pudim para enviar junto a boxes y regalos.', label: 'Pudim Regalo', tag: 'Postre' },
+    shrimp: { title: 'Bandeja de camarón crocante', description: 'Camarón dorado sobre papas paja crocantes, listo para recoger o entregar bajo cita.', label: 'Camarón Crocante', tag: 'Salado' },
+    weekend: { title: 'Box de fin de semana en familia', description: 'Box rotativo de comida brasileña reconfortante para pequeñas reuniones y fines de semana sin estrés.', label: 'Box Fin de Semana', tag: 'Familia' },
+    beefRice: { title: 'Box de carne con arroz', description: 'Carne al estilo brasileño con arroz, vegetales y empaque listo para recoger.', label: 'Box Arroz con Carne', tag: 'Almuerzo' },
+    fitGroundBeef: { title: 'Box fit de carne molida', description: 'Carne molida, arroz y vegetales para pedidos semanales equilibrados.', label: 'Box Fit Carne Molida', tag: 'Fit' },
+    grilledChicken: { title: 'Box de pollo a la parrilla', description: 'Pollo sazonado sobre arroz, preparado en lotes para toda la semana.', label: 'Box Pollo a la Parrilla', tag: 'Almuerzo' },
+    meatballPasta: { title: 'Box de pasta con albóndigas', description: 'Pasta reconfortante con albóndigas, salsa y empaque listo para compartir.', label: 'Pasta con Albóndigas', tag: 'Reconfortante' },
+    salmonMash: { title: 'Box de salmón con puré', description: 'Salmón, puré cremoso y vegetales verdes para una comida premium bajo cita.', label: 'Box Salmón y Puré', tag: 'Premium' },
+    groundBeefRice: { title: 'Box de arroz con carne molida', description: 'Arroz, carne molida, zanahoria y papa en un box práctico y reconfortante.', label: 'Arroz con Carne Molida', tag: 'Almuerzo' },
+    pizzaWaffle: { title: 'Waffle salado de pizza', description: 'Bocado salado en forma de waffle para armar boxes y pequeños regalos.', label: 'Pizza Waffle', tag: 'Snack' },
+    savoryPie: { title: 'Pastel salado de papa paja', description: 'Pastel salado brasileño con cobertura crocante de papa paja para reuniones.', label: 'Pastel Salado', tag: 'Fiesta' },
+    shrimpPlatter: { title: 'Fuente de camarón para fiesta', description: 'Fuente de camarón crocante con salsa, hecha para eventos y mesas para compartir.', label: 'Fuente de Camarón', tag: 'Fiesta' },
+    cookieDuo: { title: 'Box dúo de galletas', description: 'Galletas gourmet para complementar boxes, regalos y mesas de dulces.', label: 'Cookie Duo', tag: 'Dulces' },
+    charcuterie: { title: 'Tabla de fiambres', description: 'Quesos premium, frutas, galletas y fiambres para eventos.', label: 'Tabla de Fiambres', tag: 'Eventos' },
+    luxuryHamper: { title: 'Canasta de regalo de lujo', description: 'Canasta personalizada con dulces, bebida, flores y acabado premium.', label: 'Canasta Premium', tag: 'Regalo' },
+    birthdayTray: { title: 'Bandeja de cumpleaños', description: 'Bandeja de cumpleaños personalizada con dulces, bebidas y cintas.', label: 'Bandeja Cumpleaños', tag: 'Regalo' },
+  };
+
+  const DICT = { pt: PT, es: ES };
+
   const getLang = () => {
-    try { return localStorage.getItem('bp-lang') === 'pt' ? 'pt' : 'en'; }
-    catch { return 'en'; }
+    try {
+      const v = localStorage.getItem('bp-lang');
+      return v === 'pt' || v === 'es' ? v : 'en';
+    } catch { return 'en'; }
   };
 
   function applyLang() {
     const lang = getLang();
     if (!window.boxProducts) return;
 
-    Object.entries(PT).forEach(([key, vals]) => {
+    Object.keys(window.boxProducts).forEach((key) => {
       const p = window.boxProducts[key];
       if (!p) return;
       // Salvar versão EN original na primeira passada
@@ -141,7 +167,8 @@
         p._labelEn = p.label;
         p._tagEn = p.tag;
       }
-      if (lang === 'pt') {
+      const vals = DICT[lang] && DICT[lang][key];
+      if (vals) {
         p.title = vals.title;
         p.description = vals.description;
         p.label = vals.label;

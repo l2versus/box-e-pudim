@@ -19,9 +19,12 @@
 
   // i18n local (espelha header.js)
   const getLang = () => {
-    try { return localStorage.getItem('bp-lang') === 'pt' ? 'pt' : 'en'; }
-    catch { return 'en'; }
+    try {
+      const v = localStorage.getItem('bp-lang');
+      return v === 'pt' || v === 'es' ? v : 'en';
+    } catch { return 'en'; }
   };
+  const pickL = (en, pt, es) => ({ en, pt, es })[getLang()] ?? en;
   const T = {
     en: {
       title: 'Bag',
@@ -48,6 +51,19 @@
       emptyDesc: 'Veja o cardápio e adicione doces, boxes ou bandejas.',
       emptyCta: 'Ver cardápio',
       close: 'Fechar sacola',
+    },
+    es: {
+      title: "Bolsa",
+      itemsZero: "Aún no hay artículos",
+      items_one: "1 artículo",
+      items_other: "{n} artículos",
+      shippingRemaining: "Faltan {amount} para entrega local gratis",
+      shippingDone: "Desbloqueaste la entrega local gratis",
+      progress: "{n}%",
+      emptyTitle: "Tu bolsa está vacía",
+      emptyDesc: "Mira el menú y agrega dulces, boxes o bandejas para fiestas.",
+      emptyCta: "Ver menú",
+      close: "Cerrar bolsa",
     },
   };
   const t = (key, vars = {}) => {
@@ -153,9 +169,9 @@
     emptyState.querySelector('[data-bk-empty-title]').textContent = t('emptyTitle');
     emptyState.querySelector('[data-bk-empty-desc]').textContent = t('emptyDesc');
     emptyState.querySelector('[data-bk-empty-cta]').textContent = t('emptyCta');
-    eyebrowEl.textContent = getLang() === 'pt' ? 'EUA · Pré-venda' : 'USA · Preorder';
+    eyebrowEl.textContent = pickL('USA · Preorder', 'EUA · Pré-venda', 'EE. UU. · Preventa');
     const cont = drawer.querySelector('[data-bk-cart-continue-text]');
-    if (cont) cont.textContent = getLang() === 'pt' ? 'Adicionar mais' : 'Add more';
+    if (cont) cont.textContent = pickL('Add more', 'Adicionar mais', 'Agregar más');
   }
 
   function readCartTotals() {
@@ -356,10 +372,7 @@
     if (itemCount === 0) {
       e.preventDefault();
       e.stopImmediatePropagation();
-      const lang = getLang();
-      alert(lang === 'pt'
-        ? 'Adicione pelo menos 1 item antes de enviar.'
-        : 'Add at least 1 item before sending.');
+      alert(pickL('Add at least 1 item before sending.', 'Adicione pelo menos 1 item antes de enviar.', 'Agrega al menos 1 artículo antes de enviar.'));
       return;
     }
 
@@ -367,11 +380,8 @@
     if (dateVal && window.bkIsValidPreorderDate && !window.bkIsValidPreorderDate(dateVal)) {
       e.preventDefault();
       e.stopImmediatePropagation();
-      const lang = getLang();
       const lead = window.BK_CONFIG?.leadTimeHours || 48;
-      alert(lang === 'pt'
-        ? `A data precisa ser pelo menos ${lead}h a partir de agora.`
-        : `Date must be at least ${lead}h from now.`);
+      alert(pickL(`Date must be at least ${lead}h from now.`, `A data precisa ser pelo menos ${lead}h a partir de agora.`, `La fecha debe ser al menos ${lead}h a partir de ahora.`));
       dateInput?.focus();
       return;
     }

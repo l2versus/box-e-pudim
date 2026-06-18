@@ -485,7 +485,11 @@ function updateOrderCounts() {
 function updateCapacitySummary() {
   const puddings = Number(document.querySelector('[data-capacity-slider="puddings"]').value);
   const boxes = Number(document.querySelector('[data-capacity-slider="boxes"]').value);
-  const reserved = 16;
+  // Reservado = pedidos abertos reais no quadro (exclui entregue/cancelado/concluido),
+  // em vez de um numero fixo. Sem pedidos (ou API offline) => 0.
+  const reserved = document.querySelectorAll(
+    '.order-card:not([data-status="delivered"]):not([data-status="cancelled"]):not([data-status="completed"]):not([data-status="done"])'
+  ).length;
   capacityLeft.textContent = Math.max(0, puddings + boxes - reserved);
 }
 
@@ -580,6 +584,7 @@ function clearProductForm() {
   productForm.reset();
   productForm.elements.id.value = "";
   productForm.elements.active.checked = true;
+  window.bkSetProductPhoto?.("");
   productSubmit.textContent = "Adicionar produto";
   productCancel.hidden = true;
 }
@@ -595,6 +600,7 @@ function fillProductForm(product) {
   productForm.elements.leadTime.value = product.leadTime;
   productForm.elements.description.value = product.description || "";
   productForm.elements.image.value = product.image;
+  window.bkSetProductPhoto?.(product.image);
   productForm.elements.active.checked = product.active;
   productSubmit.textContent = "Salvar produto";
   productCancel.hidden = false;
@@ -755,14 +761,22 @@ productForm.addEventListener("submit", async (event) => {
 
   if (isProductionAdmin()) {
     const payload = productToApiPayload(product);
+    // Backend ainda nao tem endpoint de upload de imagem; um data URL estoura o
+    // limite de imageUrl (max 500). Salva o produto SEM a foto e avisa, em vez
+    // de falhar com erro generico. (Endpoint de upload = proxima sessao.)
+    let photoNote = "";
+    if (String(payload.imageUrl || "").startsWith("data:")) {
+      payload.imageUrl = undefined;
+      photoNote = " (a foto enviada ainda nao sobe em producao — cole uma URL por enquanto)";
+    }
     productSubmit.disabled = true;
     try {
       if (product.apiId) {
         await window.bkApi.adminUpdateProduct(product.apiId, payload);
-        showToast(`${product.name} atualizado na API.`);
+        showToast(`${product.name} atualizado na API.${photoNote}`);
       } else {
         await window.bkApi.adminCreateProduct(payload);
-        showToast(`${product.name} criado na API.`);
+        showToast(`${product.name} criado na API.${photoNote}`);
       }
       await refreshProductsFromApi({ silent: true });
       clearProductForm();
@@ -842,3 +856,96 @@ if (productReset && window.BK_CONFIG?.adminMode !== "demo") {
 }
 renderProducts();
 renderLeads();
+
+// Reflete dados reais do config.js nos rotulos estaticos da sidebar (sem hardcode).
+(() => {
+  const cfg = window.BK_CONFIG || {};
+  const pickup = document.querySelector(".sidebar-status strong");
+  if (pickup && cfg.pickupWindow) pickup.textContent = cfg.pickupWindow;
+})();
+
+// Expoe leads e produtos pro admin-router.js (export CSV e seletor do pedido manual).
+window.bkGetLeads = () => adminLeads;
+window.bkGetProducts = () => adminProducts;
+
+// ============================================================
+// Upload de foto do produto (drag/drop + escolher do celular).
+// Comprime no cliente (canvas) e guarda como data URL no campo image.
+// Sem backend de storage: funciona em demo/localStorage e no display.
+// (Pra produção em escala, o ideal e um endpoint de upload no server -> URL.)
+// ============================================================
+function compressImage(file, maxDim = 1000, quality = 0.82) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error("read"));
+    reader.onload = () => {
+      const img = new Image();
+      img.onerror = () => reject(new Error("decode"));
+      img.onload = () => {
+        let { width, height } = img;
+        if (width > maxDim || height > maxDim) {
+          const scale = maxDim / Math.max(width, height);
+          width = Math.round(width * scale);
+          height = Math.round(height * scale);
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext("2d").drawImage(img, 0, 0, width, height);
+        try { resolve(canvas.toDataURL("image/jpeg", quality)); }
+        catch (err) { reject(err); }
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+(function setupPhotoUpload() {
+  const field = document.querySelector("[data-photo-field]");
+  if (!field) return;
+  const drop = field.querySelector("[data-photo-drop]");
+  const input = field.querySelector("[data-photo-input]");
+  const hidden = field.querySelector("[data-photo-value]");
+  const preview = field.querySelector("[data-photo-preview]");
+  const textEl = field.querySelector("[data-photo-text]");
+  if (!drop || !input || !hidden) return;
+
+  const IDLE = "Arraste uma foto aqui ou toque pra escolher (do celular tambem)";
+  const setValue = (val) => {
+    hidden.value = val || "";
+    if (val) {
+      if (preview) { preview.src = val; preview.hidden = false; }
+      if (textEl) textEl.textContent = "Trocar foto";
+    } else {
+      if (preview) { preview.removeAttribute("src"); preview.hidden = true; }
+      if (textEl) textEl.textContent = IDLE;
+    }
+  };
+  // Exposto pra fillProductForm/clearProductForm sincronizarem o preview.
+  window.bkSetProductPhoto = setValue;
+
+  const handleFile = async (file) => {
+    if (!file) return;
+    if (!file.type || !file.type.startsWith("image/")) { showToast("Selecione um arquivo de imagem."); return; }
+    if (textEl) textEl.textContent = "Otimizando foto...";
+    try { setValue(await compressImage(file)); }
+    catch { showToast("Nao consegui ler essa imagem."); setValue(hidden.value); }
+  };
+
+  input.addEventListener("change", () => handleFile(input.files && input.files[0]));
+  ["dragenter", "dragover"].forEach((ev) =>
+    drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.add("is-drag"); })
+  );
+  ["dragleave", "dragend"].forEach((ev) =>
+    drop.addEventListener(ev, () => drop.classList.remove("is-drag"))
+  );
+  drop.addEventListener("drop", (e) => {
+    e.preventDefault();
+    drop.classList.remove("is-drag");
+    handleFile(e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]);
+  });
+  drop.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); input.click(); }
+  });
+})();

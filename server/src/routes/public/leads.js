@@ -7,7 +7,7 @@ const LeadSchema = z.object({
   email: z.string().email().max(200).optional(),
   productSlug: z.string().trim().max(80).optional(),
   message: z.string().max(2000).optional(),
-  preferredLang: z.enum(['en', 'pt']).optional(),
+  preferredLang: z.enum(['en', 'pt', 'es']).optional(),
   consent: z.literal(true, { errorMap: () => ({ message: 'consent must be true (CTDPA)' }) }),
   utmSource: z.string().max(80).optional(),
   utmMedium: z.string().max(80).optional(),

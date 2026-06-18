@@ -13,10 +13,17 @@
       }
     </script>
     <link rel="preload" href="assets/img/lifestyle/pudding-photo.avif" as="image" type="image/avif" />
-    <link rel="stylesheet" href="admin.css?v=113" />
-    <link rel="stylesheet" href="assets/header/header.css?v=113" />
-    <link rel="stylesheet" href="assets/admin/admin-router.css?v=113" />
-    <link rel="stylesheet" href="assets/delivery/delivery.css?v=113" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..600&family=Hanken+Grotesk:wght@400..750&display=swap"
+    />
+    <link rel="stylesheet" href="assets/design/tokens.css?v=119" />
+    <link rel="stylesheet" href="admin.css?v=119" />
+    <link rel="stylesheet" href="assets/header/header.css?v=119" />
+    <link rel="stylesheet" href="assets/admin/admin-router.css?v=119" />
+    <link rel="stylesheet" href="assets/delivery/delivery.css?v=119" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   </head>
   <body class="admin-body">
@@ -349,10 +356,15 @@
                 <span>Descricao de venda</span>
                 <textarea name="description" rows="3" placeholder="Texto curto que aparece no cardapio e no carrinho"></textarea>
               </label>
-              <label class="product-photo-field">
-                <span>Foto / caminho</span>
-                <input name="image" type="text" placeholder="assets/img/products/product-classic-pudim.png" />
-              </label>
+              <div class="product-photo-field" data-photo-field>
+                <span class="product-photo-label">Foto do produto</span>
+                <input type="hidden" name="image" data-photo-value />
+                <label class="photo-drop" data-photo-drop tabindex="0">
+                  <input type="file" accept="image/*" data-photo-input hidden />
+                  <img class="photo-preview" data-photo-preview alt="Pre-visualizacao da foto" hidden />
+                  <span class="photo-drop-text" data-photo-text>Arraste uma foto aqui ou toque pra escolher (do celular tambem)</span>
+                </label>
+              </div>
               <label class="product-active-field">
                 <input name="active" type="checkbox" checked />
                 <span>Ativo no cardapio</span>
@@ -542,15 +554,21 @@
         <div class="form-grid">
           <label>
             <span>Cliente</span>
-            <input name="customer" type="text" placeholder="Nome ou WhatsApp" required />
+            <input name="customer" type="text" placeholder="Nome do cliente" required />
+          </label>
+          <label>
+            <span>WhatsApp</span>
+            <input name="phone" type="tel" inputmode="tel" placeholder="+1 (203) 000-0000" required />
           </label>
           <label>
             <span>Produto</span>
-            <input name="title" type="text" placeholder="Ex: 2 classic pudins" required />
+            <select name="productSlug" data-order-product required>
+              <option value="">Selecione...</option>
+            </select>
           </label>
           <label>
-            <span>Valor</span>
-            <input name="total" type="number" min="0" step="0.01" placeholder="56" required />
+            <span>Quantidade</span>
+            <input name="qty" type="number" min="1" step="1" value="1" required />
           </label>
           <label>
             <span>Data</span>
@@ -559,16 +577,8 @@
           <label>
             <span>Forma</span>
             <select name="fulfillment">
-              <option value="Pickup">Pickup</option>
-              <option value="Delivery">Delivery</option>
-            </select>
-          </label>
-          <label>
-            <span>Status inicial</span>
-            <select name="status">
-              <option value="requested">Solicitado</option>
-              <option value="paid">Pago</option>
-              <option value="production">Em produção</option>
+              <option value="Pickup">Retirada</option>
+              <option value="Delivery">Entrega</option>
             </select>
           </label>
         </div>
@@ -576,6 +586,7 @@
           <span>Observação</span>
           <textarea name="notes" rows="2" placeholder="ZIP, sabor, alergias..."></textarea>
         </label>
+        <p class="order-modal-hint">O total é calculado pelo preço do produto. O pedido entra como "Solicitado" — você avança o status no quadro.</p>
         <footer>
           <button type="button" class="admin-button admin-button-ghost" data-order-modal-close>Cancelar</button>
           <button type="submit" class="admin-button admin-button-primary">Salvar pedido</button>
@@ -584,12 +595,12 @@
     </div>
 
     <div class="admin-toast" data-toast role="status" aria-live="polite"></div>
-    <script src="assets/img/picture.js?v=113"></script>
-    <script src="assets/config/config.js?v=113"></script>
-    <script src="assets/api/client.js?v=113"></script>
+    <script src="assets/img/picture.js?v=119"></script>
+    <script src="assets/config/config.js?v=119"></script>
+    <script src="assets/api/client.js?v=119"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="assets/delivery/delivery.js?v=113"></script>
-    <script src="admin.js?v=113"></script>
-    <script src="assets/admin/admin-router.js?v=113" defer></script>
+    <script src="assets/delivery/delivery.js?v=119"></script>
+    <script src="admin.js?v=119"></script>
+    <script src="assets/admin/admin-router.js?v=119" defer></script>
   </body>
 </html>

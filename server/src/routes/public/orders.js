@@ -16,7 +16,7 @@ const OrderSchema = z.object({
     name: z.string().trim().min(2).max(120),
     phone: z.string().trim().min(7).max(40),
     email: z.string().email().max(200).optional(),
-    preferredLang: z.enum(['en', 'pt']).default('en'),
+    preferredLang: z.enum(['en', 'pt', 'es']).default('en'),
   }),
   fulfillment: z.enum(['pickup', 'delivery']),
   requestedFor: z.string().datetime({ offset: true }), // ISO 8601 com offset (+HH:MM ou Z)

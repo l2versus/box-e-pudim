@@ -1,0 +1,206 @@
+/* ============================================================
+   Concierge AI — estilos self-contained (usa tokens --bk-*)
+   Carregado no box.html (e disponível pra reuso). O pudim tem a
+   própria versão no styles.css; este arquivo NÃO conflita porque
+   só é linkado onde o styles.css do pudim não está.
+   ============================================================ */
+
+.floating-concierge {
+  position: fixed;
+  right: clamp(16px, 3vw, 28px);
+  bottom: clamp(16px, 3vw, 28px);
+  z-index: 80;
+  font-family: var(--bk-font-body, system-ui, sans-serif);
+}
+
+.concierge-fab {
+  display: grid;
+  width: 64px;
+  height: 64px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 999px;
+  color: #fff;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.34), transparent 30%),
+    linear-gradient(135deg, var(--bk-caramel, #c4692a), var(--bk-jade, #155d4c));
+  box-shadow: 0 18px 44px rgba(34, 24, 18, 0.34);
+  cursor: pointer;
+  transition: transform 0.28s var(--bk-ease, ease), box-shadow 0.28s var(--bk-ease, ease);
+}
+.concierge-fab:hover {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 26px 62px rgba(34, 24, 18, 0.42);
+}
+.concierge-fab span {
+  font-family: var(--bk-font-display, Georgia, serif);
+  font-weight: 800;
+  font-size: 1.1rem;
+  letter-spacing: 0.02em;
+}
+
+.concierge-dock {
+  position: absolute;
+  right: 0;
+  bottom: 80px;
+  display: grid;
+  width: min(380px, calc(100vw - 32px));
+  max-height: min(680px, calc(100svh - 120px));
+  overflow: hidden;
+  color: var(--bk-ink, #221812);
+  background: var(--bk-surface, #fffbef);
+  border: 1px solid var(--bk-hairline, rgba(34, 24, 18, 0.13));
+  border-radius: var(--bk-radius-lg, 1.5rem);
+  box-shadow: var(--bk-elev-4, 0 30px 80px rgba(34, 24, 18, 0.25));
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(18px) scale(0.96);
+  transform-origin: bottom right;
+  transition: opacity 0.28s var(--bk-ease, ease), transform 0.28s var(--bk-ease, ease);
+}
+.floating-concierge.is-open .concierge-dock {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+.concierge-dock .chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 18px 14px;
+  border-bottom: 1px solid var(--bk-hairline, rgba(34, 24, 18, 0.12));
+}
+.concierge-dock .chat-header strong {
+  display: block;
+  font-family: var(--bk-font-display, Georgia, serif);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+.concierge-dock .chat-header span {
+  display: block;
+  margin-top: 3px;
+  color: var(--bk-caramel-deep, #97480f);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.concierge-dock .icon-button {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border: 1px solid var(--bk-hairline, rgba(34, 24, 18, 0.12));
+  border-radius: 999px;
+  color: var(--bk-ink, #221812);
+  background: var(--bk-surface-2, #fbe9bf);
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.concierge-dock .chat-body {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  height: 320px;
+  overflow: auto;
+  padding: 18px;
+  background:
+    radial-gradient(120% 80% at 100% 0%, rgba(242, 169, 44, 0.08), transparent 60%);
+}
+.concierge-dock .chat-message {
+  max-width: 88%;
+  padding: 11px 14px;
+  border-radius: var(--bk-radius-md, 1rem);
+  line-height: 1.45;
+  font-size: 0.92rem;
+}
+.concierge-dock .chat-message.assistant {
+  justify-self: start;
+  color: var(--bk-ink, #221812);
+  background: var(--bk-surface-2, #fbe9bf);
+  border-bottom-left-radius: 6px;
+}
+.concierge-dock .chat-message.user {
+  justify-self: end;
+  color: #fff;
+  background: var(--bk-jade, #155d4c);
+  border-bottom-right-radius: 6px;
+}
+
+.concierge-dock .quick-questions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0 18px 14px;
+}
+.concierge-dock .quick-questions button {
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--bk-hairline, rgba(34, 24, 18, 0.14));
+  border-radius: 999px;
+  color: var(--bk-caramel-deep, #97480f);
+  background: var(--bk-surface, #fffbef);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+.concierge-dock .quick-questions button:hover {
+  background: var(--bk-surface-2, #fbe9bf);
+  transform: translateY(-1px);
+}
+
+.concierge-dock .chat-input {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  padding: 14px 18px 18px;
+  border-top: 1px solid var(--bk-hairline, rgba(34, 24, 18, 0.12));
+}
+.concierge-dock .chat-input input {
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--bk-hairline, rgba(34, 24, 18, 0.18));
+  border-radius: 999px;
+  background: var(--bk-paper, #fbf2d6);
+  color: var(--bk-ink, #221812);
+  font: inherit;
+  font-size: 0.9rem;
+}
+.concierge-dock .chat-input input:focus-visible {
+  outline: 2px solid var(--bk-jade, #155d4c);
+  outline-offset: 1px;
+}
+.concierge-dock .chat-input button {
+  min-height: 44px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 999px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--bk-caramel, #c4692a), var(--bk-caramel-deep, #97480f));
+  font: inherit;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+@media (max-width: 480px) {
+  .concierge-dock {
+    width: calc(100vw - 24px);
+  }
+  .concierge-fab {
+    width: 58px;
+    height: 58px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .concierge-dock,
+  .concierge-fab {
+    transition: none;
+  }
+}

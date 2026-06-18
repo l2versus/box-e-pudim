@@ -655,11 +655,33 @@
   const modal = document.querySelector('[data-order-modal]');
   const modalForm = document.querySelector('[data-order-form]');
 
+  function populateProductSelect() {
+    const sel = modalForm?.querySelector('[data-order-product]');
+    if (!sel) return;
+    const products = (typeof window.bkGetProducts === 'function' ? window.bkGetProducts() : []) || [];
+    sel.replaceChildren();
+    const ph = document.createElement('option');
+    ph.value = '';
+    ph.textContent = 'Selecione...';
+    sel.appendChild(ph);
+    products.filter((p) => p && p.active !== false).forEach((p) => {
+      const o = document.createElement('option');
+      o.value = p.slug || `id-${p.id}`; // slug real (API) ou marcador local (demo)
+      o.dataset.name = p.name || '';
+      o.dataset.price = String(Number(p.price) || 0);
+      const priceNum = Number(p.price) || 0;
+      const priceTxt = priceNum ? ` — $${priceNum.toFixed(2).replace(/\.00$/, '')}` : '';
+      o.textContent = `${p.name || 'Produto'}${priceTxt}`;
+      sel.appendChild(o);
+    });
+  }
+
   function openOrderModal() {
     if (!modal) return;
+    populateProductSelect();
     modal.hidden = false;
     document.body.style.overflow = 'hidden';
-    setTimeout(() => modal.querySelector('input')?.focus(), 100);
+    setTimeout(() => modal.querySelector('input, select')?.focus(), 100);
   }
   function closeOrderModal() {
     if (!modal) return;
@@ -674,59 +696,134 @@
   });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !modal?.hidden) closeOrderModal(); });
 
-  modalForm?.addEventListener('submit', (e) => {
+  const orderToast = (msg) => {
+    const t = document.querySelector('[data-toast]');
+    if (!t) return;
+    t.textContent = msg;
+    t.classList.add('is-visible');
+    setTimeout(() => t.classList.remove('is-visible'), 2600);
+  };
+
+  modalForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const f = new FormData(modalForm);
-    const customer = String(f.get('customer') || '').trim();
-    const title = String(f.get('title') || '').trim();
-    const total = Number(f.get('total') || 0);
+    const name = String(f.get('customer') || '').trim();
+    const phone = String(f.get('phone') || '').trim();
+    const slug = String(f.get('productSlug') || '').trim();
+    const qty = Math.max(1, Math.round(Number(f.get('qty') || 1)));
     const date = String(f.get('date') || '').trim();
-    const fulfillment = String(f.get('fulfillment') || 'Pickup');
-    const status = String(f.get('status') || 'requested');
+    const fulfillmentRaw = String(f.get('fulfillment') || 'Pickup');
+    const fulfillment = fulfillmentRaw.toLowerCase().startsWith('deliv') ? 'delivery' : 'pickup';
+    const notes = String(f.get('notes') || '').trim();
+    const opt = modalForm.querySelector('[data-order-product]')?.selectedOptions?.[0];
+    const productName = opt?.dataset?.name || slug;
+    const price = Number(opt?.dataset?.price || 0);
 
-    if (!customer || !title) return;
+    if (!name || !phone || !slug || !date) {
+      orderToast('Preencha cliente, WhatsApp, produto e data.');
+      return;
+    }
 
+    const submitBtn = modalForm.querySelector('button[type="submit"]');
+    const useApi = Boolean(window.bkApi && window.BK_CONFIG?.adminMode !== 'demo');
+
+    // Caminho API: cria pedido REAL via createOrder (precisa de slug real do catalogo).
+    if (useApi && !slug.startsWith('id-')) {
+      // O backend exige endereco+ZIP pra entrega; o modal ainda nao coleta isso.
+      // Evita o 400 generico avisando claro. (Campos de entrega = proxima sessao.)
+      if (fulfillment === 'delivery') {
+        orderToast('Entrega manual ainda precisa de endereco (em breve). Use Retirada ou peca pelo site.');
+        return;
+      }
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Salvando...'; }
+      try {
+        const order = await window.bkApi.createOrder({
+          customer: { name, phone, preferredLang: 'pt' },
+          fulfillment,
+          requestedFor: new Date(`${date}T17:00:00`).toISOString(),
+          items: [{ productSlug: slug, qty }],
+          consent: true,
+          notes: notes || undefined,
+        });
+        closeOrderModal();
+        await loadOrdersFromApi();
+        orderToast(`Pedido #${order?.number || ''} criado.`);
+        location.hash = 'orders';
+      } catch (err) {
+        const msg = err?.status === 409 ? 'Capacidade cheia nessa data.'
+          : err?.code === 'network_error' ? 'API offline — pedido nao salvo.'
+          : err?.status === 400 ? 'Dados invalidos. Confira produto, WhatsApp e data.'
+          : 'Erro ao criar o pedido. Tente de novo.';
+        orderToast(msg);
+      } finally {
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Salvar pedido'; }
+      }
+      return;
+    }
+
+    // Caminho demo/local (sem API): card DOM-safe, total = preco x quantidade.
+    const total = price * qty;
+    const def = STATUS_FLOW[0];
     const card = document.createElement('article');
     card.className = 'order-card';
-    card.dataset.status = status;
+    card.dataset.status = def.key;
     card.dataset.manual = 'true';
-    const def = STATUS_FLOW.find((s) => s.key === status) || STATUS_FLOW[0];
-    card.innerHTML = `
-      <div>
-        <span class="status-pill ${def.key}">${def.label}</span>
-        <h3>${title}</h3>
-        <p>${customer} · ${fulfillment} · ${date || 'sem data'} · $${total}</p>
-      </div>
-      <button type="button" data-next-status>${def.action}</button>
-    `;
+    const info = document.createElement('div');
+    const pill = document.createElement('span');
+    pill.className = `status-pill ${def.key}`;
+    pill.textContent = def.label;
+    const h3 = document.createElement('h3');
+    h3.textContent = `${qty}x ${productName}`;
+    const meta = document.createElement('p');
+    meta.textContent = `${name} · ${fulfillmentRaw} · ${date || 'sem data'} · $${total}`;
+    info.append(pill, h3, meta);
+    const nextBtn = document.createElement('button');
+    nextBtn.type = 'button';
+    nextBtn.dataset.nextStatus = '';
+    nextBtn.textContent = def.action;
+    card.append(info, nextBtn);
     orderList?.prepend(card);
     saveOrders();
     updateBadges();
     closeOrderModal();
-    document.querySelector('[data-toast]')?.dispatchEvent?.(new Event('click'));
-    // toast manual
-    const t = document.querySelector('[data-toast]');
-    if (t) {
-      t.textContent = 'Pedido criado.';
-      t.classList.add('is-visible');
-      setTimeout(() => t.classList.remove('is-visible'), 2300);
-    }
-    // navegar pra orders
+    orderToast('Pedido criado (modo local).');
     location.hash = 'orders';
   });
 
   /* ---------------- Export CSV de leads ---------------- */
   document.querySelector('[data-leads-export]')?.addEventListener('click', () => {
-    const items = [...document.querySelectorAll('[data-lead-list] > article')];
-    if (!items.length) return;
-    const rows = [['Status','Origem','Itens','Forma','Data','Horario','Total','Mensagem']];
-    items.forEach((a) => {
-      const text = a.textContent.trim().replace(/\s+/g, ' ');
-      const cols = a.querySelectorAll('span,strong,p,pre');
-      const get = (i) => (cols[i]?.textContent || '').trim().replace(/\s+/g, ' ');
-      rows.push([get(0), '', get(1), get(2), '', '', '', get(3)]);
-    });
-    const csv = rows.map((r) => r.map((c) => `"${(c||'').replace(/"/g,'""')}"`).join(',')).join('\n');
+    const header = ['Status','Origem','Itens','Forma','Data','Horario','Total','WhatsApp','Mensagem','Criado em'];
+    const rows = [header];
+    // Preferencia: dados estruturados do admin.js (robusto). Fallback: raspar o DOM.
+    const leads = typeof window.bkGetLeads === 'function' ? window.bkGetLeads() : null;
+    if (Array.isArray(leads) && leads.length) {
+      leads.forEach((l) => {
+        const items = Array.isArray(l.items) ? l.items.join(' | ') : (l.items || '');
+        const created = l.createdAt ? new Date(l.createdAt).toLocaleString('pt-BR') : '';
+        rows.push([
+          l.status || 'Novo lead', l.source || 'Site', items, l.fulfillment || '',
+          l.date || '', l.time || '', l.total || '', l.phone || '',
+          (l.message || l.note || '').replace(/\s+/g, ' ').trim(), created,
+        ]);
+      });
+    } else {
+      const items = [...document.querySelectorAll('[data-lead-list] > article')];
+      if (!items.length) return;
+      items.forEach((a) => {
+        const cols = a.querySelectorAll('span,strong,p,pre');
+        const get = (i) => (cols[i]?.textContent || '').trim().replace(/\s+/g, ' ');
+        rows.push([get(0), '', get(1), get(2), '', '', '', '', get(3), '']);
+      });
+    }
+    if (rows.length < 2) return;
+    // Neutraliza CSV/formula injection (campo message vem do cliente): celula que
+    // comeca com = + - @ tab CR ganha um apostrofo antes de virar formula no Excel.
+    const safeCell = (c) => {
+      let s = String(c == null ? '' : c);
+      if (/^[=+\-@\t\r]/.test(s)) s = `'${s}`;
+      return `"${s.replace(/"/g, '""')}"`;
+    };
+    const csv = rows.map((r) => r.map(safeCell).join(',')).join('\n');
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);

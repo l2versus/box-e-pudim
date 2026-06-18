@@ -314,16 +314,72 @@ const BOX_UI = {
     validationZipConfirm: "Esse ZIP precisa ser confirmado no WhatsApp.",
     sending: "Enviando...",
   },
+  es: {
+    pickupFree: "Recoger es gratis.",
+    pickup: "Recoger",
+    deliveryChoice: "Solicitar entrega",
+    deliveryHint: "Para entrega a domicilio, escribe el ZIP antes de enviar.",
+    enterZip: "Ingresa el ZIP de la entrega.",
+    quoteFrom: "Calculamos desde Danbury, CT 06810.",
+    deliverySuffix: "entrega",
+    deliveryFromDanbury: "desde Danbury",
+    deliveryFreeUnlocked: "Entrega gratis desbloqueada",
+    deliveryFreeMin: "Entrega gratis a partir de {amount} en este rango.",
+    outsideRadiusMessage: "Fuera del radio automático. La dueña confirma por WhatsApp.",
+    confirmation: "La entrega necesita confirmación.",
+    noItems: "Ningún artículo seleccionado",
+    emptyCart: "Agrega boxes, comidas o pudines del menú para organizar el pedido.",
+    items: (count) => `${count} ${count === 1 ? "artículo" : "artículos"}`,
+    remove: "Quitar",
+    addToCart: "Agregar",
+    choose: "Elegir",
+    customQuote: "a consultar",
+    customSuffix: "a consultar",
+    intro: "¡Hola! Me gustaría solicitar un pedido Box InHouse.",
+    notFilled: "Aún sin completar",
+    addressPending: "Dirección pendiente",
+    pickupLine: "Recoger en Danbury, CT",
+    confirmWhatsapp: "Confirmar en WhatsApp",
+    freeDeliveryFee: "$0 (entrega gratis)",
+    customer: "Cliente",
+    whatsapp: "WhatsApp",
+    messageItems: "Artículos",
+    preferredDate: "Fecha deseada",
+    preferredTime: "Horario deseado",
+    fulfillment: "Forma",
+    delivery: "Entrega",
+    deliveryFee: "Costo de entrega",
+    estimatedTotal: "Total estimado",
+    notes: "Observaciones",
+    fallbackTime: "La dueña puede sugerir el mejor horario",
+    fallbackNotes: "Sin observaciones aún",
+    validationItem: "Agrega al menos 1 artículo.",
+    validationName: "Ingresa tu nombre.",
+    validationWhatsapp: "Ingresa tu WhatsApp.",
+    validationDate: "Elige la fecha.",
+    validationLead: "La fecha debe respetar 48h de anticipación.",
+    validationZip: "Ingresa el ZIP de la entrega.",
+    validationAddress: "Ingresa la dirección de la entrega.",
+    validationZipConfirm: "Este ZIP necesita confirmación por WhatsApp.",
+    sending: "Enviando...",
+  },
 };
 
 function boxLang() {
-  try { return window.localStorage.getItem("bp-lang") === "pt" ? "pt" : "en"; }
-  catch { return "en"; }
+  try {
+    const v = window.localStorage.getItem("bp-lang");
+    return v === "pt" || v === "es" ? v : "en";
+  } catch { return "en"; }
 }
 
 function boxUi(key, ...args) {
   const value = (BOX_UI[boxLang()] || BOX_UI.en)[key] ?? BOX_UI.en[key];
   return typeof value === "function" ? value(...args) : value;
+}
+
+// Helper trilingue: escolhe a string pelo idioma atual, com fallback EN.
+function boxT(map) {
+  return map[boxLang()] ?? map.en;
 }
 
 function whatsappUrl(message) {
@@ -340,38 +396,37 @@ function priceNumber(value) {
 }
 
 function boxAvailability(product) {
-  const lang = boxLang();
   const mode = product.availabilityMode || (priceNumber(product.price) > 0 ? "preorder" : "quote");
   const stock = Number(product.stockQty || 0);
 
   if (mode === "in_stock" && stock > 0) {
     return {
       mode,
-      label: lang === "pt" ? `Pronta entrega - ${stock} disp.` : `In stock - ${stock} available`,
-      action: lang === "pt" ? "Reservar agora" : "Reserve now",
+      label: boxT({ en: `In stock - ${stock} available`, pt: `Pronta entrega - ${stock} disp.`, es: `En stock - ${stock} disp.` }),
+      action: boxT({ en: "Reserve now", pt: "Reservar agora", es: "Reservar ahora" }),
     };
   }
 
   if (mode === "sold_out" || (mode === "in_stock" && stock <= 0)) {
     return {
       mode: "sold_out",
-      label: lang === "pt" ? "Agenda cheia" : "Schedule full",
-      action: lang === "pt" ? "Entrar na lista" : "Join waitlist",
+      label: boxT({ en: "Schedule full", pt: "Agenda cheia", es: "Agenda llena" }),
+      action: boxT({ en: "Join waitlist", pt: "Entrar na lista", es: "Unirme a la lista" }),
     };
   }
 
   if (mode === "quote") {
     return {
       mode,
-      label: lang === "pt" ? "Sob encomenda" : "Custom preorder",
-      action: lang === "pt" ? "Pedir orcamento" : "Request quote",
+      label: boxT({ en: "Custom preorder", pt: "Sob encomenda", es: "Por encargo" }),
+      action: boxT({ en: "Request quote", pt: "Pedir orcamento", es: "Pedir cotización" }),
     };
   }
 
   return {
     mode: "preorder",
-    label: lang === "pt" ? "Encomenda 48h" : "48h preorder",
-    action: lang === "pt" ? "Encomendar" : "Preorder",
+    label: boxT({ en: "48h preorder", pt: "Encomenda 48h", es: "Encargo 48h" }),
+    action: boxT({ en: "Preorder", pt: "Encomendar", es: "Encargar" }),
   };
 }
 
@@ -387,8 +442,9 @@ function money(value) {
 
 function boxPriceLabel(price) {
   const value = String(price || "");
-  if (boxLang() === "pt") {
-    if (/^from\s+/i.test(value)) return value.replace(/^from\s+/i, "a partir de ");
+  const l = boxLang();
+  if (l === "pt" || l === "es") {
+    if (/^from\s+/i.test(value)) return value.replace(/^from\s+/i, l === "es" ? "desde " : "a partir de ");
     if (/custom/i.test(value)) return boxUi("customQuote");
   }
   return value;
@@ -637,7 +693,7 @@ function saveBoxLeadSnapshot() {
       const name = String(data.get("name") || "").trim();
       const phone = String(data.get("phone") || "").trim();
       if (name && phone) {
-        const lang = window.localStorage.getItem("bp-lang") === "pt" ? "pt" : "en";
+        const lang = boxLang();
         window.bkApi.createLead({
           name,
           phone,
@@ -708,7 +764,7 @@ function boxSlug(productKey) {
 function buildBoxLeadPayload() {
   const data = new FormData(boxOrderForm);
   const items = cartItems();
-  const lang = window.localStorage.getItem("bp-lang") === "pt" ? "pt" : "en";
+  const lang = boxLang();
   return {
     name: String(data.get("name") || "").trim(),
     phone: String(data.get("phone") || "").trim(),
@@ -723,7 +779,7 @@ function buildBoxLeadPayload() {
 function buildBoxOrderPayload() {
   const data = new FormData(boxOrderForm);
   const delivery = isBoxDeliverySelected();
-  const lang = window.localStorage.getItem("bp-lang") === "pt" ? "pt" : "en";
+  const lang = boxLang();
   return {
     customer: {
       name: String(data.get("name") || "").trim(),
@@ -749,7 +805,7 @@ function saveBoxLocalOrderSnapshot(status = "requested") {
   try {
     const data = new FormData(boxOrderForm);
     const delivery = isBoxDeliverySelected();
-    const lang = window.localStorage.getItem("bp-lang") === "pt" ? "pt" : "en";
+    const lang = boxLang();
     const orders = JSON.parse(window.localStorage.getItem("bp-local-orders") || "[]");
     const id = `local-${Date.now()}`;
     const order = {
