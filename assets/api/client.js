@@ -164,6 +164,13 @@
     adminKpis: () => request('GET', '/admin/kpis'),
     adminDeliverySettings: () => request('GET', '/admin/delivery-settings'),
     adminUpdateDeliverySettings: (settings) => request('PUT', '/admin/delivery-settings', settings),
+
+    // Caixa (cash register)
+    adminCashCurrent: () => request('GET', '/admin/cash/current'),
+    adminCashOpen: (openingCents, notes) => request('POST', '/admin/cash/open', { openingCents, notes }),
+    adminCashTransaction: (tx) => request('POST', '/admin/cash/transactions', tx),
+    adminCashClose: (closingCents, notes) => request('POST', '/admin/cash/close', { closingCents, notes }),
+    adminCashSessions: (limit = 10) => request('GET', `/admin/cash/sessions?limit=${encodeURIComponent(limit)}`),
   };
 
   window.bkApi = api;

@@ -17,13 +17,13 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 
 <!-- ===== Camada de dados: config + client da API real ===== -->
-<script src="assets/config/config.js?v=126"></script>
-<script src="assets/api/client.js?v=126"></script>
+<script src="assets/config/config.js?v=127"></script>
+<script src="assets/api/client.js?v=127"></script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/design/tokens.css?v=126">
+<link rel="stylesheet" href="assets/design/tokens.css?v=127">
 
 <style>
   /* ============================================================
@@ -356,6 +356,8 @@
   .state{padding:28px}
   .state .status{display:flex;align-items:center;gap:10px;font-weight:600;color:var(--gold-lite);font-size:.96rem;letter-spacing:.2px}
   .pulse-dot{width:10px;height:10px;border-radius:50%;background:var(--gold-lite);flex:none;box-shadow:0 0 0 0 rgba(231,200,120,.6);animation:pulse 2s infinite}
+  .pulse-dot.off{background:#8a8a8a;box-shadow:none;animation:none}
+  .state .status.status-off{color:#9a9a9a}
   @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(231,200,120,.55)}70%{box-shadow:0 0 0 12px rgba(231,200,120,0)}100%{box-shadow:0 0 0 0 rgba(231,200,120,0)}}
   .state .saldo-label{margin-top:22px;color:var(--cream-faint);font-size:.78rem;text-transform:uppercase;letter-spacing:2.5px;font-weight:700}
   .state .saldo{
@@ -1039,93 +1041,74 @@
     <!-- ============== VIEW: CAIXA ============== -->
     <section class="view" id="view-caixa">
       <div class="caixa-wrap">
-        <div class="bk-amber-note">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
-          Demo — módulo de caixa ainda não tem backend.
-        </div>
         <div class="grid-caixa">
           <div>
-            <section class="card state">
-              <div class="status"><span class="pulse-dot"></span> Caixa ABERTO desde 09:12</div>
-              <div class="saldo-label">Saldo atual</div>
-              <div class="saldo num">$1.450,00<small>USD</small></div>
-              <div class="actions">
-                <button class="btn btn-ghost" data-caixa="sangria">
-                  <svg fill="none" stroke-width="1.9" viewBox="0 0 24 24"><path d="M5 12h14" stroke-linecap="round"/><path d="M5 19h14" stroke-linecap="round"/></svg>
-                  Sangria
-                </button>
-                <button class="btn btn-ghost" data-caixa="reforco">
-                  <svg fill="none" stroke-width="1.9" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
-                  Reforço
-                </button>
-                <button class="btn btn-fechar" data-caixa="fechar">
-                  <svg fill="none" stroke-width="1.9" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
-                  Fechar caixa
-                </button>
+            <section class="card state" id="caixaState">
+              <!-- CAIXA ABERTO -->
+              <div data-caixa-open hidden>
+                <div class="status"><span class="pulse-dot"></span> <span data-caixa-since>Caixa aberto</span></div>
+                <div class="saldo-label">Saldo esperado</div>
+                <div class="saldo num"><span data-caixa-balance>$0,00</span><small>USD</small></div>
+                <div class="actions">
+                  <button class="btn btn-ghost" data-caixa="venda">
+                    <svg fill="none" stroke-width="1.9" viewBox="0 0 24 24"><path d="M12 19V6M6 12l6-6 6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    Venda
+                  </button>
+                  <button class="btn btn-ghost" data-caixa="reforco">
+                    <svg fill="none" stroke-width="1.9" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
+                    Reforço
+                  </button>
+                  <button class="btn btn-ghost" data-caixa="sangria">
+                    <svg fill="none" stroke-width="1.9" viewBox="0 0 24 24"><path d="M5 12h14" stroke-linecap="round"/><path d="M5 19h14" stroke-linecap="round"/></svg>
+                    Sangria
+                  </button>
+                  <button class="btn btn-fechar" data-caixa="fechar">
+                    <svg fill="none" stroke-width="1.9" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+                    Fechar caixa
+                  </button>
+                </div>
+              </div>
+              <!-- CAIXA FECHADO -->
+              <div data-caixa-closed hidden>
+                <div class="status status-off"><span class="pulse-dot off"></span> Caixa fechado</div>
+                <div class="saldo-label">Abra o caixa pra começar o turno</div>
+                <label class="cfg-field" style="margin:14px 0 12px"><span>Fundo de troco na abertura ($)</span>
+                  <input id="caixaOpening" type="number" min="0" step="1" inputmode="numeric" placeholder="150">
+                </label>
+                <button class="btn-brasa" data-caixa="abrir" style="width:100%">Abrir caixa</button>
               </div>
             </section>
 
             <section class="card movs">
               <h2>Movimentações</h2>
               <p class="sub">Entradas e saídas do turno de hoje</p>
-              <div class="mov-list">
-                <div class="mov">
-                  <div class="mi in"><svg fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><path d="M12 19V6M6 12l6-6 6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-                  <div class="meta"><b>Venda #042 · Box Frango Grelhado</b><small><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 2" stroke-linecap="round"/></svg>12:41</small></div>
-                  <span class="chip-money in">+$84,00</span>
-                </div>
-                <div class="mov">
-                  <div class="mi in"><svg fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><path d="M12 19V6M6 12l6-6 6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-                  <div class="meta"><b>Venda #041 · Box Carne &amp; Arroz</b><small><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 2" stroke-linecap="round"/></svg>12:08</small></div>
-                  <span class="chip-money in">+$112,00</span>
-                </div>
-                <div class="mov">
-                  <div class="mi out"><svg fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><path d="M12 5v13M6 12l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-                  <div class="meta"><b>Sangria · Compra de embalagens</b><small><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 2" stroke-linecap="round"/></svg>11:30</small></div>
-                  <span class="chip-money out">−$100,00</span>
-                </div>
-                <div class="mov">
-                  <div class="mi in"><svg fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><path d="M12 19V6M6 12l6-6 6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-                  <div class="meta"><b>Venda #040 · 2× Box Frango Grelhado</b><small><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 2" stroke-linecap="round"/></svg>11:02</small></div>
-                  <span class="chip-money in">+$96,00</span>
-                </div>
-                <div class="mov">
-                  <div class="mi in"><svg fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><path d="M12 19V6M6 12l6-6 6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-                  <div class="meta"><b>Venda #039 · Box Carne &amp; Arroz</b><small><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 2" stroke-linecap="round"/></svg>10:24</small></div>
-                  <span class="chip-money in">+$78,00</span>
-                </div>
-                <div class="mov">
-                  <div class="mi in"><svg fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="13" rx="2"/><path d="M4 10h16" stroke-linecap="round"/></svg></div>
-                  <div class="meta"><b>Abertura de caixa</b><small><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 2" stroke-linecap="round"/></svg>09:12</small></div>
-                  <span class="chip-money in">+$150,00</span>
-                </div>
-              </div>
+              <div class="mov-list" id="caixaMovs"><p class="rep-empty">Sem movimentações no turno.</p></div>
             </section>
           </div>
 
           <aside>
             <section class="card summary">
               <h2>Resumo do turno</h2>
-              <p class="sub">Abertura às 09:12 · operadora Mara</p>
+              <p class="sub" data-caixa-summary-sub>Caixa fechado</p>
               <div class="sum-row">
                 <span class="lbl"><span class="ico"><svg fill="none" stroke="var(--gold)" stroke-width="1.8" viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="13" rx="2"/><path d="M4 10h16" stroke-linecap="round"/></svg></span>Abertura</span>
-                <span class="val">$150,00</span>
+                <span class="val" data-sum-opening>$0,00</span>
               </div>
               <div class="sum-row">
                 <span class="lbl"><span class="ico"><svg fill="none" stroke="var(--amber)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 19V6M6 12l6-6 6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Vendas</span>
-                <span class="val pos">+$1.400,00</span>
+                <span class="val pos" data-sum-sales>+$0,00</span>
               </div>
               <div class="sum-row">
                 <span class="lbl"><span class="ico"><svg fill="none" stroke="var(--brasa-hover)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 5v13M6 12l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Sangrias</span>
-                <span class="val neg">−$100,00</span>
+                <span class="val neg" data-sum-sangria>−$0,00</span>
               </div>
               <div class="sum-row">
                 <span class="lbl"><span class="ico"><svg fill="none" stroke="var(--gold)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg></span>Reforços</span>
-                <span class="val">$0,00</span>
+                <span class="val" data-sum-reforco>$0,00</span>
               </div>
               <div class="sum-total">
                 <span class="lbl">Saldo esperado</span>
-                <span class="val">$1.450,00</span>
+                <span class="val" data-sum-expected>$0,00</span>
               </div>
             </section>
           </aside>
@@ -1916,6 +1899,7 @@
     });
     if (view === 'config') loadConfig();
     if (view === 'relatorios') loadReports();
+    if (view === 'caixa') loadCash();
     window.scrollTo(0, 0);
   }
 
@@ -2099,15 +2083,176 @@
     $('#acceptState').textContent = this.checked ? 'pedidos' : 'pausado';
   });
 
-  /* ---------- CAIXA (feedback demo) ---------- */
-  $$('[data-caixa]').forEach(function(b){
-    b.addEventListener('click', function(){
-      var act = this.getAttribute('data-caixa');
-      var msg = act === 'sangria' ? 'Registrar sangria (retirada de dinheiro do caixa).'
-              : act === 'reforco' ? 'Registrar reforço (entrada de troco no caixa).'
-              : 'Fechar o caixa do dia? Os pedidos entregues serão arquivados.';
-      window.alert(msg);
+  /* ============================================================
+     CAIXA — turno real via API (/admin/cash/*)
+     ============================================================ */
+  var CAIXA_SESSION = null;
+
+  // centavos -> "$1.450,00" (pt-BR, com centavos — caixa precisa de precisao)
+  function caixaMoney(cents){
+    var v = (Number(cents) || 0) / 100;
+    return '$' + v.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  var MOV_ICON = {
+    in:   '<svg fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><path d="M12 19V6M6 12l6-6 6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    out:  '<svg fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><path d="M12 5v13M6 12l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    open: '<svg fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="13" rx="2"/><path d="M4 10h16" stroke-linecap="round"/></svg>'
+  };
+  var MOV_CLOCK = '<svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 2" stroke-linecap="round"/></svg>';
+
+  function movLabel(tx){
+    if (tx.type === 'opening') return 'Abertura de caixa';
+    if (tx.type === 'sale')    return 'Venda' + (tx.orderNumber ? (' #' + tx.orderNumber) : '') + (tx.reason ? (' · ' + tx.reason) : '');
+    if (tx.type === 'reforco') return 'Reforço' + (tx.reason ? (' · ' + tx.reason) : '');
+    if (tx.type === 'sangria') return 'Sangria' + (tx.reason ? (' · ' + tx.reason) : '');
+    return tx.type;
+  }
+
+  // DOM seguro: textContent pros dados; frag() (createContextualFragment) só pros SVG estaticos.
+  function renderCaixaMovs(txs){
+    var wrap = $('#caixaMovs'); if (!wrap) return;
+    wrap.textContent = '';
+    if (!txs || !txs.length){
+      var empty = document.createElement('p'); empty.className = 'rep-empty';
+      empty.textContent = 'Sem movimentações no turno.'; wrap.appendChild(empty); return;
+    }
+    txs.forEach(function(tx){
+      var out = tx.type === 'sangria';
+      var cls = out ? 'out' : 'in';
+      var iconStr = tx.type === 'opening' ? MOV_ICON.open : (out ? MOV_ICON.out : MOV_ICON.in);
+      var row = document.createElement('div'); row.className = 'mov';
+      var mi = document.createElement('div'); mi.className = 'mi ' + cls; mi.appendChild(frag(iconStr));
+      var meta = document.createElement('div'); meta.className = 'meta';
+      var b = document.createElement('b'); b.textContent = movLabel(tx);
+      var small = document.createElement('small');
+      small.appendChild(frag(MOV_CLOCK)); small.appendChild(document.createTextNode(hhmm(tx.createdAt)));
+      meta.appendChild(b); meta.appendChild(small);
+      var chip = document.createElement('span'); chip.className = 'chip-money ' + cls;
+      chip.textContent = (out ? '−' : '+') + caixaMoney(tx.amountCents);
+      row.appendChild(mi); row.appendChild(meta); row.appendChild(chip);
+      wrap.appendChild(row);
     });
+  }
+
+  function renderCaixa(session){
+    var openBlk = $('[data-caixa-open]'), closedBlk = $('[data-caixa-closed]');
+    var setSum = function(sel, val){ var el = $('[' + sel + ']'); if (el) el.textContent = val; };
+
+    if (!session){
+      if (openBlk) openBlk.hidden = true;
+      if (closedBlk) closedBlk.hidden = false;
+      setSum('data-caixa-summary-sub', 'Caixa fechado');
+      setSum('data-sum-opening', caixaMoney(0));
+      setSum('data-sum-sales', '+' + caixaMoney(0));
+      setSum('data-sum-sangria', '−' + caixaMoney(0));
+      setSum('data-sum-reforco', caixaMoney(0));
+      setSum('data-sum-expected', caixaMoney(0));
+      renderCaixaMovs([]);
+      return;
+    }
+
+    if (openBlk) openBlk.hidden = false;
+    if (closedBlk) closedBlk.hidden = true;
+    var s = session.summary || {};
+    var sinceEl = $('[data-caixa-since]');
+    if (sinceEl) sinceEl.textContent = 'Caixa aberto desde ' + hhmm(session.openedAt) + (session.openedByName ? (' · ' + firstName(session.openedByName)) : '');
+    var balEl = $('[data-caixa-balance]'); if (balEl) balEl.textContent = caixaMoney(s.expectedCents);
+    setSum('data-caixa-summary-sub', 'Aberto às ' + hhmm(session.openedAt) + (session.openedByName ? (' · operadora ' + firstName(session.openedByName)) : ''));
+    setSum('data-sum-opening', caixaMoney(s.openingCents));
+    setSum('data-sum-sales', '+' + caixaMoney(s.salesCents));
+    setSum('data-sum-sangria', '−' + caixaMoney(s.sangriaCents));
+    setSum('data-sum-reforco', caixaMoney(s.reforcoCents));
+    setSum('data-sum-expected', caixaMoney(s.expectedCents));
+    renderCaixaMovs(session.transactions);
+  }
+
+  function loadCash(){
+    if (!api){ renderCaixa(null); toast('Caixa precisa do servidor (backend offline).', 'err'); return; }
+    api.adminCashCurrent().then(function(r){
+      CAIXA_SESSION = (r && r.session) || null;
+      renderCaixa(CAIXA_SESSION);
+    }).catch(function(){ renderCaixa(null); showOfflineBanner(); });
+  }
+
+  // prompt -> centavos (reaproveita priceToCents do cadastro); null = cancelou/invalido
+  function caixaPromptCents(label){
+    var raw = window.prompt(label);
+    if (raw == null) return null;
+    var c = priceToCents(raw);
+    if (c == null || c <= 0){ toast('Valor inválido.', 'err'); return null; }
+    return c;
+  }
+
+  function caixaApplySession(r){ CAIXA_SESSION = (r && r.session) || null; renderCaixa(CAIXA_SESSION); }
+
+  function caixaTx(tx){
+    api.adminCashTransaction(tx).then(function(r){
+      caixaApplySession(r); toast('Movimentação registrada ✓', 'ok');
+    }).catch(function(e){ toast((e && e.message) || 'Erro ao registrar.', 'err'); });
+  }
+
+  function caixaAction(act, btn){
+    if (!api){ toast('Caixa precisa do servidor (backend offline).', 'err'); return; }
+
+    if (act === 'abrir'){
+      var inp = $('#caixaOpening');
+      var cents = inp && inp.value !== '' ? priceToCents(inp.value) : 0;
+      if (cents == null || cents < 0){ toast('Fundo de troco inválido.', 'err'); return; }
+      if (btn) btn.disabled = true;
+      api.adminCashOpen(cents).then(function(r){
+        if (btn) btn.disabled = false;
+        if (inp) inp.value = '';
+        caixaApplySession(r); toast('Caixa aberto ✓', 'ok');
+      }).catch(function(e){ if (btn) btn.disabled = false; toast((e && e.message) || 'Não foi possível abrir.', 'err'); });
+      return;
+    }
+
+    if (act === 'venda'){
+      var v = caixaPromptCents('Valor da venda em dinheiro ($):'); if (v == null) return;
+      var ord = window.prompt('Nº do pedido (opcional):');
+      var tx = { type: 'sale', amountCents: v };
+      var n = ord != null ? parseInt(String(ord).replace(/\D/g, ''), 10) : NaN;
+      if (!isNaN(n) && n > 0) tx.orderNumber = n;
+      caixaTx(tx); return;
+    }
+
+    if (act === 'reforco' || act === 'sangria'){
+      var amt = caixaPromptCents((act === 'reforco' ? 'Valor do reforço' : 'Valor da sangria') + ' ($):');
+      if (amt == null) return;
+      var reason = window.prompt('Motivo (opcional):');
+      var t = { type: act, amountCents: amt };
+      if (reason != null && String(reason).trim()) t.reason = String(reason).trim().slice(0, 200);
+      caixaTx(t); return;
+    }
+
+    if (act === 'fechar'){
+      if (!window.confirm('Fechar o caixa do turno?')) return;
+      var counted = window.prompt('Valor contado na gaveta ($) — deixe vazio pra pular a conferência:');
+      var closingCents;
+      if (counted != null && String(counted).trim() !== ''){
+        closingCents = priceToCents(counted);
+        if (closingCents == null || closingCents < 0){ toast('Valor contado inválido.', 'err'); return; }
+      }
+      if (btn) btn.disabled = true;
+      api.adminCashClose(closingCents).then(function(r){
+        if (btn) btn.disabled = false;
+        var s = r && r.session;
+        if (s && s.differenceCents != null && s.differenceCents !== 0){
+          var d = s.differenceCents;
+          toast((d > 0 ? 'Caixa fechado — sobra de ' : 'Caixa fechado — falta de ') + caixaMoney(Math.abs(d)), d > 0 ? 'ok' : 'err');
+        } else {
+          toast('Caixa fechado ✓', 'ok');
+        }
+        loadCash();
+      }).catch(function(e){ if (btn) btn.disabled = false; toast((e && e.message) || 'Não foi possível fechar.', 'err'); });
+      return;
+    }
+  }
+
+  document.addEventListener('click', function(e){
+    var b = e.target.closest('[data-caixa]'); if (!b) return;
+    caixaAction(b.getAttribute('data-caixa'), b);
   });
 
   /* ---------- CADASTRO: nome -> preview, upload, drag&drop ---------- */

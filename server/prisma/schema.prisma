@@ -94,6 +94,19 @@ enum AuditAction {
   failed_login
 }
 
+enum CashSessionStatus {
+  open
+  closed
+}
+
+enum CashTxType {
+  opening      // fundo de troco na abertura
+  sale         // venda em dinheiro (pode referenciar um pedido)
+  reforco      // suprimento — entrada de dinheiro no caixa
+  sangria      // retirada de dinheiro do caixa
+  adjustment   // ajuste manual (sobra/falta)
+}
+
 // ============================================================
 // Models
 // ============================================================
@@ -111,6 +124,9 @@ model User {
 
   ordersTransitioned OrderStatusTransition[]
   auditLogs          AuditLog[]
+  cashSessionsOpened CashSession[]     @relation("CashOpenedBy")
+  cashSessionsClosed CashSession[]     @relation("CashClosedBy")
+  cashTransactions   CashTransaction[] @relation("CashTxBy")
 }
 
 model Customer {
@@ -394,4 +410,46 @@ model Message {
   createdAt      DateTime         @default(now())
 
   @@index([conversationId, createdAt])
+}
+
+// ============================================================
+// Caixa (cash register) — turno operacional da loja
+// ============================================================
+
+model CashSession {
+  id              String            @id @default(cuid())
+  status          CashSessionStatus @default(open)
+  openingCents    Int               @default(0)  // fundo de troco na abertura
+  closingCents    Int?                            // contado fisicamente no fechamento
+  expectedCents   Int?                            // calculado no fechamento (snapshot)
+  differenceCents Int?                            // closing - expected (sobra +/falta -)
+  openedById      String?
+  openedBy        User?             @relation("CashOpenedBy", fields: [openedById], references: [id])
+  openedByName    String?           // snapshot do nome (sobrevive a soft-delete do user)
+  closedById      String?
+  closedBy        User?             @relation("CashClosedBy", fields: [closedById], references: [id])
+  closedByName    String?
+  notes           String?
+  openedAt        DateTime          @default(now())
+  closedAt        DateTime?
+
+  transactions    CashTransaction[]
+
+  @@index([status, openedAt])
+}
+
+model CashTransaction {
+  id          String      @id @default(cuid())
+  sessionId   String
+  session     CashSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  type        CashTxType
+  amountCents Int         // sempre positivo; o sinal vem do `type`
+  reason      String?     // descrição livre ("Compra de embalagens", "Box Frango")
+  orderId     String?     // se foi venda ligada a um pedido
+  orderNumber Int?        // snapshot do número humano do pedido
+  createdById String?
+  createdBy   User?       @relation("CashTxBy", fields: [createdById], references: [id])
+  createdAt   DateTime    @default(now())
+
+  @@index([sessionId, createdAt])
 }

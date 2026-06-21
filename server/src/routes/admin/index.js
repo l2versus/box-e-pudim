@@ -7,6 +7,7 @@ import productionRoutes from './production.js';
 import kpisRoutes from './kpis.js';
 import deliverySettingsRoutes from './delivery-settings.js';
 import promotionsAdminRoutes from './promotions.js';
+import cashRoutes from './cash.js';
 
 export default async function adminRoutes(app) {
   await app.register(authRoutes);
@@ -18,4 +19,5 @@ export default async function adminRoutes(app) {
   await app.register(kpisRoutes);
   await app.register(deliverySettingsRoutes);
   await app.register(promotionsAdminRoutes);
+  await app.register(cashRoutes);
 }
