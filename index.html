@@ -8,7 +8,7 @@
     />
     <meta name="google" content="notranslate" />
     <meta http-equiv="Content-Language" content="en" />
-    <meta name="theme-color" content="#0f3f33" />
+    <meta name="theme-color" content="#17110d" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="Brazilian Kitchen" />
@@ -88,8 +88,15 @@
       }
     </script>
 
-    <link rel="stylesheet" href="assets/header/header.css?v=119" />
-    <link rel="stylesheet" href="entry.css?v=119" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/design/tokens.css?v=126" />
+    <link rel="stylesheet" href="assets/header/header.css?v=126" />
+    <link rel="stylesheet" href="entry.css?v=126" />
   </head>
   <body class="entry-body">
 
@@ -123,10 +130,12 @@
           href="index.html"
           aria-label="Brazilian Kitchen home"
         >
-          <span class="bk-brand-mark">BK</span>
+          <span class="bk-brand-mark">
+            <img src="assets/img/brand/boxin-house-gourmet.svg" alt="" width="26" height="26" />
+          </span>
           <span class="bk-brand-text">
-            <strong>Brazilian Kitchen</strong>
-            <small data-bk-i18n="bkBrandKitchenTag">Preorder in the USA</small>
+            <strong>Box'in House</strong>
+            <small data-bk-i18n="bkBrandKitchenTag">Gourmet · Danbury CT</small>
           </span>
         </a>
 
@@ -273,6 +282,7 @@
           >
             <div class="panel-light panel-light-one" aria-hidden="true"></div>
             <div class="choice-copy">
+              <img class="choice-emblem" src="assets/img/brand/brazilian-pudding.svg" alt="Brazilian Pudding" />
               <p class="choice-kicker" data-bk-i18n="entrySignature">
                 Signature dessert
               </p>
@@ -344,33 +354,12 @@
               data-depth="-0.07"
               aria-hidden="true"
             >
-              <video
-                class="choice-video"
-                data-bk-hero
-                playsinline
-                muted
-                loop
-                preload="none"
-                poster="assets/img/products/product-dessert-cups.png"
-                aria-hidden="true"
-              >
-                <source src="assets/video/box-side.webm" type="video/webm" />
-                <source src="assets/video/box-side.mp4" type="video/mp4" />
-              </video>
-
-              <picture class="choice-video-fallback">
+              <picture>
                 <source
-                  srcset="assets/img/products/product-dessert-cups.avif"
-                  type="image/avif"
-                />
-                <source
-                  srcset="assets/img/products/product-dessert-cups.webp"
+                  srcset="assets/img/boxes/box-grilled-chicken.webp"
                   type="image/webp"
                 />
-                <img
-                  src="assets/img/products/product-dessert-cups.png"
-                  alt=""
-                />
+                <img src="assets/img/boxes/box-grilled-chicken.png" alt="" />
               </picture>
             </div>
 
@@ -381,6 +370,12 @@
             </div>
           </a>
         </article>
+
+        <div class="entry-emblem" data-entry-reveal aria-hidden="true">
+          <img class="entry-emblem-mark" src="assets/img/brand/boxin-house-gourmet.svg" alt="" />
+          <span class="entry-emblem-word">Box'in House</span>
+          <span class="entry-emblem-sub">Gourmet</span>
+        </div>
       </section>
 
       <section class="entry-runway" aria-label="Choose the next route">
@@ -479,11 +474,11 @@
       </section>
     </main>
 
-    <script src="assets/img/picture.js?v=119"></script>
-    <script src="assets/config/config.js?v=119"></script>
-    <script src="assets/api/client.js?v=119"></script>
-    <script src="entry.js?v=119"></script>
-    <script src="assets/header/header.js?v=119" defer></script>
-    <script src="assets/pwa/register-sw.js?v=119" defer></script>
+    <script src="assets/img/picture.js?v=126"></script>
+    <script src="assets/config/config.js?v=126"></script>
+    <script src="assets/api/client.js?v=126"></script>
+    <script src="entry.js?v=126"></script>
+    <script src="assets/header/header.js?v=126" defer></script>
+    <script src="assets/pwa/register-sw.js?v=126" defer></script>
   </body>
 </html>

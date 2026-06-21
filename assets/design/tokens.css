@@ -34,40 +34,54 @@
   --bk-tracking-tight: -0.02em;
   --bk-tracking-wide: 0.14em;
 
-  /* ---- Cor: base de marca (Ouro Caramelo — amarelo-forward premium) ----
-     Campo dominante amarelo/creme (~60%), ink espresso (~30%),
-     acento jade/guava (~10%). Texto SEMPRE escuro sobre amarelo (WCAG). */
-  --bk-ink: #221812;          /* espresso, não preto puro */
+  /* ---- Cor: base de marca (PRETO & OURO GOURMET — apetite + luxo) ----
+     Hibrido: heroi/entrada em preto&ouro dramatico; cardapio/carrinho/admin
+     em marfim claro. CTA brasa (apetite). Ouro = assinatura da logo Box'in House.
+     SEM verde/jade (suprime apetite). Texto SEMPRE escuro sobre claro/ouro. */
+  --bk-ink: #17110d;          /* espresso-preto quente (tinta) */
   --bk-ink-2: #4b3d33;
   --bk-muted: #7a6a5b;
-  --bk-paper: #fbf2d6;        /* creme-manteiga (fundo amarelo dominante) */
+  --bk-paper: #f6ecdb;        /* marfim quente (fundo claro dominante) */
   --bk-surface: #fffbef;      /* porcelana quente (cards respiram) */
   --bk-surface-2: #fbe9bf;    /* mel claro (faixas, insets) */
   --bk-hairline: color-mix(in srgb, var(--bk-ink) 13%, transparent);
-  --bk-on-dark: #fdf3da;
-  --bk-on-dark-soft: color-mix(in srgb, #fdf3da 70%, transparent);
+  --bk-on-dark: #f6ecdb;
+  --bk-on-dark-soft: color-mix(in srgb, #f6ecdb 70%, transparent);
 
-  /* ---- Cor: paleta assinatura (calda do pudim: amarelo -> âmbar -> caramelo) ---- */
-  --bk-amber: #f2a92c;        /* amarelo-âmbar de faixa/hero (cor de marca) */
+  /* ---- Superficies escuras (heroi / entrada / admin dark gourmet) ---- */
+  --bk-espresso: #17110d;     /* fundo dark dramatico */
+  --bk-espresso-2: #241a13;   /* surface escura (cards no dark) */
+  --bk-espresso-3: #2f2318;   /* surface escura elevada */
+  --bk-hairline-gold: color-mix(in srgb, #c9a24b 38%, transparent);
+
+  /* ---- Cor: paleta assinatura (apetite: brasa -> ambar -> caramelo + ouro) ---- */
+  --bk-amber: #f2a92c;        /* ambar de chip/faixa (cor de marca quente) */
   --bk-caramel: #c4692a;
   --bk-caramel-deep: #97480f;
   --bk-caramel-bright: #e6953d;
   --bk-honey: #f6b83e;        /* mel forte (chips, destaques) */
   --bk-cream-hi: #ffe7ae;     /* mel claro highlight */
-  --bk-jade: #155d4c;         /* complementar frio — faz o amarelo estalar (CTA) */
-  --bk-jade-deep: #0c3a2f;
-  --bk-berry: #c5304e;        /* faísca quente */
+  --bk-gold: #c9a24b;         /* OURO da logo (assinatura, filetes, selos) */
+  --bk-gold-hi: #e7c878;      /* ouro highlight metalico */
+  --bk-gold-deep: #9c7a2f;
+  --bk-ember: #be3a1d;        /* BRASA — CTA apetite (gatilho de fome nº1) */
+  --bk-ember-deep: #8e1f0e;
+  --bk-ember-bright: #d6552f;
+  /* jade aposentado -> remapeado pra brasa pra matar qualquer verde residual */
+  --bk-jade: var(--bk-ember);
+  --bk-jade-deep: var(--bk-ember-deep);
+  --bk-berry: #8e2433;        /* vinho/berry — urgencia/contagem */
 
   /* ---- Semântica (sub-tema reescreve --bk-accent/--bk-pop) ---- */
-  --bk-accent: var(--bk-jade);
-  --bk-accent-deep: var(--bk-jade-deep);
+  --bk-accent: var(--bk-ember);
+  --bk-accent-deep: var(--bk-ember-deep);
   --bk-accent-ink: #fff;
   --bk-pop: var(--bk-berry);
 
   /* ---- Status de disponibilidade (o coração do dual-mode) ---- */
-  --bk-ready: #1d7a4f;                                   /* pronto agora */
-  --bk-ready-bg: color-mix(in srgb, var(--bk-ready) 13%, var(--bk-surface));
-  --bk-ready-ink: #0e4a2e;
+  --bk-ready: #a87514;                                   /* pronto agora (ouro-bronze, sem verde) */
+  --bk-ready-bg: color-mix(in srgb, var(--bk-ready) 14%, var(--bk-surface));
+  --bk-ready-ink: #5a4410;
   --bk-batch: var(--bk-caramel-deep);                    /* próxima fornada */
   --bk-batch-bg: color-mix(in srgb, var(--bk-caramel) 16%, var(--bk-surface));
   --bk-batch-ink: #6d3408;
@@ -115,15 +129,15 @@
 
 /* ---- Sub-temas: só o sotaque de cor muda, base é a mesma ---- */
 [data-bk-theme="pudim"] {
-  --bk-accent: var(--bk-jade);
-  --bk-accent-deep: var(--bk-jade-deep);
-  --bk-pop: var(--bk-berry);
+  --bk-accent: var(--bk-ember);
+  --bk-accent-deep: var(--bk-ember-deep);
+  --bk-pop: var(--bk-gold);
 }
 
 [data-bk-theme="box"] {
-  --bk-accent: var(--bk-caramel-deep);
-  --bk-accent-deep: #6d3408;
-  --bk-pop: var(--bk-jade);
+  --bk-accent: var(--bk-ember);
+  --bk-accent-deep: var(--bk-ember-deep);
+  --bk-pop: var(--bk-gold);
 }
 
 /* ============================================================

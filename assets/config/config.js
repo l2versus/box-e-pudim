@@ -12,6 +12,21 @@
     deliveryFeeCents: 257,
     freeShippingMin: 0,
 
+    // Retirada DESATIVADA por enquanto: a dona esta dentro de um condominio e ainda
+    // nao tem ponto de retirada. Quando tiver, basta trocar pra true (volta o toggle).
+    pickupEnabled: false,
+
+    // Promocoes (fallback local). Em producao/local-com-API o valor real vem de
+    // GET /api/promotions/public, ajustado pela dona em Configuracoes do admin.
+    promotions: {
+      enabled: true,
+      freeDeliveryMinCents: 6000, // pedido >= $60 ganha frete gratis
+      discountTiers: [
+        { minCents: 9000, percent: 10 },  // >= $90  -> 10% off
+        { minCents: 15000, percent: 15 }, // >= $150 -> 15% off
+      ],
+    },
+
     pickupWindow: 'Saturday, 5-7 PM',
     supportEmail: 'hello@brazilianpudding.com',
     storeRegion: 'Danbury, CT 06810',
@@ -71,7 +86,19 @@
     },
 
     adminMode: 'production',
-    version: '1.2.0',
+
+    // Base da API. Dev local (porta 4173) fala direto com o backend Fastify em :3000;
+    // produção usa o proxy /api (Cloudflare/Vercel). forceApiLocal destrava o client.js no localhost.
+    apiBase:
+      ['127.0.0.1', 'localhost'].includes(location.hostname) &&
+      ['4173', ''].includes(location.port || '')
+        ? 'http://127.0.0.1:3000/api'
+        : '/api',
+    forceApiLocal:
+      ['127.0.0.1', 'localhost'].includes(location.hostname) &&
+      ['4173', ''].includes(location.port || ''),
+
+    version: '1.3.0',
   };
 
   window.BK_CONFIG = config;

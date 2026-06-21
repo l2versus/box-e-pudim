@@ -3,6 +3,7 @@ import leadsRoutes from './leads.js';
 import availabilityRoutes from './availability.js';
 import ordersRoutes from './orders.js';
 import deliveryRoutes from './delivery.js';
+import promotionsPublicRoutes from './promotions.js';
 
 export default async function publicRoutes(app) {
   await app.register(productsRoutes);
@@ -10,4 +11,5 @@ export default async function publicRoutes(app) {
   await app.register(availabilityRoutes);
   await app.register(ordersRoutes);
   await app.register(deliveryRoutes);
+  await app.register(promotionsPublicRoutes);
 }

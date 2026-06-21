@@ -23,10 +23,17 @@
   color: #fff;
   background:
     radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.34), transparent 30%),
-    linear-gradient(135deg, var(--bk-caramel, #c4692a), var(--bk-jade, #155d4c));
+    linear-gradient(135deg, var(--bk-caramel, #c4692a), var(--bk-jade, #be3a1d));
   box-shadow: 0 18px 44px rgba(34, 24, 18, 0.34);
   cursor: pointer;
   transition: transform 0.28s var(--bk-ease, ease), box-shadow 0.28s var(--bk-ease, ease);
+  overflow: hidden;
+}
+.concierge-fab img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
 }
 .concierge-fab:hover {
   transform: translateY(-4px) scale(1.03);
@@ -127,7 +134,7 @@
 .concierge-dock .chat-message.user {
   justify-self: end;
   color: #fff;
-  background: var(--bk-jade, #155d4c);
+  background: var(--bk-jade, #be3a1d);
   border-bottom-right-radius: 6px;
 }
 
@@ -173,7 +180,7 @@
   font-size: 0.9rem;
 }
 .concierge-dock .chat-input input:focus-visible {
-  outline: 2px solid var(--bk-jade, #155d4c);
+  outline: 2px solid var(--bk-jade, #be3a1d);
   outline-offset: 1px;
 }
 .concierge-dock .chat-input button {

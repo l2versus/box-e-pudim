@@ -3,6 +3,7 @@ import { db } from '../../db.js';
 import { idempotency } from '../../middleware/idempotency.js';
 import { publish } from '../../lib/outbox.js';
 import { getDeliverySettings, quoteDeliveryByZip } from '../../lib/delivery-settings.js';
+import { getPromotions, discountForSubtotal, isFreeDelivery } from '../../lib/promotions-settings.js';
 import { defaultCapacityFor } from '../../lib/capacity.js';
 
 const ItemSchema = z.object({
@@ -92,7 +93,21 @@ export default async function ordersRoutes(app) {
         const p = bySlug.get(it.productSlug);
         return sum + (p?.priceCents || 0) * it.qty;
       }, 0);
-      const totalCents = subtotalCents + deliveryFeeCents;
+
+      // Promocoes (ajustadas pela dona): desconto progressivo + frete gratis por valor.
+      const promotions = await getPromotions();
+      const { percent: discountPercent, discountCents } = discountForSubtotal(subtotalCents, promotions);
+      const eligibleSubtotalCents = subtotalCents - discountCents;
+      if (data.fulfillment === 'delivery' && isFreeDelivery(eligibleSubtotalCents, promotions)) {
+        deliveryFeeCents = 0;
+      }
+      const totalCents = eligibleSubtotalCents + deliveryFeeCents;
+
+      // Registra o desconto aplicado nas notas (nao ha coluna dedicada — evita migracao).
+      const promoNote = discountCents > 0
+        ? `Desconto ${discountPercent}% (-$${(discountCents / 100).toFixed(2)})`
+        : '';
+      const orderNotes = [data.notes, promoNote].filter(Boolean).join(' | ') || undefined;
 
       // ============================================================
       // Transação atômica: customer + capacity check + order
@@ -159,7 +174,7 @@ export default async function ordersRoutes(app) {
               deliveryAddress: data.deliveryAddress,
               deliveryZip: data.deliveryZip,
               deliveryFeeCents,
-              notes: data.notes,
+              notes: orderNotes,
               subtotalCents,
               totalCents,
               source: 'site',
