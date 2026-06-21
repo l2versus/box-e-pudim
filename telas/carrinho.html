@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#17110d">
+<title>Seu carrinho — Box'in House Gourmet</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+  :root{
+    --ivory:#f6ecdb;
+    --porcelain:#fffbef;
+    --ink:#17110d;
+    --espresso:#17110d;
+    --gold:#c9a24b;
+    --gold-hi:#e7c878;
+    --ember:#be3a1d;
+    --ember-hi:#d6552f;
+    --amber:#f2a92c;
+    --wine:#8e2433;
+    --line:rgba(23,17,13,.10);
+    --line-strong:rgba(23,17,13,.16);
+    --muted:#6f6253;
+    --shadow-sm:0 2px 10px rgba(74,49,18,.10);
+    --shadow-md:0 14px 36px -12px rgba(74,49,18,.30);
+    --shadow-lg:0 -10px 40px -14px rgba(74,49,18,.28);
+    --r-lg:16px;
+    --r-md:14px;
+    --r-sm:12px;
+    --sans:'Hanken Grotesk',system-ui,-apple-system,Segoe UI,sans-serif;
+    --serif:'Fraunces',Georgia,serif;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    font-family:var(--sans);
+    color:var(--ink);
+    background:var(--ivory);
+    background-image:
+      radial-gradient(900px 480px at 88% -8%, rgba(201,162,75,.14), transparent 60%),
+      radial-gradient(700px 420px at -8% 6%, rgba(190,58,29,.07), transparent 55%);
+    background-attachment:fixed;
+    min-height:100vh;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    /* espaço pra barra fixa (CTA + Adicionar mais + selo) nao cobrir o resumo no mobile */
+    padding-bottom:210px;
+  }
+  img{display:block;max-width:100%}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+  ::selection{background:var(--gold-hi);color:var(--ink)}
+
+  /* ---------- Header ---------- */
+  .top{
+    position:sticky;top:0;z-index:40;
+    background:linear-gradient(180deg,#1d1610,#17110d);
+    color:#f4ead6;
+    border-bottom:1px solid rgba(201,162,75,.28);
+    box-shadow:0 6px 24px -16px rgba(0,0,0,.9);
+  }
+  .top-in{
+    max-width:1180px;margin:0 auto;
+    display:flex;align-items:center;gap:14px;
+    padding:13px clamp(16px,4vw,40px);
+  }
+  .brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:inherit}
+  .brand-badge{
+    width:42px;height:42px;border-radius:11px;
+    display:grid;place-items:center;
+    background:radial-gradient(120% 120% at 30% 20%, rgba(231,200,120,.20), rgba(201,162,75,.05));
+    border:1px solid rgba(201,162,75,.38);
+  }
+  .brand-badge img{width:30px;height:30px}
+  .brand-name{display:flex;flex-direction:column;line-height:1.04}
+  .brand-name b{
+    font-family:var(--serif);font-style:italic;font-weight:600;
+    font-size:1.16rem;letter-spacing:.2px;
+    color:var(--gold-hi);
+  }
+  .brand-name small{
+    font-size:.62rem;letter-spacing:.34em;font-weight:700;
+    color:rgba(201,162,75,.82);padding-left:2px;
+  }
+  .top-spacer{flex:1}
+  .top-back{
+    display:inline-flex;align-items:center;gap:7px;
+    font-size:.86rem;font-weight:600;color:#e6d6b4;
+    padding:9px 14px;border-radius:999px;
+    border:1px solid rgba(201,162,75,.30);
+    background:rgba(201,162,75,.06);
+    transition:.18s;
+  }
+  .top-back:hover{background:rgba(201,162,75,.14);transform:translateY(-1px)}
+
+  /* ---------- Layout ---------- */
+  .wrap{
+    max-width:1180px;margin:0 auto;
+    padding:clamp(18px,3vw,34px) clamp(16px,4vw,40px) 0;
+  }
+  .grid{
+    display:grid;gap:22px;
+    grid-template-columns:1fr;
+  }
+
+  .page-head{margin-bottom:6px}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:.7rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+    color:#97480f;
+  }
+  .eyebrow::before{content:"";width:22px;height:1.5px;background:linear-gradient(90deg,var(--gold),transparent)}
+  .page-title{
+    font-family:var(--serif);font-weight:600;
+    font-size:clamp(1.9rem,5vw,2.5rem);
+    letter-spacing:-.01em;margin-top:8px;
+  }
+  .page-sub{color:var(--muted);font-size:.95rem;margin-top:4px}
+
+  /* ---------- Card shell ---------- */
+  .card{
+    background:var(--porcelain);
+    border:1px solid var(--line);
+    border-radius:var(--r-lg);
+    box-shadow:var(--shadow-sm);
+    position:relative;
+    overflow:hidden;
+  }
+  .card.glow::before{
+    content:"";position:absolute;inset:0;height:3px;
+    background:linear-gradient(90deg,var(--gold-hi),var(--gold),var(--ember));
+    opacity:.9;
+  }
+  .card-pad{padding:clamp(16px,3vw,22px)}
+
+  /* mobile drag handle */
+  .sheet-handle{
+    display:flex;justify-content:center;padding:9px 0 2px;
+  }
+  .sheet-handle span{
+    width:44px;height:5px;border-radius:99px;
+    background:linear-gradient(90deg,var(--gold),var(--gold-hi));
+    opacity:.55;
+  }
+
+  /* ---------- Toggle: retirada x entrega ---------- */
+  .fulfil{
+    display:flex;flex-wrap:wrap;align-items:center;gap:12px;
+    margin-bottom:16px;
+  }
+  .seg{
+    display:inline-flex;padding:5px;gap:4px;
+    background:#f0e4cf;
+    border:1px solid var(--line-strong);
+    border-radius:999px;
+    position:relative;
+  }
+  .seg button{
+    position:relative;z-index:2;
+    padding:9px 18px;border-radius:999px;
+    font-size:.88rem;font-weight:700;color:var(--muted);
+    display:inline-flex;align-items:center;gap:7px;
+    transition:color .2s;
+  }
+  .seg button .ico{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8}
+  .seg button[aria-pressed="true"]{color:#fff}
+  .seg-pill{
+    position:absolute;z-index:1;top:5px;bottom:5px;
+    border-radius:999px;
+    background:linear-gradient(135deg,var(--ember),var(--ember-hi));
+    box-shadow:0 6px 14px -6px rgba(190,58,29,.6);
+    transition:transform .26s cubic-bezier(.22,1,.36,1),width .26s cubic-bezier(.22,1,.36,1);
+  }
+  .chip-amber{
+    display:inline-flex;align-items:center;gap:6px;
+    background:linear-gradient(135deg,var(--amber),#f5bb55);
+    color:#3a2503;font-weight:800;font-size:.78rem;
+    padding:8px 13px;border-radius:999px;
+    box-shadow:0 4px 12px -5px rgba(242,169,44,.7);
+    letter-spacing:.01em;
+  }
+  .chip-amber svg{width:14px;height:14px}
+
+  /* ---------- Progresso de frete gratis ---------- */
+  .ship-progress{margin:2px 0 16px}
+  .ship-progress[hidden]{display:none}
+  .ship-bar{
+    height:8px;border-radius:99px;overflow:hidden;
+    background:#ece0c9;border:1px solid var(--line-strong);
+  }
+  .ship-bar span{
+    display:block;height:100%;width:0;border-radius:99px;
+    background:linear-gradient(90deg,var(--amber),var(--gold-hi));
+    transition:width .4s cubic-bezier(.22,1,.36,1);
+  }
+  .ship-bar.is-done span{background:linear-gradient(90deg,var(--gold),var(--gold-hi))}
+  .ship-txt{
+    margin-top:7px;font-size:.8rem;font-weight:600;color:#7a6536;
+    display:flex;align-items:center;gap:6px;
+  }
+  .ship-txt b{color:var(--ember)}
+  .ship-txt.is-done{color:#8a6c2b}
+  /* linha de desconto no resumo */
+  .sum-row.discount{color:#7a6536}
+  .sum-row.discount span:last-child{color:var(--ember);font-weight:700}
+  .sum-row.discount[hidden]{display:none}
+  .sum-row.free span:last-child{color:#8a6c2b;font-weight:700}
+
+  /* ---------- Items ---------- */
+  .items{list-style:none;display:flex;flex-direction:column}
+  .item{
+    display:grid;
+    grid-template-columns:84px 1fr auto;
+    gap:14px;align-items:center;
+    padding:16px 0;
+    border-top:1px solid var(--line);
+    transition:opacity .35s, transform .35s, max-height .35s, padding .35s;
+  }
+  .item:first-child{border-top:none}
+  .item.removing{opacity:0;transform:translateX(24px);max-height:0;padding:0;overflow:hidden}
+  .thumb{
+    width:84px;height:84px;border-radius:var(--r-sm);
+    object-fit:cover;
+    border:1px solid var(--line-strong);
+    box-shadow:var(--shadow-sm);
+    background:#efe3cd;
+  }
+  .it-main{min-width:0}
+  .it-name{
+    font-family:var(--serif);font-weight:600;font-size:1.06rem;
+    letter-spacing:-.01em;line-height:1.2;
+  }
+  .it-desc{font-size:.8rem;color:var(--muted);margin-top:3px}
+  .it-tag{
+    display:inline-block;margin-top:7px;
+    font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--wine);
+    background:rgba(142,36,51,.08);
+    padding:3px 9px;border-radius:6px;
+  }
+  .it-right{display:flex;flex-direction:column;align-items:flex-end;gap:10px;justify-self:end}
+  .it-price{
+    font-family:var(--serif);font-weight:600;font-size:1.12rem;
+    white-space:nowrap;
+  }
+  .it-unit{font-size:.72rem;color:var(--muted);text-align:right;margin-top:-4px}
+
+  /* stepper */
+  .stepper{
+    display:inline-flex;align-items:center;
+    background:#f4e9d4;
+    border:1px solid var(--line-strong);
+    border-radius:999px;padding:3px;
+  }
+  .stepper button{
+    width:30px;height:30px;border-radius:50%;
+    display:grid;place-items:center;
+    color:var(--ink);font-weight:700;
+    transition:.15s;
+  }
+  .stepper button:hover{background:rgba(201,162,75,.22)}
+  .stepper button:active{transform:scale(.9)}
+  .stepper button[disabled]{opacity:.32;cursor:not-allowed}
+  .stepper button svg{width:14px;height:14px;stroke:currentColor;stroke-width:2.4;fill:none}
+  .qty{
+    min-width:26px;text-align:center;
+    font-weight:800;font-size:.96rem;font-variant-numeric:tabular-nums;
+  }
+  .it-remove{
+    display:inline-flex;align-items:center;gap:5px;
+    font-size:.76rem;font-weight:600;color:var(--wine);
+    padding:5px 4px;border-radius:8px;transition:.15s;
+  }
+  .it-remove:hover{color:var(--ember);background:rgba(190,58,29,.06)}
+  .it-remove svg{width:16px;height:16px;stroke:currentColor;stroke-width:1.7;fill:none}
+
+  /* ---------- Summary ---------- */
+  .sum-row{
+    display:flex;justify-content:space-between;align-items:baseline;
+    padding:9px 0;font-size:.95rem;
+  }
+  .sum-row span:last-child{font-weight:600;font-variant-numeric:tabular-nums}
+  .sum-row.muted{color:var(--muted)}
+  .sum-div{height:1px;background:var(--line);margin:6px 0}
+  .sum-total{
+    display:flex;justify-content:space-between;align-items:center;
+    margin-top:6px;padding-top:14px;
+    border-top:2px dashed var(--line-strong);
+  }
+  .sum-total .lab{font-family:var(--serif);font-weight:600;font-size:1.15rem}
+  .sum-total .val{
+    font-family:var(--serif);font-weight:700;font-size:1.7rem;
+    color:var(--ink);font-variant-numeric:tabular-nums;
+  }
+  .sum-note{
+    display:flex;gap:9px;align-items:flex-start;
+    margin-top:14px;padding:12px 13px;
+    background:rgba(201,162,75,.08);
+    border:1px solid rgba(201,162,75,.22);
+    border-radius:var(--r-sm);
+    font-size:.8rem;color:#6a5733;
+  }
+  .sum-note svg{width:17px;height:17px;flex-shrink:0;margin-top:1px;stroke:var(--gold);fill:none;stroke-width:1.7}
+
+  .summary-title{
+    font-family:var(--serif);font-weight:600;font-size:1.15rem;
+    margin-bottom:6px;display:flex;align-items:center;gap:9px;
+  }
+  .summary-title::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent)}
+
+  /* ---------- Footer CTA ---------- */
+  .footbar{
+    position:fixed;left:0;right:0;bottom:0;z-index:50;
+    background:rgba(255,251,239,.86);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    border-top:1px solid var(--line-strong);
+    box-shadow:var(--shadow-lg);
+    padding:13px clamp(16px,4vw,40px) calc(13px + env(safe-area-inset-bottom));
+  }
+  .footbar-in{
+    max-width:1180px;margin:0 auto;
+    display:flex;align-items:center;gap:12px;
+  }
+  .foot-total{display:none;flex-direction:column;line-height:1.1;margin-right:4px}
+  .foot-total small{font-size:.7rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.08em}
+  .foot-total b{font-family:var(--serif);font-size:1.45rem;font-weight:700}
+
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:10px;
+    min-height:54px;border-radius:14px;
+    font-weight:800;font-size:1rem;letter-spacing:.01em;
+    transition:transform .15s, box-shadow .2s, background .2s;
+    text-decoration:none;
+  }
+  .btn:active{transform:translateY(1px) scale(.995)}
+  .btn-ember{
+    flex:1;
+    background:linear-gradient(135deg,var(--ember),var(--ember-hi));
+    color:#fff;
+    box-shadow:0 12px 26px -10px rgba(190,58,29,.62), inset 0 1px 0 rgba(255,255,255,.18);
+  }
+  .btn-ember:hover{background:linear-gradient(135deg,var(--ember-hi),#e0633b);box-shadow:0 16px 30px -10px rgba(190,58,29,.7)}
+  .btn-ember svg{width:21px;height:21px;fill:#fff}
+  .btn-ghost{
+    background:transparent;
+    border:1.6px solid var(--gold);
+    color:#8a6c2b;
+    min-height:54px;padding:0 20px;
+    white-space:nowrap;
+  }
+  .btn-ghost:hover{background:rgba(201,162,75,.1);border-color:var(--gold-hi)}
+  .btn-ghost svg{width:18px;height:18px;stroke:currentColor;stroke-width:2;fill:none}
+
+  /* trust line */
+  .trust{
+    display:flex;align-items:center;justify-content:center;gap:7px;
+    margin-top:10px;font-size:.74rem;color:var(--muted);font-weight:500;
+  }
+  .trust svg{width:14px;height:14px;stroke:var(--gold);fill:none;stroke-width:1.7}
+
+  .empty-hint{text-align:center;padding:30px 10px;color:var(--muted);display:none}
+  .empty-hint.show{display:block}
+
+  /* ---------- Desktop ---------- */
+  @media(min-width:880px){
+    body{padding-bottom:0}
+    .grid{grid-template-columns:1.55fr 1fr;align-items:start;gap:28px}
+    .sheet-handle{display:none}
+    .col-summary{position:sticky;top:98px}
+    .footbar{
+      position:static;background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;
+      border-top:none;box-shadow:none;padding:0;margin-top:18px;
+    }
+    .footbar-in{flex-direction:column;align-items:stretch;gap:10px}
+    .btn-ghost{width:100%}
+    .foot-cta-wrap{display:flex;flex-direction:column;gap:10px}
+    .page-sub{max-width:48ch}
+  }
+  @media(max-width:879px){
+    .col-summary .card{border-radius:var(--r-lg)}
+    .wrap{padding-bottom:8px}
+    .foot-cta-wrap{flex-direction:column}
+    .footbar .btn-ember,.footbar .btn-ghost{width:100%;white-space:nowrap}
+  }
+  @media(min-width:560px) and (max-width:879px){
+    .grid{max-width:560px;margin:0 auto}
+  }
+
+  /* ---------- Mapa (entrega / retirada) ---------- */
+  .map{height:240px;width:100%;border-radius:var(--r-md);border:1px solid rgba(201,162,75,.5);box-shadow:var(--shadow-sm);overflow:hidden;background:#1a140d;z-index:1}
+  .map-note{display:flex;gap:9px;align-items:flex-start;margin-top:12px;font-size:.82rem;color:#6a5733}
+  .map-note svg{width:18px;height:18px;flex-shrink:0;margin-top:1px;stroke:var(--gold);fill:none;stroke-width:1.7}
+  .deliver-fields{display:grid;grid-template-columns:1fr 112px;gap:10px;margin-bottom:14px}
+  .deliver-fields[hidden]{display:none}
+  .fld{display:flex;flex-direction:column;gap:5px}
+  .fld span{font-size:.72rem;font-weight:700;letter-spacing:.04em;color:var(--muted);text-transform:uppercase}
+  .fld input{width:100%;min-height:48px;padding:0 14px;border-radius:12px;border:1.5px solid var(--line-strong);background:#fbf3e2;color:var(--ink);font-family:inherit;font-size:.95rem;transition:.16s}
+  .fld input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,162,75,.22)}
+  .leaflet-container{font-family:var(--sans);background:#1a140d}
+  .leaflet-bar a,.leaflet-control-zoom a{color:#3a2503!important;background:#f6ecdb!important;border-color:rgba(201,162,75,.4)!important}
+  @media(max-width:420px){ .deliver-fields{grid-template-columns:1fr} }
+</style>
+<script src="../assets/config/config.js?v=126"></script>
+<script src="../assets/api/client.js?v=126"></script>
+<script src="../assets/delivery/delivery.js?v=126"></script>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="top">
+    <div class="top-in">
+      <a class="brand" id="brandLink" href="../box.html" aria-label="Início">
+        <span class="brand-badge"><img id="brandImg" src="../assets/img/brand/boxin-house-gourmet.svg" width="30" height="30" alt=""></span>
+        <span class="brand-name">
+          <b id="brandName">Box'in House</b>
+          <small id="brandSub">GOURMET</small>
+        </span>
+      </a>
+      <span class="top-spacer"></span>
+      <a class="top-back" id="backLink" href="../box.html">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+        Continuar comprando
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="page-head">
+      <span class="eyebrow">Danbury, CT · USA</span>
+      <h1 class="page-title">Seu carrinho</h1>
+      <p class="page-sub">Confira os itens, informe seu ZIP pra calcular a entrega e finalize em segundos pelo WhatsApp.</p>
+    </div>
+
+    <div class="grid">
+
+      <!-- LEFT: itens -->
+      <section class="col-items">
+        <div class="card glow">
+          <div class="sheet-handle"><span></span></div>
+          <div class="card-pad">
+
+            <!-- fulfillment: Retirada esta OFF (condominio sem ponto de retirada).
+                 O botao Retirada e injetado por JS apenas quando BK_CONFIG.pickupEnabled = true. -->
+            <div class="fulfil">
+              <div class="seg" id="seg" role="group" aria-label="Tipo de entrega">
+                <span class="seg-pill" id="segPill"></span>
+                <button type="button" data-mode="delivery" aria-pressed="true">
+                  <svg class="ico" viewBox="0 0 24 24"><path d="M3 16V6a1 1 0 0 1 1-1h10v11"/><path d="M14 9h4l3 3v4h-7"/><circle cx="7.5" cy="17.5" r="1.7"/><circle cx="17.5" cy="17.5" r="1.7"/></svg>
+                  Entrega
+                </button>
+              </div>
+              <span class="chip-amber">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                Encomenda 48h
+              </span>
+            </div>
+
+            <!-- progresso: faltam $X pra frete gratis -->
+            <div class="ship-progress" id="shipProgress" hidden>
+              <div class="ship-bar"><span id="shipFill"></span></div>
+              <p class="ship-txt" id="shipTxt"></p>
+            </div>
+
+            <!-- items (renderizados via JS a partir do localStorage 'bp-cart') -->
+            <ul class="items" id="items"></ul>
+
+            <div class="empty-hint" id="emptyHint">
+              <p style="font-family:var(--serif);font-size:1.1rem;font-weight:600">Seu carrinho está vazio</p>
+              <p style="margin-top:4px;font-size:.9rem">Volte ao cardápio para escolher seus boxes.</p>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- MAPA: entrega (endereço + raio) / retirada (ponto) -->
+        <div class="card glow" id="mapCard" style="margin-top:22px">
+          <div class="card-pad">
+            <p class="summary-title" id="mapTitle">Endereço de entrega</p>
+            <div class="deliver-fields" id="deliverFields">
+              <label class="fld">
+                <span>Endereço de entrega</span>
+                <input type="text" id="addr" placeholder="Rua, número, complemento" autocomplete="street-address">
+              </label>
+              <label class="fld">
+                <span>ZIP</span>
+                <input type="text" id="zip" placeholder="06810" inputmode="numeric" maxlength="5">
+              </label>
+            </div>
+            <div id="map" class="map" role="img" aria-label="Mapa de Danbury, CT"></div>
+            <p class="map-note" id="mapNote">
+              <svg viewBox="0 0 24 24"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+              <span>Digite seu ZIP pra calcular a taxa de entrega na hora. Atendemos a região de Danbury, CT.</span>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT: resumo -->
+      <aside class="col-summary">
+        <div class="card">
+          <div class="card-pad">
+            <p class="summary-title">Resumo do pedido</p>
+
+            <div class="sum-row"><span>Subtotal</span><span data-subtotal>$0,00</span></div>
+            <div class="sum-row discount" data-discount-row hidden><span data-discount-label>Desconto</span><span data-discount>-$0,00</span></div>
+            <div class="sum-row muted"><span id="feeLabel">Taxa de entrega</span><span data-fee>—</span></div>
+            <div class="sum-div"></div>
+            <div class="sum-total">
+              <span class="lab">Total</span>
+              <span class="val" data-total>$67,87</span>
+            </div>
+
+            <div class="sum-note">
+              <svg viewBox="0 0 24 24"><path d="M12 22s8-4.5 8-11V5l-8-3-8 3v6c0 6.5 8 11 8 11Z"/><path d="m9 12 2 2 4-4"/></svg>
+              <span>Pagamento confirmado pelo WhatsApp. Aceitamos <b>Zelle</b>, <b>Venmo</b> e <b>Cash App</b>.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CTA footer (sticky no mobile, inline no desktop) -->
+        <div class="footbar">
+          <div class="footbar-in">
+            <div class="foot-total" id="footTotal">
+              <small>Total</small>
+              <b data-total-mini>$67,87</b>
+            </div>
+            <div class="foot-cta-wrap" style="flex:1;display:flex;gap:12px;flex-wrap:wrap">
+              <a class="btn btn-ember" id="waBtn" href="checkout.html">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 1.67c2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 0 1 2.42 5.82c0 4.54-3.7 8.24-8.25 8.24a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.18 8.18 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24Zm-4.6 4.43c-.16 0-.42.06-.64.3-.22.24-.85.83-.85 2.03 0 1.2.87 2.36.99 2.52.12.16 1.7 2.6 4.12 3.64.57.25 1.02.4 1.37.51.58.18 1.1.16 1.52.1.46-.07 1.43-.59 1.63-1.15.2-.56.2-1.04.14-1.15-.06-.1-.22-.16-.46-.28-.24-.12-1.43-.71-1.65-.79-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1.02-.38-1.94-1.2-.72-.64-1.2-1.43-1.34-1.67-.14-.24-.02-.37.1-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.32-.76-1.8-.18-.4-.36-.4-.52-.41-.13 0-.28-.01-.44-.01Z"/></svg>
+                Finalizar pelo WhatsApp
+              </a>
+              <a class="btn btn-ghost" href="../box.html">
+                <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+                Adicionar mais
+              </a>
+            </div>
+          </div>
+          <p class="trust">
+            <svg viewBox="0 0 24 24"><path d="M12 22s8-4.5 8-11V5l-8-3-8 3v6c0 6.5 8 11 8 11Z"/></svg>
+            Pré-venda artesanal · feito sob encomenda em Danbury, CT
+          </p>
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
+<script>
+(() => {
+  'use strict';
+  const CONFIG = window.BK_CONFIG || {};
+  const PICKUP_ON = CONFIG.pickupEnabled === true;
+
+  const fmt = n => '$' + (Number(n) || 0).toFixed(2).replace('.', ',');
+  const fmtCents = c => fmt((Number(c) || 0) / 100);
+  const items = document.getElementById('items');
+  const emptyHint = document.getElementById('emptyHint');
+  const feeLabel = document.getElementById('feeLabel');
+
+  // Retirada off por padrao -> modalidade inicial e sempre entrega.
+  let mode = 'delivery';
+  // Cotacao de frete ao vivo (preenchida ao digitar o ZIP). null = ZIP ainda nao informado.
+  let deliveryFeeCents = null;
+  let deliveryServed = null; // true atendido / false fora do raio / null sem ZIP
+  // Promocoes (fallback da config; sobrescrito pela API quando disponivel).
+  let promos = normalizePromos(CONFIG.promotions);
+
+  function normalizePromos(p){
+    p = p || {};
+    const tiers = Array.isArray(p.discountTiers) ? p.discountTiers : [];
+    return {
+      enabled: p.enabled !== false,
+      freeDeliveryMinCents: Math.max(0, Math.round(Number(p.freeDeliveryMinCents) || 0)),
+      discountTiers: tiers
+        .map(t => ({ minCents: Math.max(0, Math.round(Number(t.minCents) || 0)), percent: Math.min(90, Math.max(0, Number(t.percent) || 0)) }))
+        .filter(t => t.minCents > 0 && t.percent > 0)
+        .sort((a, b) => a.minCents - b.minCents),
+    };
+  }
+  function discountFor(subtotalCents){
+    if(!promos.enabled || !(subtotalCents > 0)) return { percent: 0, cents: 0 };
+    let percent = 0;
+    promos.discountTiers.forEach(t => { if(subtotalCents >= t.minCents) percent = t.percent; });
+    return { percent, cents: Math.round(subtotalCents * percent / 100) };
+  }
+
+  /* ---- header ciente da loja de origem (box x pudim) ---- */
+  (function brandAware(){
+    let store = 'box';
+    try {
+      const ref = document.referrer || '';
+      if(/pudim\.html/i.test(ref)) store = 'pudim';
+      else if(/box\.html/i.test(ref)) store = 'box';
+      else { const ls = localStorage.getItem('bp-store'); if(ls === 'pudim' || ls === 'box') store = ls; }
+    } catch(e){}
+    if(store !== 'pudim') return;
+    const set = (id, fn) => { const n = document.getElementById(id); if(n) fn(n); };
+    set('brandImg', n => n.src = '../assets/img/brand/brazilian-pudding.svg');
+    set('brandName', n => n.textContent = 'Brazilian Pudding');
+    set('brandSub', n => n.textContent = "BY BOX'IN HOUSE");
+    set('brandLink', n => n.href = '../pudim.html');
+    set('backLink', n => n.href = '../pudim.html');
+  })();
+
+  /* ---- carrega promocoes reais da API (se disponivel) ---- */
+  (async function loadPromos(){
+    try {
+      if(window.bkApi && typeof window.bkApi.get === 'function'){
+        const r = await window.bkApi.get('/promotions/public');
+        if(r) { promos = normalizePromos(r); recalc(); }
+      }
+    } catch(e){ /* mantem fallback da config */ }
+  })();
+
+  /* ---- carrinho compartilhado (localStorage 'bp-cart') ---- */
+  function readCart(){
+    try{ return JSON.parse(localStorage.getItem('bp-cart') || '[]') || []; }
+    catch(e){ return []; }
+  }
+  function saveCart(arr){
+    try{ localStorage.setItem('bp-cart', JSON.stringify(arr)); }catch(e){}
+  }
+
+  /* imagem/descrição opcional por slug; fallback por placeholder */
+  const META = {
+    'grilled-chicken-box':   { img: '../assets/img/boxes/box-grilled-chicken.png', desc: 'Peito suculento ao alho, legumes e arroz integral.' },
+    'beef-rice-box':         { img: '../assets/img/boxes/box-beef-rice.png',       desc: 'Serve 2. Arroz soltinho, feijão e farofa crocante.' },
+    'meatball-pasta-box':    { img: '../assets/img/boxes/box-meatball-pasta.png',  desc: 'Massa fresca, molho artesanal e parmesão curado.' },
+    'salmon-mash-box':       { img: '../assets/img/boxes/box-salmon-mash.png',     desc: 'Filé grelhado, purê aveludado e aspargos frescos.' },
+    'shrimp-tray':           { img: '../assets/img/boxes/box-shrimp-platter.png',  desc: 'Camarões ao creme, servidos na moranga assada.' },
+    'cups-tower':            { img: '../assets/img/products/product-dessert-cups.png', desc: 'Camadas de doce de leite, brigadeiro e creme belga.' },
+    'classic-pudim':         { img: '../assets/img/products/product-classic-pudim.png', desc: 'Leite condensado com calda de caramelo dourada.' },
+    'berry-pudim':           { img: '../assets/img/products/product-berry-pudim.png', desc: 'Pudim aveludado com calda de frutas vermelhas.' },
+    'berry-celebration-cake':{ img: '../assets/img/events/event-berry-cake.png',   desc: 'Massa fofinha, recheio cremoso e frutas vermelhas.' },
+    'birthday-tray':         { img: '../assets/img/events/event-birthday-pink-tray.png', desc: 'Mix de brigadeiros, beijinhos e docinhos finos.' },
+    'cookie-duo':            { img: '../assets/img/events/event-cookie-duo.png',    desc: 'Dupla de cookies recheados, macios e crocantes.' }
+  };
+  const PLACEHOLDER = '../assets/img/products/product-classic-pudim.png';
+
+  /* ---- render dos itens a partir do bp-cart (sem innerHTML, DOM seguro) ---- */
+  function svg(paths){
+    const s = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    s.setAttribute('viewBox', '0 0 24 24');
+    paths.forEach(d => {
+      const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      p.setAttribute('d', d);
+      s.appendChild(p);
+    });
+    return s;
+  }
+  function el(tag, cls, text){
+    const n = document.createElement(tag);
+    if(cls) n.className = cls;
+    if(text != null) n.textContent = text;
+    return n;
+  }
+
+  function renderItems(){
+    const cart = readCart();
+    items.textContent = '';
+    cart.forEach((it, idx) => {
+      const meta = META[it.slug] || {};
+      const li = el('li', 'item');
+      li.dataset.idx = idx;
+
+      const img = el('img', 'thumb');
+      img.src = meta.img || PLACEHOLDER;
+      img.alt = it.name || '';
+      li.appendChild(img);
+
+      const main = el('div', 'it-main');
+      main.appendChild(el('p', 'it-name', it.name || 'Item'));
+      if(meta.desc) main.appendChild(el('p', 'it-desc', meta.desc));
+      li.appendChild(main);
+
+      const right = el('div', 'it-right');
+      const price = el('span', 'it-price'); price.setAttribute('data-line', '');
+      right.appendChild(price);
+      right.appendChild(el('span', 'it-unit', fmtCents(it.priceCents) + ' / un'));
+
+      const stepper = el('div', 'stepper');
+      const dec = el('button', null); dec.type = 'button'; dec.setAttribute('data-act', 'dec'); dec.setAttribute('aria-label', 'Diminuir');
+      dec.appendChild(svg(['M5 12h14']));
+      const qty = el('span', 'qty', String(Number(it.qty) || 1)); qty.setAttribute('data-qty', '');
+      const inc = el('button', null); inc.type = 'button'; inc.setAttribute('data-act', 'inc'); inc.setAttribute('aria-label', 'Aumentar');
+      inc.appendChild(svg(['M12 5v14', 'M5 12h14']));
+      stepper.append(dec, qty, inc);
+      right.appendChild(stepper);
+
+      const rm = el('button', 'it-remove'); rm.type = 'button'; rm.setAttribute('data-act', 'remove');
+      rm.appendChild(svg(['M4 7h16', 'M10 11v6M14 11v6', 'M6 7l1 13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-13', 'M9 7V4h6v3']));
+      rm.appendChild(document.createTextNode('Remover'));
+      right.appendChild(rm);
+
+      li.appendChild(right);
+      items.appendChild(li);
+    });
+    recalc();
+    setTimeout(movePill, 30);
+  }
+
+  /* ---- segmented control (Retirada injetada so quando pickupEnabled) ---- */
+  const seg = document.getElementById('seg');
+  const pill = document.getElementById('segPill');
+  function movePill(){
+    const active = seg.querySelector('[aria-pressed="true"]');
+    if(!active) return;
+    pill.style.width = active.offsetWidth + 'px';
+    pill.style.transform = `translateX(${active.offsetLeft - 5}px)`;
+  }
+  function segClick(ev){
+    const b = ev.currentTarget;
+    seg.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed','false'));
+    b.setAttribute('aria-pressed','true');
+    mode = b.dataset.mode;
+    try{ localStorage.setItem('bp-fulfillment', mode); }catch(e){}
+    movePill();
+    recalc();
+  }
+  if(PICKUP_ON){
+    const pk = document.createElement('button');
+    pk.type = 'button'; pk.dataset.mode = 'pickup'; pk.setAttribute('aria-pressed','false');
+    pk.innerHTML = '<svg class="ico" viewBox="0 0 24 24"><path d="M3 7h18l-1.5 12.5a1 1 0 0 1-1 .9H5.5a1 1 0 0 1-1-.9L3 7Z"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/></svg> Retirada';
+    seg.insertBefore(pk, seg.querySelector('[data-mode="delivery"]'));
+  }
+  seg.querySelectorAll('button').forEach(b=>b.addEventListener('click', segClick));
+  window.addEventListener('load', movePill);
+  window.addEventListener('resize', movePill);
+  movePill();
+
+  /* ---- cotacao de frete ao vivo pelo ZIP ---- */
+  const zipInput = document.getElementById('zip');
+  let zipTimer;
+  function quoteZip(z){
+    if(!z || z.length < 5){ deliveryFeeCents = null; deliveryServed = null; recalc(); return; }
+    try{
+      const q = (window.bkDelivery && window.bkDelivery.quoteByZip) ? window.bkDelivery.quoteByZip(z) : null;
+      if(q && q.served){ deliveryFeeCents = q.feeCents; deliveryServed = true; }
+      else if(q){ deliveryFeeCents = null; deliveryServed = false; }
+      else { deliveryFeeCents = null; deliveryServed = null; }
+    }catch(e){ deliveryFeeCents = null; deliveryServed = null; }
+    try{ localStorage.setItem('bp-delivery-zip', z); }catch(e){}
+    recalc();
+  }
+  if(zipInput){
+    zipInput.addEventListener('input', ()=>{
+      const z = zipInput.value.replace(/\D/g,'').slice(0,5);
+      if(zipInput.value !== z) zipInput.value = z;
+      clearTimeout(zipTimer);
+      zipTimer = setTimeout(()=>quoteZip(z), 280);
+    });
+  }
+
+  /* ---- stepper + remove (atualizam o bp-cart) ---- */
+  items.addEventListener('click', e=>{
+    const btn = e.target.closest('[data-act]');
+    if(!btn) return;
+    const row = btn.closest('.item');
+    if(!row) return;
+    const idx = parseInt(row.dataset.idx, 10);
+    const cart = readCart();
+    if(isNaN(idx) || !cart[idx]) return;
+    const act = btn.dataset.act;
+
+    if(act === 'remove'){
+      cart.splice(idx, 1);
+      saveCart(cart);
+      row.classList.add('removing');
+      setTimeout(renderItems, 360);
+      return;
+    }
+    let q = Number(cart[idx].qty) || 1;
+    if(act === 'inc') q++;
+    if(act === 'dec') q = Math.max(1, q - 1);
+    cart[idx].qty = q;
+    saveCart(cart);
+    const qEl = row.querySelector('[data-qty]');
+    if(qEl) qEl.textContent = q;
+    recalc();
+  });
+
+  /* ---- recalc totals (desconto + frete ao vivo + frete gratis) ---- */
+  function recalc(){
+    const cart = readCart();
+    let subtotalCents = 0;
+
+    items.querySelectorAll('.item:not(.removing)').forEach(row=>{
+      const idx = parseInt(row.dataset.idx, 10);
+      const it = cart[idx];
+      if(!it) return;
+      const q = Number(it.qty) || 1;
+      const lineCents = (Number(it.priceCents) || 0) * q;
+      subtotalCents += lineCents;
+      const lineEl = row.querySelector('[data-line]');
+      if(lineEl) lineEl.textContent = fmtCents(lineCents);
+      const dec = row.querySelector('[data-act="dec"]');
+      if(dec) dec.disabled = q <= 1;
+    });
+
+    const hasItems = cart.length > 0;
+    emptyHint.classList.toggle('show', !hasItems);
+
+    const disc = discountFor(subtotalCents);
+    const eligibleCents = subtotalCents - disc.cents;
+
+    const freeMin = promos.freeDeliveryMinCents;
+    const qualifiesFree = freeMin > 0 && eligibleCents >= freeMin && hasItems;
+
+    let feeCents = 0, feeText;
+    if(mode === 'pickup'){ feeCents = 0; feeText = 'Grátis'; }
+    else if(!hasItems){ feeCents = 0; feeText = '—'; }
+    else if(qualifiesFree){ feeCents = 0; feeText = 'Grátis'; }
+    else if(deliveryFeeCents != null && deliveryServed){ feeCents = deliveryFeeCents; feeText = fmtCents(deliveryFeeCents); }
+    else if(deliveryServed === false){ feeCents = 0; feeText = 'No WhatsApp'; }
+    else { feeCents = 0; feeText = 'Informe o ZIP'; }
+
+    const totalCents = eligibleCents + feeCents;
+
+    document.querySelector('[data-subtotal]').textContent = fmtCents(subtotalCents);
+    const discRow = document.querySelector('[data-discount-row]');
+    if(disc.cents > 0){
+      discRow.hidden = false;
+      document.querySelector('[data-discount-label]').textContent = 'Desconto ' + disc.percent + '%';
+      document.querySelector('[data-discount]').textContent = '-' + fmtCents(disc.cents);
+    } else { discRow.hidden = true; }
+
+    const feeEl = document.querySelector('[data-fee]');
+    feeEl.textContent = feeText;
+    feeEl.parentElement.classList.toggle('free', feeText === 'Grátis');
+    feeLabel.textContent = mode === 'pickup' ? 'Taxa de serviço' : 'Taxa de entrega';
+
+    document.querySelector('[data-total]').textContent = fmtCents(totalCents);
+    document.querySelector('[data-total-mini]').textContent = fmtCents(totalCents);
+
+    updateShipProgress(hasItems, eligibleCents, qualifiesFree);
+
+    const waBtn = document.getElementById('waBtn');
+    if(waBtn) waBtn.setAttribute('href', hasItems ? 'checkout.html' : '../box.html');
+  }
+
+  function updateShipProgress(hasItems, eligibleCents, qualifiesFree){
+    const wrap = document.getElementById('shipProgress');
+    if(!wrap) return;
+    const fill = document.getElementById('shipFill');
+    const txt = document.getElementById('shipTxt');
+    const bar = wrap.querySelector('.ship-bar');
+    const freeMin = promos.freeDeliveryMinCents;
+    if(!hasItems || mode !== 'delivery' || !freeMin){ wrap.hidden = true; return; }
+    wrap.hidden = false;
+    const pct = Math.max(4, Math.min(100, Math.round(eligibleCents / freeMin * 100)));
+    fill.style.width = pct + '%';
+    if(qualifiesFree){
+      bar.classList.add('is-done'); txt.classList.add('is-done');
+      txt.textContent = 'Você ganhou frete grátis!';
+    } else {
+      bar.classList.remove('is-done'); txt.classList.remove('is-done');
+      const faltam = (freeMin - eligibleCents) / 100;
+      txt.innerHTML = 'Faltam <b>' + fmt(faltam) + '</b> pra frete grátis';
+    }
+  }
+
+  /* restaura modalidade salva (retirada so se habilitada) + ZIP salvo */
+  try{
+    const savedMode = localStorage.getItem('bp-fulfillment');
+    if(savedMode === 'pickup' && PICKUP_ON){
+      const pBtn = seg.querySelector('[data-mode="pickup"]');
+      if(pBtn) pBtn.click();
+    }
+    const savedZip = localStorage.getItem('bp-delivery-zip');
+    if(savedZip && zipInput){ zipInput.value = savedZip; quoteZip(savedZip); }
+  }catch(e){}
+
+  renderItems();
+  window.addEventListener('storage', e => { if(e.key === 'bp-cart') renderItems(); });
+})();
+</script>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(() => {
+  'use strict';
+  if (!window.L) return;
+  const STORE = [41.3948, -73.4540]; // Danbury, CT
+  const map = L.map('map', { zoomControl: true, scrollWheelZoom: false }).setView(STORE, 13);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    maxZoom: 19, subdomains: 'abcd',
+    attribution: '&copy; OpenStreetMap &copy; CARTO'
+  }).addTo(map);
+  L.circleMarker(STORE, { radius: 9, color: '#e7c878', weight: 3, fillColor: '#be3a1d', fillOpacity: 1 })
+    .addTo(map).bindPopup("Box'in House Gourmet — Danbury, CT");
+  const radius = L.circle(STORE, { radius: 8000, color: '#be3a1d', weight: 1.5, fillColor: '#c9a24b', fillOpacity: 0.1, dashArray: '5 6' });
+
+  const fields = document.getElementById('deliverFields');
+  const title = document.getElementById('mapTitle');
+  const noteTxt = document.querySelector('#mapNote span');
+  const seg = document.getElementById('seg');
+
+  function apply(mode) {
+    if (mode === 'delivery') {
+      fields.hidden = false;
+      radius.addTo(map);
+      title.textContent = 'Endereço de entrega';
+      noteTxt.textContent = 'Digite seu ZIP pra calcular a taxa de entrega na hora. Atendemos a região de Danbury, CT.';
+      map.setView(STORE, 11);
+    } else {
+      fields.hidden = true;
+      map.removeLayer(radius);
+      title.textContent = 'Onde você retira';
+      noteTxt.textContent = 'Ponto de retirada em Danbury, CT · 06810. Escolha o horário no checkout.';
+      map.setView(STORE, 13);
+    }
+    setTimeout(() => map.invalidateSize(), 60);
+  }
+
+  seg.querySelectorAll('button').forEach((b) => {
+    b.addEventListener('click', () => apply(b.dataset.mode));
+  });
+  setTimeout(() => map.invalidateSize(), 150);
+  apply('delivery');
+})();
+</script>
+</body>
+</html>

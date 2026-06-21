@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pedido enviado — Box'in House Gourmet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ivory:#f6ecdb; --porcelain:#fffbef; --ink:#17110d;
+    --espresso:#17110d; --surface:#241a13; --cream:#f6ecdb;
+    --gold:#c9a24b; --gold-light:#e7c878;
+    --ember:#be3a1d; --ember-hover:#d6552f;
+    --amber:#f2a92c; --wine:#8e2433;
+    --line:rgba(201,162,75,.32);
+    --shadow-warm:0 18px 48px -22px rgba(40,24,8,.55);
+    --shadow-soft:0 10px 30px -18px rgba(40,24,8,.45);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:'Hanken Grotesk',system-ui,sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(1200px 540px at 50% -10%, #2c2017 0%, transparent 60%),
+      var(--ivory);
+    -webkit-font-smoothing:antialiased;
+    display:flex;flex-direction:column;align-items:center;
+    min-height:100%;
+    padding:0 16px 48px;
+  }
+
+  /* ---------- TOPO DARK CELEBRANDO ---------- */
+  .celebrate{
+    position:relative;width:100%;max-width:560px;
+    margin-top:0;
+    background:
+      radial-gradient(620px 360px at 50% -40%, rgba(231,200,120,.28), transparent 62%),
+      linear-gradient(180deg,#1d140d 0%, var(--espresso) 70%);
+    border-radius:0 0 28px 28px;
+    padding:54px 28px 60px;
+    text-align:center;
+    overflow:hidden;
+    box-shadow:var(--shadow-warm);
+  }
+  /* halo de ouro atrás do selo */
+  .celebrate::before{
+    content:"";position:absolute;left:50%;top:40px;width:240px;height:240px;
+    transform:translateX(-50%);
+    background:radial-gradient(circle, rgba(231,200,120,.34) 0%, transparent 68%);
+    filter:blur(6px);pointer-events:none;
+  }
+
+  /* confete */
+  .confetti{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+  .confetti i{
+    position:absolute;top:-12px;width:8px;height:13px;border-radius:2px;
+    opacity:0;
+    animation:fall linear infinite;
+  }
+  @keyframes fall{
+    0%{opacity:0;transform:translateY(-20px) rotate(0deg)}
+    8%{opacity:1}
+    100%{opacity:0;transform:translateY(440px) rotate(420deg)}
+  }
+
+  /* selo / check */
+  .seal{
+    position:relative;z-index:2;width:108px;height:108px;margin:0 auto 22px;
+    border-radius:50%;
+    background:
+      radial-gradient(circle at 32% 28%, #fbeec4 0%, var(--gold-light) 36%, var(--gold) 72%, #9c7a2f 100%);
+    display:grid;place-items:center;
+    box-shadow:0 0 0 8px rgba(231,200,120,.12), 0 0 0 16px rgba(231,200,120,.06),
+               0 14px 34px -10px rgba(0,0,0,.55);
+    animation:pop .7s cubic-bezier(.2,.9,.25,1.4) both;
+  }
+  .seal svg{width:54px;height:54px}
+  .seal svg path{
+    stroke:#3a2a12;stroke-width:9;fill:none;stroke-linecap:round;stroke-linejoin:round;
+    stroke-dasharray:60;stroke-dashoffset:60;
+    animation:draw .55s .35s ease forwards;
+  }
+  @keyframes pop{0%{transform:scale(.4);opacity:0}100%{transform:scale(1);opacity:1}}
+  @keyframes draw{to{stroke-dashoffset:0}}
+
+  .celebrate h1{
+    position:relative;z-index:2;
+    font-family:'Fraunces',serif;font-weight:600;font-size:clamp(28px,7vw,38px);
+    color:var(--cream);letter-spacing:.2px;line-height:1.08;
+  }
+  .celebrate .ribbon{
+    position:relative;z-index:2;
+    display:inline-flex;align-items:center;gap:8px;margin-bottom:16px;
+    font-size:12px;letter-spacing:.22em;text-transform:uppercase;font-weight:700;
+    color:var(--gold-light);
+  }
+  .celebrate .ribbon::before,.celebrate .ribbon::after{
+    content:"";width:26px;height:1px;background:linear-gradient(90deg,transparent,var(--gold))
+  }
+  .celebrate .ribbon::after{background:linear-gradient(90deg,var(--gold),transparent)}
+
+  /* logo */
+  .brand{
+    position:relative;z-index:2;
+    display:inline-flex;align-items:center;gap:10px;margin-bottom:30px;
+  }
+  .brand img{display:block}
+  .brand .name{font-family:'Fraunces',serif;font-style:italic;font-weight:600;
+    font-size:19px;color:var(--gold-light);line-height:1}
+  .brand .tag{font-size:10px;letter-spacing:.34em;color:rgba(246,236,219,.62);
+    font-weight:700;margin-top:3px}
+  .brand .stack{display:flex;flex-direction:column;align-items:flex-start}
+
+  /* ---------- CORPO CLARO ---------- */
+  .card{
+    width:100%;max-width:560px;
+    margin-top:-26px;position:relative;z-index:3;
+    background:var(--porcelain);
+    border:1px solid var(--line);
+    border-radius:20px;
+    box-shadow:var(--shadow-warm);
+    padding:30px 24px 26px;
+  }
+  .lead{
+    text-align:center;font-size:16px;line-height:1.5;color:#4b3a28;
+    max-width:380px;margin:0 auto 22px;
+  }
+  .lead strong{color:var(--ink)}
+
+  .order-num{
+    display:inline-flex;align-items:center;gap:7px;
+    background:linear-gradient(180deg,#ffd98a,var(--amber));
+    color:#4a2c06;font-weight:800;letter-spacing:.04em;
+    padding:8px 16px;border-radius:999px;font-size:14px;
+    box-shadow:0 6px 16px -8px rgba(242,169,44,.8), inset 0 1px 0 rgba(255,255,255,.5);
+  }
+  .order-num .dot{width:7px;height:7px;border-radius:50%;background:#7a4a08}
+  .center{text-align:center;margin-bottom:22px}
+
+  /* resumo */
+  .summary{
+    border:1px solid var(--line);border-radius:16px;overflow:hidden;
+    background:#fffefb;
+  }
+  .summary-head{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:13px 16px;
+    background:linear-gradient(180deg,#fff7e6,#fffbef);
+    border-bottom:1px solid var(--line);
+  }
+  .summary-head .t{font-family:'Fraunces',serif;font-weight:600;font-size:16px}
+  .summary-head .gold-rule{
+    font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#97480f;font-weight:700
+  }
+  .items{padding:6px 16px}
+  .item{
+    display:flex;align-items:center;gap:13px;padding:12px 0;
+    border-bottom:1px dashed rgba(201,162,75,.28);
+  }
+  .item:last-child{border-bottom:0}
+  .item .thumb{
+    width:58px;height:58px;border-radius:12px;object-fit:cover;flex:none;
+    border:1px solid var(--line);box-shadow:var(--shadow-soft);background:#f1e6cf;
+  }
+  .item .meta{flex:1;min-width:0}
+  .item .meta .nm{font-weight:700;font-size:15px;color:var(--ink);line-height:1.2}
+  .item .meta .sub{font-size:13px;color:#8a755a;margin-top:3px}
+  .item .qty{
+    font-size:12px;font-weight:700;color:var(--wine);
+    background:rgba(142,36,51,.08);border:1px solid rgba(142,36,51,.18);
+    padding:2px 8px;border-radius:8px;margin-top:5px;display:inline-block;
+  }
+  .item .price{font-weight:800;font-size:15px;color:var(--ink);white-space:nowrap}
+
+  .totals{padding:14px 16px;border-top:1px solid var(--line);background:#fffaf0}
+  .trow{display:flex;justify-content:space-between;font-size:14px;color:#6a5641;margin-bottom:7px}
+  .trow.total{margin-top:8px;padding-top:11px;border-top:1px solid var(--line);
+    font-size:19px;font-weight:800;color:var(--ink)}
+  .trow.total .v{font-family:'Fraunces',serif}
+
+  /* retirada / data */
+  .facts{display:flex;gap:10px;margin-top:16px}
+  .fact{
+    flex:1;background:#fffaf0;border:1px solid var(--line);border-radius:13px;
+    padding:12px 13px;
+  }
+  .fact .k{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#97480f;
+    font-weight:700;margin-bottom:5px;display:flex;align-items:center;gap:6px}
+  .fact .v{font-weight:700;font-size:14.5px;color:var(--ink);line-height:1.3}
+  .fact .v small{display:block;font-weight:500;color:#8a755a;font-size:12.5px;margin-top:2px}
+  .fact svg{width:14px;height:14px;stroke:var(--gold);fill:none;stroke-width:2}
+
+  /* CTAs */
+  .actions{margin-top:24px}
+  .btn-ember{
+    width:100%;min-height:54px;border:none;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;gap:11px;
+    background:linear-gradient(180deg,var(--ember-hover),var(--ember));
+    color:#fff;font-family:inherit;font-weight:800;font-size:16.5px;letter-spacing:.01em;
+    border-radius:14px;text-decoration:none;
+    box-shadow:0 12px 26px -12px rgba(190,58,29,.9), inset 0 1px 0 rgba(255,255,255,.22);
+    transition:transform .12s ease, box-shadow .2s ease, background .2s ease;
+  }
+  .btn-ember:hover{background:linear-gradient(180deg,#e26338,var(--ember-hover));
+    box-shadow:0 16px 30px -12px rgba(190,58,29,1)}
+  .btn-ember:active{transform:translateY(1px) scale(.995)}
+  .btn-ember svg{width:21px;height:21px;fill:#fff}
+  .btn-ember .glow{position:relative}
+
+  .secondary{
+    display:block;text-align:center;margin-top:16px;
+    color:#97480f;font-weight:700;font-size:14.5px;text-decoration:none;
+    padding:8px;border-radius:10px;transition:color .15s ease, background .15s ease;
+  }
+  .secondary:hover{color:var(--ember);background:rgba(190,58,29,.05)}
+  .secondary span{border-bottom:1px solid currentColor;padding-bottom:1px}
+
+  .reassure{
+    text-align:center;font-size:12.5px;color:#6a5641;margin-top:18px;
+    display:flex;align-items:center;justify-content:center;gap:7px;
+  }
+  .reassure svg{width:14px;height:14px;stroke:var(--gold);fill:none;stroke-width:2}
+
+  @media (max-width:480px){
+    body{padding:0 12px 40px}
+    .celebrate{padding:46px 22px 52px;border-radius:0 0 24px 24px}
+    .card{padding:26px 18px 22px}
+    .facts{flex-direction:column}
+  }
+  @media (min-width:561px){
+    body{justify-content:flex-start;padding-top:0}
+    .celebrate{margin-top:0;border-radius:0 0 32px 32px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .seal,.seal svg path,.confetti i{animation:none}
+    .seal svg path{stroke-dashoffset:0}
+  }
+</style>
+<script src="../assets/config/config.js?v=124"></script>
+</head>
+<body>
+
+  <!-- ===== TOPO DARK CELEBRANDO ===== -->
+  <header class="celebrate">
+    <div class="confetti" id="confetti" aria-hidden="true"></div>
+
+    <span class="ribbon">Confirmado</span>
+
+    <div class="seal" aria-hidden="true">
+      <svg viewBox="0 0 64 64"><path d="M18 33 L28 44 L47 22"/></svg>
+    </div>
+
+    <h1>Pedido enviado!</h1>
+
+    <div class="brand" style="margin-top:24px">
+      <img src="../assets/img/brand/boxin-house-gourmet.svg" width="30" height="30" alt="">
+      <div class="stack">
+        <span class="name">Box'in House</span>
+        <span class="tag">GOURMET</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== CORPO CLARO ===== -->
+  <main class="card">
+    <p class="lead">
+      Tudo certo! <strong>Te chamamos no WhatsApp</strong> pra confirmar o
+      pagamento e o horário. É rapidinho.
+    </p>
+
+    <div class="center">
+      <span class="order-num"><span class="dot"></span>Pedido <span id="orderNumber">#BH-2048</span></span>
+    </div>
+
+    <section class="summary" aria-label="Resumo do pedido">
+      <div class="summary-head">
+        <span class="t">Seu pedido</span>
+        <span class="gold-rule">2 itens</span>
+      </div>
+
+      <div class="items">
+        <div class="item">
+          <img class="thumb" src="../assets/img/boxes/box-beef-rice.png" alt="Box de carne com arroz">
+          <div class="meta">
+            <div class="nm">Box Beef &amp; Rice</div>
+            <div class="sub">Carne grelhada, arroz, feijão e farofa</div>
+            <span class="qty">Qtd 2</span>
+          </div>
+          <div class="price">$25,80</div>
+        </div>
+
+        <div class="item">
+          <img class="thumb" src="../assets/img/products/product-classic-pudim.png" alt="Pudim clássico">
+          <div class="meta">
+            <div class="nm">Pudim Clássico</div>
+            <div class="sub">Leite condensado, calda de caramelo</div>
+            <span class="qty">Qtd 1</span>
+          </div>
+          <div class="price">$8,50</div>
+        </div>
+      </div>
+
+      <div class="totals">
+        <div class="trow"><span>Subtotal</span><span>$34,30</span></div>
+        <div class="trow"><span>Taxa de retirada</span><span>$0,00</span></div>
+        <div class="trow total"><span>Total</span><span class="v">$34,30</span></div>
+      </div>
+    </section>
+
+    <div class="facts">
+      <div class="fact">
+        <div class="k">
+          <svg viewBox="0 0 24 24"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+          Retirada
+        </div>
+        <div class="v">Box'in House
+          <small>Danbury, CT · USA</small>
+        </div>
+      </div>
+      <div class="fact">
+        <div class="k">
+          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>
+          Data
+        </div>
+        <div class="v">Sáb, 21 jun
+          <small>Janela 16h – 19h</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a class="btn-ember" id="waBtn" href="https://wa.me/12034822797?text=Ol%C3%A1!%20Acabei%20de%20enviar%20meu%20pedido" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.95.51 3.78 1.4 5.37L2 22l4.85-1.27a9.9 9.9 0 0 0 5.19 1.46h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2Zm0 18.13c-1.62 0-3.2-.43-4.58-1.26l-.33-.2-2.88.76.77-2.81-.21-.34a8.18 8.18 0 0 1-1.26-4.37c0-4.54 3.7-8.23 8.23-8.23 2.2 0 4.27.86 5.82 2.42a8.16 8.16 0 0 1 2.41 5.82c0 4.54-3.69 8.23-8.18 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.8-.23-.09-.39-.12-.56.12-.16.25-.64.8-.79.97-.14.16-.29.18-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.41.08-.16.04-.31-.02-.43-.06-.12-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.16 0-.43.06-.65.31-.23.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.16 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.11-.22-.17-.47-.29Z"/></svg>
+        Abrir WhatsApp
+      </a>
+      <a class="secondary" href="../box.html"><span>Voltar ao cardápio</span></a>
+    </div>
+
+    <p class="reassure">
+      <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg>
+      Pagamento confirmado direto com a anfitriã, sem stress.
+    </p>
+  </main>
+
+<script>
+  // ---- número real do pedido (bp-last-order) ----
+  (function(){
+    try{
+      var raw = localStorage.getItem('bp-last-order');
+      if(!raw) return;
+      var data = JSON.parse(raw);
+      if(data && data.number != null){
+        var label = '#' + String(data.number).replace(/^#/, '');
+        var numEl = document.getElementById('orderNumber');
+        if(numEl) numEl.textContent = label;
+        var waBtn = document.getElementById('waBtn');
+        if(waBtn){
+          var msg = 'Olá! Acabei de enviar meu pedido ' + label;
+          waBtn.href = (typeof window.bkWaLink === 'function')
+            ? window.bkWaLink(msg)
+            : 'https://wa.me/12034822797?text=' + encodeURIComponent(msg);
+        }
+      }
+    }catch(e){ /* mantém o texto atual se algo falhar */ }
+  })();
+
+  // confete de ouro sutil
+  (function(){
+    var wrap = document.getElementById('confetti');
+    if(!wrap || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var golds = ['#e7c878','#c9a24b','#f2a92c','#fbeec4','#9c7a2f'];
+    for(var i=0;i<22;i++){
+      var s = document.createElement('i');
+      s.style.left = Math.random()*100 + '%';
+      s.style.background = golds[i % golds.length];
+      s.style.animationDuration = (3.4 + Math.random()*2.6) + 's';
+      s.style.animationDelay = (Math.random()*3.5) + 's';
+      s.style.height = (9 + Math.random()*8) + 'px';
+      s.style.opacity = '0';
+      if(i % 3 === 0) s.style.borderRadius = '50%';
+      wrap.appendChild(s);
+    }
+  })();
+</script>
+</body>
+</html>
