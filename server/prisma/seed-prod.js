@@ -45,21 +45,26 @@ async function seedAdmins() {
     secret: Buffer.from(config.ARGON_SECRET),
   });
 
-  const adminEmails = uniqueEmails([
-    config.ADMIN_INITIAL_EMAIL,
-    'admin@brazilianpudding.com',
-    'owner@brazilianpudding.com',
-  ]);
+  // Único admin da loja, definido por ADMIN_INITIAL_EMAIL (default: Mara).
+  const adminEmails = uniqueEmails([config.ADMIN_INITIAL_EMAIL]);
 
   const admins = [];
   for (const email of adminEmails) {
     admins.push(await prisma.user.upsert({
       where: { email },
       update: { passwordHash, active: true, role: 'owner' },
-      create: { email, passwordHash, name: 'Owner', role: 'owner' },
+      create: { email, passwordHash, name: 'Mara', role: 'owner' },
     }));
   }
-  console.log(`[seed-prod] Admins garantidos: ${admins.map((admin) => admin.email).join(', ')}`);
+
+  // Desativa qualquer owner antigo que não seja o configurado
+  // (ex.: admin@/owner@brazilianpudding.com de seeds anteriores).
+  const disabled = await prisma.user.updateMany({
+    where: { role: 'owner', email: { notIn: adminEmails } },
+    data: { active: false },
+  });
+
+  console.log(`[seed-prod] Admin garantido: ${admins.map((admin) => admin.email).join(', ')} | owners antigos desativados: ${disabled.count}`);
 }
 
 async function seedProducts() {

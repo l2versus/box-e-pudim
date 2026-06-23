@@ -43,7 +43,7 @@ const ConfigSchema = z.object({
 
   ARGON_SECRET: z.string().min(16, 'ARGON_SECRET precisa de ao menos 16 chars'),
 
-  ADMIN_INITIAL_EMAIL: z.string().email().default('admin@brazilianpudding.com'),
+  ADMIN_INITIAL_EMAIL: z.string().email().default('mara@admin.com'),
   ADMIN_INITIAL_PASS: z.string().min(8).default('ChangeMeOnFirstLogin2026!'),
 
   CORS_ORIGINS: z
