@@ -773,7 +773,7 @@
       <span class="label">OPERAÇÃO</span>
       <button type="button" class="nav-btn active" data-view="pedidos">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="6" height="16" rx="1.5"/><rect x="10.5" y="4" width="6" height="11" rx="1.5"/><rect x="18" y="4" width="3" height="16" rx="1.2"/></svg>
-        Pedidos <span class="count">14</span>
+        Pedidos <span class="count">0</span>
       </button>
       <button type="button" class="nav-btn" data-view="caixa">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10h18"/><path d="M7 15h4"/></svg>
@@ -824,10 +824,10 @@
     <header class="head">
       <div class="head-row">
         <div class="greet">
-          <h1>Bom dia, <em>Mara</em></h1>
+          <h1><span data-greet>Bom dia</span>, <em>Mara</em></h1>
           <p class="date">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>
-            Quinta-feira, 19 de junho de 2026
+            <span data-today>—</span>
           </p>
         </div>
         <div class="head-actions">
@@ -856,18 +856,18 @@
         <div class="kpis">
           <div class="kpi">
             <div class="kt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16l-1.2 11a2 2 0 0 1-2 1.8H7.2a2 2 0 0 1-2-1.8Z"/><path d="M8.5 7a3.5 3.5 0 0 1 7 0"/></svg> Pedidos hoje</div>
-            <div class="kv">14</div>
-            <div class="kd"><b>+3</b> vs. ontem nesta hora</div>
+            <div class="kv">—</div>
+            <div class="kd">carregando…</div>
           </div>
           <div class="kpi">
             <div class="kt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M14.5 9.2A2.6 2.6 0 0 0 12 7.8c-1.5 0-2.6.8-2.6 2s1 1.7 2.6 2.1 2.6 1 2.6 2.1-1.1 2-2.6 2a2.6 2.6 0 0 1-2.5-1.4M12 6.4v1.4M12 16.2v1.4"/></svg> Faturamento</div>
-            <div class="kv">$612</div>
-            <div class="kd">9 pagos · 5 aguardando</div>
+            <div class="kv">—</div>
+            <div class="kd">carregando…</div>
           </div>
           <div class="kpi">
             <div class="kt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-5 4 3 7-8"/><path d="M16 4h4v4"/></svg> Ticket médio</div>
-            <div class="kv">$44</div>
-            <div class="kd"><b>+$6</b> acima da meta</div>
+            <div class="kv">—</div>
+            <div class="kd">carregando…</div>
           </div>
         </div>
       </div>
@@ -1382,7 +1382,7 @@
       <span class="label">OPERAÇÃO</span>
       <button type="button" class="nav-btn active" data-view="pedidos">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="6" height="16" rx="1.5"/><rect x="10.5" y="4" width="6" height="11" rx="1.5"/><rect x="18" y="4" width="3" height="16" rx="1.2"/></svg>
-        Pedidos <span class="count">14</span>
+        Pedidos <span class="count">0</span>
       </button>
       <button type="button" class="nav-btn" data-view="caixa">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10h18"/><path d="M7 15h4"/></svg>
@@ -1560,7 +1560,23 @@
     loginStage.style.display = 'none';
     app.classList.add('is-on');
     app.setAttribute('aria-hidden', 'false');
+    setHeaderDateGreeting();
     window.scrollTo(0, 0);
+  }
+
+  // saudação por horário + data de hoje em pt-BR (corrige o texto fixo do design)
+  function setHeaderDateGreeting(){
+    var now = new Date();
+    var h = now.getHours();
+    var g = $('[data-greet]');
+    if (g) g.textContent = h < 12 ? 'Bom dia' : (h < 18 ? 'Boa tarde' : 'Boa noite');
+    var t = $('[data-today]');
+    if (t){
+      var s;
+      try { s = now.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }); }
+      catch (e) { s = now.toLocaleDateString('pt-BR'); }
+      t.textContent = s.charAt(0).toUpperCase() + s.slice(1); // capitaliza o dia da semana
+    }
   }
 
   // aplica saudação com o primeiro nome do usuário logado
@@ -1652,10 +1668,17 @@
       var kvs = $$('#view-pedidos .kpi .kv');
       var open = (k.openOrders != null) ? k.openOrders : 0;
       var today = (k.revenue && k.revenue.today) || { cents: 0, count: 0 };
+      var week = (k.revenue && k.revenue.week) || { cents: 0, count: 0 };
+      var month = (k.revenue && k.revenue.month) || { cents: 0, count: 0 };
       var avg = today.count > 0 ? Math.round((today.cents / today.count) / 100) : 0;
       if (kvs[0]) kvs[0].textContent = open;
       if (kvs[1]) kvs[1].textContent = money(today.cents);
       if (kvs[2]) kvs[2].textContent = '$' + avg;
+      // subtítulos com dados REAIS (substitui o texto mock do design)
+      var kds = $$('#view-pedidos .kpi .kd');
+      if (kds[0]) kds[0].textContent = today.count + (today.count === 1 ? ' pedido feito hoje' : ' pedidos feitos hoje');
+      if (kds[1]) kds[1].textContent = 'semana ' + money(week.cents) + ' · mês ' + money(month.cents);
+      if (kds[2]) kds[2].textContent = today.count > 0 ? ('média de ' + today.count + (today.count === 1 ? ' pedido hoje' : ' pedidos hoje')) : 'sem pedidos hoje';
       // badge "Pedidos" em todas as navs (sidebar + drawer)
       $$('.nav-btn[data-view="pedidos"] .count').forEach(function(c){ c.textContent = open; });
     }).catch(function(err){
