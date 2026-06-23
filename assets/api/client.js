@@ -134,6 +134,9 @@
     adminMe: () =>
       request('GET', '/admin/me'),
 
+    adminChangePassword: (currentPassword, newPassword) =>
+      request('POST', '/admin/change-password', { currentPassword, newPassword }),
+
     adminListOrders: (params = {}) => {
       const qs = new URLSearchParams(params).toString();
       return request('GET', `/admin/orders${qs ? `?${qs}` : ''}`);

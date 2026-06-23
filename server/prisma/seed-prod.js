@@ -47,12 +47,17 @@ async function seedAdmins() {
 
   // Único admin da loja, definido por ADMIN_INITIAL_EMAIL (default: Mara).
   const adminEmails = uniqueEmails([config.ADMIN_INITIAL_EMAIL]);
+  // Em deploy normal NÃO sobrescrevemos a senha (preserva a troca pelo painel).
+  // Só reseta pra ADMIN_INITIAL_PASS quando ADMIN_FORCE_RESET=true (break-glass).
+  const forceReset = config.ADMIN_FORCE_RESET;
 
   const admins = [];
   for (const email of adminEmails) {
     admins.push(await prisma.user.upsert({
       where: { email },
-      update: { passwordHash, active: true, role: 'owner' },
+      update: forceReset
+        ? { passwordHash, active: true, role: 'owner' }
+        : { active: true, role: 'owner' },
       create: { email, passwordHash, name: 'Mara', role: 'owner' },
     }));
   }
@@ -64,7 +69,7 @@ async function seedAdmins() {
     data: { active: false },
   });
 
-  console.log(`[seed-prod] Admin garantido: ${admins.map((admin) => admin.email).join(', ')} | owners antigos desativados: ${disabled.count}`);
+  console.log(`[seed-prod] Admin garantido: ${admins.map((admin) => admin.email).join(', ')}${forceReset ? ' (senha RESETADA via ADMIN_FORCE_RESET)' : ' (senha preservada)'} | owners antigos desativados: ${disabled.count}`);
 }
 
 async function seedProducts() {

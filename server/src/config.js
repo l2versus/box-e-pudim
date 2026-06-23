@@ -45,6 +45,16 @@ const ConfigSchema = z.object({
 
   ADMIN_INITIAL_EMAIL: z.string().email().default('mara@admin.com'),
   ADMIN_INITIAL_PASS: z.string().min(8).default('ChangeMeOnFirstLogin2026!'),
+  // Break-glass: quando true, o seed RESETA a senha do admin pra ADMIN_INITIAL_PASS
+  // no próximo deploy (recuperação de senha esquecida). Normalmente false pra
+  // preservar a senha trocada pelo painel.
+  ADMIN_FORCE_RESET: z
+    .string()
+    .optional()
+    .transform((value) => {
+      if (value === undefined || value === '') return false;
+      return ['1', 'true', 'yes', 'on'].includes(value.toLowerCase());
+    }),
 
   CORS_ORIGINS: z
     .string()

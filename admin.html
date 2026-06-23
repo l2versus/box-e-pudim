@@ -17,13 +17,13 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 
 <!-- ===== Camada de dados: config + client da API real ===== -->
-<script src="assets/config/config.js?v=127"></script>
-<script src="assets/api/client.js?v=127"></script>
+<script src="assets/config/config.js?v=128"></script>
+<script src="assets/api/client.js?v=128"></script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/design/tokens.css?v=127">
+<link rel="stylesheet" href="assets/design/tokens.css?v=128">
 
 <style>
   /* ============================================================
@@ -738,7 +738,7 @@
           </div>
         </div>
 
-        <div class="row-aux"><a class="link" href="#" onclick="event.preventDefault()">Esqueci a senha</a></div>
+        <div class="row-aux"><a class="link" href="#" data-forgot>Esqueci a senha</a></div>
 
         <button type="submit" class="btn-brasa">
           Entrar
@@ -1353,6 +1353,15 @@
             <button type="button" class="btn-brasa cfg-save" data-cfg-save="store">Salvar</button>
           </section>
 
+          <section class="cfg-card">
+            <h3>Conta &amp; senha</h3>
+            <p class="cfg-hint">Trocar a senha de acesso ao painel. Mínimo 8 caracteres.</p>
+            <label class="cfg-field"><span>Senha atual</span><input id="pwCurrent" type="password" autocomplete="current-password" placeholder="••••••••"></label>
+            <label class="cfg-field"><span>Nova senha</span><input id="pwNew" type="password" autocomplete="new-password" placeholder="mínimo 8 caracteres"></label>
+            <label class="cfg-field"><span>Confirmar nova senha</span><input id="pwConfirm" type="password" autocomplete="new-password" placeholder="repita a nova senha"></label>
+            <button type="button" class="btn-brasa cfg-save" data-cfg-save="password">Trocar senha</button>
+          </section>
+
         </div>
         <p class="cfg-toast" id="cfgToast" hidden></p>
       </div>
@@ -1511,6 +1520,21 @@
     this.children[0].style.display = on ? 'none' : 'block';
     this.children[1].style.display = on ? 'block' : 'none';
   });
+
+  // "Esqueci a senha" — sem email configurado, orienta as duas vias de recuperação
+  (function(){
+    var forgot = $('[data-forgot]');
+    if (!forgot) return;
+    forgot.addEventListener('click', function(e){
+      e.preventDefault();
+      window.alert(
+        'Recuperar / trocar senha:\n\n' +
+        '• Logada: vá em Configurações → "Conta & senha" e troque por uma nova.\n\n' +
+        '• Esqueceu e não consegue entrar: peça ao suporte técnico redefinir pelo painel do servidor ' +
+        '(variáveis ADMIN_INITIAL_PASS + ADMIN_FORCE_RESET=true e redeploy).'
+      );
+    });
+  })();
 
   // mensagem de erro inline no login (criada sob demanda; sem mudar markup)
   function loginError(msg){
@@ -1987,6 +2011,22 @@
       localStorage.setItem('bp-admin-payments', JSON.stringify({ zelle:$('#payZelle').checked, venmo:$('#payVenmo').checked, cash:$('#payCash').checked }));
       localStorage.setItem('bp-admin-hours', ($('#cfgHours').value||'').trim());
       cfgToast('Salvo ✓'); return;
+    }
+    if(which === 'password'){
+      if(!api){ cfgToast('Troca de senha precisa do servidor.'); return; }
+      var cur = ($('#pwCurrent').value||''), nw = ($('#pwNew').value||''), cf = ($('#pwConfirm').value||'');
+      if(!cur){ cfgToast('Informe a senha atual.'); return; }
+      if(nw.length < 8){ cfgToast('A nova senha precisa de no mínimo 8 caracteres.'); return; }
+      if(nw !== cf){ cfgToast('A confirmação não bate com a nova senha.'); return; }
+      if(nw === cur){ cfgToast('A nova senha é igual à atual.'); return; }
+      if(btn){ btn.disabled = true; btn.textContent = 'Trocando…'; }
+      api.adminChangePassword(cur, nw).then(function(){
+        ['#pwCurrent','#pwNew','#pwConfirm'].forEach(function(s){ if($(s)) $(s).value=''; });
+        done('Senha trocada ✓');
+      }).catch(function(e){
+        done((e && e.code === 'wrong_current_password') ? 'Senha atual incorreta.' : ((e && e.message) || 'Erro ao trocar a senha.'));
+      });
+      return;
     }
     if(!api){ cfgToast('Sem conexão com o servidor.'); return; }
     if(btn){ btn.disabled = true; btn.textContent = 'Salvando…'; }
